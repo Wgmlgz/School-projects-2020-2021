@@ -1,0 +1,2 @@
+C:\C\School\Graphs\Debug\Graphs.exe
+C:\C\School\Graphs\Debug\Graphs.pdb
