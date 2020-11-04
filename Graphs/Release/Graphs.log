@@ -1,0 +1,15 @@
+﻿  frontend.cpp
+C:\C\School\Graphs\backend.cpp(91,9): warning C4834: discarding return value of function with 'nodiscard' attribute
+C:\C\School\Graphs\frontend.cpp(92,31): warning C4018: '<': signed/unsigned mismatch
+C:\C\School\Graphs\frontend.cpp(207,49): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\C\School\Graphs\frontend.cpp(208,49): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\C\School\Graphs\frontend.cpp(209,53): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\C\School\Graphs\frontend.cpp(210,53): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\C\School\Graphs\frontend.cpp(211,52): warning C4244: 'argument': conversion from 'Graph::gType' to 'float', possible loss of data
+C:\C\School\Graphs\frontend.cpp(251,39): warning C4018: '<': signed/unsigned mismatch
+  Generating code
+  6 of 435 functions ( 1.4%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  Graphs.vcxproj -> C:\C\School\Graphs\Release\Graphs.exe

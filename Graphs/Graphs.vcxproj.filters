@@ -18,5 +18,16 @@
     <ClCompile Include="backend.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="frontend.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SliderSFML.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="SliderSFML.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

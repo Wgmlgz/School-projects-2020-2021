@@ -1,3 +1,1 @@
-﻿  backend.cpp
-C:\C\School\Graphs\backend.cpp(92,9): warning C4834: discarding return value of function with 'nodiscard' attribute
-  Graphs.vcxproj -> C:\C\School\Graphs\Debug\Graphs.exe
+﻿  Graphs.vcxproj -> C:\C\School\Graphs\Debug\Graphs.exe
