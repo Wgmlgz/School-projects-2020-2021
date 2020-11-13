@@ -13,11 +13,13 @@ using namespace std;
 
 Checker ch;
 vector<vector<bool>> regions{
-        {0, 1, 1, 0, 0, 1, 1, 1, 1, 1},
-        {0, 0, 0, 0, 0, 1, 0, 1, 1, 1},
-        {0, 0, 0, 0, 0, 1, 1, 1, 1, 1},
-        {1, 1, 1, 0, 1, 1, 1, 1, 1, 1},
-        {0, 0, 0, 0, 1, 1, 1, 1, 1, 1}
+    {0, 0, 0, 0, 0, 1, 0, 0, 1, 1},
+    {0, 1, 1, 0, 0, 1, 1, 1, 1, 1},
+    {1, 1, 1, 0, 1, 1, 1, 1, 1, 1},
+    {0, 0, 0, 0, 0, 1, 0, 1, 1, 1},
+    {0, 0, 0, 0, 1, 1, 1, 1, 1, 1},
+    {0, 0, 0, 0, 0, 1, 1, 0, 1, 1},
+    {0, 0, 0, 0, 0, 1, 1, 1, 1, 1}
 };
 struct GraphSize {
     double min_x = -8, max_x = 4;
@@ -143,7 +145,7 @@ void CreateDefaultGraphs() {
     ch.addGraph("rh", Graph::rhombus, -3.5, -0.5, 10, 5, false, false);
     ch.addGraph("l1", Graph::line, 0, -2, 1, 0.25, true, false);
     ch.addGraph("l2", Graph::line, 0, 2, 1, -0.666, true, false);
-    ch.addGraph("n0", Graph::none, 0, 0, 1, 1, false, false);
+    ch.addGraph("n0", Graph::line, -2, 0, 0, 1, false, false);
     ch.addGraph("n1", Graph::none, 0, 0, 1, 1, false, false);
     ch.addGraph("n2", Graph::none, 0, 0, 1, 1, false, false);
 }
@@ -240,7 +242,7 @@ int main() {
                     double y_pix = ((defaultGS.max_y - defaultGS.min_y) / 1000);
 
                     double x = defaultGS.min_x + x_pix * Mouse::getPosition(window).x;
-                    double y = defaultGS.min_y + x_pix * (1000 - Mouse::getPosition(window).y);
+                    double y = defaultGS.min_y + y_pix * (1000 - Mouse::getPosition(window).y);
 
                     vector<bool> tmp;
                     for (auto i : ch.graphs) {
