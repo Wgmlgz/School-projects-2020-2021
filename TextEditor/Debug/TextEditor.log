@@ -1,4 +1,10 @@
 ﻿  Backend.cpp
-C:\C\TextEditor\Backend.cpp(20,25): warning C4018: '<': signed/unsigned mismatch
-C:\C\TextEditor\Backend.cpp(24,25): warning C4018: '<': signed/unsigned mismatch
-  TextEditor.vcxproj -> C:\C\TextEditor\Debug\TextEditor.exe
+C:\C\School\TextEditor\Backend.cpp(21,25): warning C4018: '<': signed/unsigned mismatch
+C:\C\School\TextEditor\Backend.cpp(25,25): warning C4018: '<': signed/unsigned mismatch
+C:\C\School\TextEditor\Backend.cpp(44,33): warning C4018: '<': signed/unsigned mismatch
+C:\C\School\TextEditor\Backend.cpp(54,33): warning C4018: '<': signed/unsigned mismatch
+C:\C\School\TextEditor\Backend.cpp(66,33): warning C4018: '<': signed/unsigned mismatch
+C:\C\School\TextEditor\Backend.cpp(68,25): warning C4018: '<': signed/unsigned mismatch
+C:\C\School\TextEditor\Backend.cpp(72,17): warning C4018: '<': signed/unsigned mismatch
+C:\C\School\TextEditor\Backend.cpp(75,29): warning C4018: '<': signed/unsigned mismatch
+  TextEditor.vcxproj -> C:\C\School\TextEditor\Debug\TextEditor.exe
