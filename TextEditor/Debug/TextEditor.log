@@ -1,0 +1,4 @@
+﻿  Backend.cpp
+C:\C\TextEditor\Backend.cpp(20,25): warning C4018: '<': signed/unsigned mismatch
+C:\C\TextEditor\Backend.cpp(24,25): warning C4018: '<': signed/unsigned mismatch
+  TextEditor.vcxproj -> C:\C\TextEditor\Debug\TextEditor.exe
