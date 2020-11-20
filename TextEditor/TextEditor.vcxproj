@@ -90,7 +90,7 @@
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
@@ -140,7 +140,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Backend.cpp" />
+    <ClCompile Include="Frontend.cpp" />
     <ClCompile Include="WindowHandler.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Backend.h" />
+    <ClInclude Include="Frontend.h" />
+    <ClInclude Include="WindowHandler.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
