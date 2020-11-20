@@ -5,7 +5,7 @@
 
 using namespace std;
 
-class WStrings {
+class WgzStrings {
  public:
   std::vector<std::string*> strings;
   // inserts

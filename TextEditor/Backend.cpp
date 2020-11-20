@@ -1,14 +1,14 @@
 #include "Backend.h"
 
 // inserts
-void WStrings::Insert(std::string s, int pos) {
+void WgzStrings::Insert(std::string s, int pos) {
   if (pos == -1) pos = 0;
   if (pos >= strings.size()) {
     strings.resize(pos, new std::string("$"));
   }
   strings.insert(strings.begin() + pos, new std::string(s));
 }
-void WStrings::InsertMultiple(std::vector<std::string> strs, int pos) {
+void WgzStrings::InsertMultiple(std::vector<std::string> strs, int pos) {
   if (pos >= strings.size()) {
     strings.resize(pos, new std::string("$"));
     for (int i = 0; i < strs.size(); ++i) {
@@ -20,20 +20,20 @@ void WStrings::InsertMultiple(std::vector<std::string> strs, int pos) {
     }
   }
 }
-void WStrings::Erase(int pos) {
+void WgzStrings::Erase(int pos) {
   strings.erase(strings.begin() + pos);
   // strings.
 }
 
 // modify
-void WStrings::InsertSubstring(std::string s, int str_pos,
+void WgzStrings::InsertSubstring(std::string s, int str_pos,
                                int char_pos) {
   strings[str_pos]->insert(char_pos, s);
 }
-void WStrings::ReplaceSymbol(char ch, int str_pos, int char_pos) {
+void WgzStrings::ReplaceSymbol(char ch, int str_pos, int char_pos) {
   (*strings[str_pos])[char_pos] = ch;
 }
-void WStrings::ReplaceSubstring(std::string old_str, std::string new_str,
+void WgzStrings::ReplaceSubstring(std::string old_str, std::string new_str,
                                 int begin_index, int end_index) {
   if (end_index == -1) end_index = strings.size();
   for (int i = begin_index; i < end_index; ++i) {
@@ -50,47 +50,53 @@ void WStrings::ReplaceSubstring(std::string old_str, std::string new_str,
 }
 
 // algorithmic
-void WStrings::RemoveZeroes(int begin_index, int end_index) {
+void WgzStrings::RemoveZeroes(int begin_index, int end_index) {
   if (end_index == -1) end_index = strings.size();
   for (int i = begin_index; i < end_index; ++i) {
-    for (int index = strings[i]->find("0"); index != -1;
-         index = strings[i]->find("0")) {
-      if (index != strings[i]->size() - 1) {
+    for (int index = 0; index < strings[i]->size() - 1; ++index) {
+      if ((*strings[i])[index] == '0') {
         if (std::string("0123456789").find((*strings[i])[index + 1]) != -1) {
-          strings[i]->erase(strings[i]->begin() + index);
-        } else
-          break;
-      } else
-        break;
-    }
-  }
-}
-void WStrings::RemoveAsterisks(int begin_index, int end_index) {
-  if (end_index == -1) end_index = strings.size();
-  for (int i = begin_index; i < end_index; ++i) {
-    for (int j = 0; j < strings[i]->size(); ++j) {
-      if (strings[i]->at(j) == '*') {
-        int k = j;
-        for (; strings[i]->at(j) == '*' && j < strings[i]->size() - 1; ++j)
-          continue;
-        std::string tmp;
-        if (j == k) break;
-        for (int h = 0; h < (j - k + 1) / 2; ++h) tmp += "+";
-        strings[i]->replace(strings[i]->begin() + k,
-                            strings[i]->begin() + j + 1, tmp);
-        break;
+          if (index == 0) {
+            strings[i]->erase(strings[i]->begin() + index);
+            --index;
+          }
+          else if (std::string("0123456789").find((*strings[i])[index - 1]) == -1) {
+            strings[i]->erase(strings[i]->begin() + index);
+            --index;
+          }
+        }
       }
     }
   }
 }
+void WgzStrings::RemoveAsterisks(int begin_index, int end_index) {
+  if (end_index == -1) end_index = strings.size();
+  for (int i = begin_index; i < end_index; ++i) {
+    *strings[i] += "6";
+    for (int j = 0; j < strings[i]->size(); ++j) {
+      if (strings[i]->at(j) == '*') {
+        int k = j;
+        for (; strings[i]->at(j) == '*' && j < strings[i]->size() - 1; ++j) continue;
+        if (j == k + 1) continue;
+
+        std::string tmp;
+        for (int h = 0; h < (j - k) / 2; ++h) tmp += "+";
+        strings[i]->replace(strings[i]->begin() + k,
+                            strings[i]->begin() + j, tmp);
+        j = 0;
+      }
+    }
+    strings[i]->erase(--strings[i]->end());
+  }
+}
 
 // helper methods
-std::string WStrings::GetAll() {
+std::string WgzStrings::GetAll() {
   std::string result;
   for (auto i : strings) result += "" + *i + '\n';
   return result;
 }
-std::vector<std::string> WStrings::Split(std::string str, std::string token) {
+std::vector<std::string> WgzStrings::Split(std::string str, std::string token) {
   std::vector<std::string> result;
   while (str.size()) {
     int index = str.find(token);

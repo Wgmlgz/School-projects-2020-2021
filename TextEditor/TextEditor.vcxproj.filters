@@ -21,18 +21,12 @@
     <ClCompile Include="Frontend.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="WindowHandler.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Frontend.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="Backend.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="WindowHandler.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
