@@ -129,6 +129,41 @@ void SetText(std::string s) {
   RedrawWindow(hWnd0); 
   //MessageBox(NULL, _T("Call to CreateWindow failed!"), _T("Windows Desktop Guided Tour"), NULL);
 }
+void DrawMain() {
+  PAINTSTRUCT ps;
+  hdc = BeginPaint(hWnd0, &ps);
+  HFONT hFont, hTmp;
+  hFont =
+      CreateFont(20, 0, 0, 0, FW_MEDIUM, 0, 0, 0, 0, 0, 0, 2, 0, L"Consolas");
+  hTmp = (HFONT)SelectObject(hdc, hFont);
+  SetBkMode(hdc, TRANSPARENT);
+
+  int j = 0;
+  for (auto i : w.strings) {
+    std::string tmp_str;
+    for (int p = 0, k = 0; p < i->size(); ++p, ++k) {
+      tmp_str += (*i)[p];
+      if (k > 105 || p == i->size() - 1) {
+        TCHAR text_t[1000] = L"";
+        _tcscpy_s(text_t, CA2T((tmp_str).c_str()));
+        TextOut(hdc, 20, j * 20 + 40, text_t, _tcslen(text_t));
+        tmp_str = "";
+        k = 0;
+        ++j;
+      }
+    }
+  }
+
+  hFont = CreateFont(40, 0, 0, 0, FW_MEDIUM, 0, 0, 0, 0, 0, 0, 2, 0,
+                     L"Product Sans Black");
+  hTmp = (HFONT)SelectObject(hdc, hFont);
+  SetBkMode(hdc, TRANSPARENT);
+
+  TextOut(hdc, 1025, 5, L"Inserts", _tcslen(L"Inserts"));
+  TextOut(hdc, 1025, 155, L"Modify", _tcslen(L"Modify"));
+  TextOut(hdc, 990, 305, L"Algorithmic", _tcslen(L"Algorithmic"));
+  EndPaint(hWnd0, &ps);
+}
 
 // popup window
 void PopUpWindow(int id) {
@@ -140,13 +175,15 @@ void PopUpWindow(int id) {
   std::string s4;
 
   if (id == 0) func_name = "Insert";
-  if (id == 1) func_name = "InsertMultiple";
+  if (id == 1) func_name = "Insert multiple";
   if (id == 2) func_name = "Erase";
-  if (id == 3) func_name = "InsertSubstring";
-  if (id == 4) func_name = "ReplaceSymbol";
-  if (id == 5) func_name = "ReplaceSubstring";
-  if (id == 6) func_name = "RemoveZeroes";
-  if (id == 7) func_name = "RemoveAsterisks";
+  if (id == 3) func_name = "Insert substring";
+  if (id == 4) func_name = "Replace symbol";
+  if (id == 5) func_name = "Replace substring";
+  if (id == 6) func_name = "Remove zeroes";
+  if (id == 7) func_name = "Remove asterisks";
+  if (id == 8) func_name = "Remove brackets content";
+  if (id == 9) func_name = "Remove digits with increasing values";
 
   if (id == 0) s1 = "String to insert";
   if (id == 1) s1 = "Strings to insert";
@@ -156,6 +193,8 @@ void PopUpWindow(int id) {
   if (id == 5) s1 = "Old substring";
   if (id == 6) s1 = "Start index";
   if (id == 7) s1 = "Start index";
+  if (id == 8) s1 = "Start index";
+  if (id == 9) s1 = "Start index";
 
   if (id == 0) s2 = "Insert position";
   if (id == 1) s2 = "Insert position";
@@ -165,6 +204,8 @@ void PopUpWindow(int id) {
   if (id == 5) s2 = "New substring";
   if (id == 6) s2 = "End index";
   if (id == 7) s2 = "End index";
+  if (id == 8) s2 = "End index";
+  if (id == 9) s2 = "End index";
 
   if (id == 0) s3 = "";
   if (id == 1) s3 = "";
@@ -204,75 +245,14 @@ void EndInput(int id) {
   if (id == 2) w.Erase(GetInt(text1));
   if (id == 3) w.InsertSubstring(GetVal(text1), GetInt(text2), GetInt(text3));
   if (id == 4) w.ReplaceSymbol(GetVal(text1)[0], GetInt(text1), GetInt(text2));
-  if (id == 5) w.ReplaceSubstring(GetVal(text1), GetVal(text2), GetInt(text3, 0), GetInt(text3, -1));
-  if (id == 6) w.RemoveZeroes(GetInt(text1, 0), GetInt(text2, -1));
-  if (id == 7) w.RemoveAsterisks(GetInt(text1, 0), GetInt(text2, -1));
+  if (id == 5) w.ReplaceSubstring(GetVal(text1), GetVal(text2), GetInt(text3), GetInt(text3, -1));
+  if (id == 6) w.RemoveZeroes(GetInt(text1), GetInt(text2, -1));
+  if (id == 7) w.RemoveAsterisks(GetInt(text1), GetInt(text2, -1));
+  if (id == 8) w.RemoveBracketsContent(GetInt(text1), GetInt(text2, -1));
+  if (id == 9) w.RemoveDigitsWithIncreasingValues(GetInt(text1), GetInt(text2, -1));
 
   SetText(w.GetAll());
   PostMessage(hWnd1, WM_CLOSE, 0, 0);
-}
-
-// events
-void Start() {
-  AddButton("Insert", hWnd0, 0, {1000, 50});
-  AddButton("Insert multiple", hWnd0, 1, {1000, 85});
-  AddButton("Erase", hWnd0, 2, {1000, 120});
-
-  AddButton("Insert substring", hWnd0, 3, {1000, 200});
-  AddButton("Replace symbol", hWnd0, 4, {1000, 235});
-  AddButton("Replace substring", hWnd0, 5, {1000, 270});
-
-  AddButton("Remove zeroes", hWnd0, 6, {1000, 350});
-  AddButton("Remove asterisks", hWnd0, 7, {1000, 385});
-
-  w.Insert("Perfect windows xp buttons <3");
-  w.Insert("Perfect Product Sans font <3");
-  w.Insert("python be like: import da");
-  w.Insert("c++ 20 be like: import <iostream>;");
-  w.Insert("ha ha #include <Windows.h> goes brrrrrrrr");
-  w.Insert("-");
-  w.Insert("(Zeroes) 000000 01 0100 00000010 666 0 1488");
-  w.Insert("-");
-  w.Insert("(Asterisks) * ** *** **** ***** ****** ***** **** *** ** *");
-  w.Insert("-");
-  w.Insert("(Long string) Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris vitae urna egestas, placerat felis tincidunt, ultrices leo. Nullam id suscipit metus. Curabitur ornare magna ut nibh lobortis, non condimentum nulla efficitur. Pellentesque mauris nulla, varius a condimentum sed, dignissim eu erat. Donec quam magna, luctus id finibus eget, ornare vitae metus. Etiam congue eros orci, ac faucibus leo elementum id. Sed cursus imperdiet lacinia. Sed auctor felis sit amet tristique tincidunt. Sed nec laoreet odio. Suspendisse potenti. Fusce in est gravida, ultrices metus quis, venenatis ligula. Nulla facilisi. Nulla pretium ligula nec erat tempus, convallis feugiat odio posuere. Praesent interdum.");
-}
-void DrawMain() {
-  PAINTSTRUCT ps;
-  hdc = BeginPaint(hWnd0, &ps);
-  HFONT hFont, hTmp;
-  hFont =
-      CreateFont(20, 0, 0, 0, FW_MEDIUM, 0, 0, 0, 0, 0, 0, 2, 0, L"Consolas");
-  hTmp = (HFONT)SelectObject(hdc, hFont);
-  SetBkMode(hdc, TRANSPARENT);
-
-  int j = 0;
-  for (auto i : w.strings) {
-    
-    
-    std::string tmp_str;
-    for (int p = 0, k = 0; p < i->size(); ++p, ++k) {
-      tmp_str += (*i)[p];
-      if (k > 105 || p == i->size()-1) {
-        TCHAR text_t[1000] = L"";
-        _tcscpy_s(text_t, CA2T((tmp_str).c_str()));
-        TextOut(hdc, 20, j * 20 + 40, text_t, _tcslen(text_t));
-        tmp_str = "";
-        k = 0;
-        ++j;
-      }
-    }
-  }
-
-  hFont = CreateFont(40, 0, 0, 0, FW_MEDIUM, 0, 0, 0, 0, 0, 0, 2, 0,
-                     L"Product Sans Black");
-  hTmp = (HFONT)SelectObject(hdc, hFont);
-  SetBkMode(hdc, TRANSPARENT);
-
-  TextOut(hdc, 1025, 5, L"Inserts", _tcslen(L"Inserts"));
-  TextOut(hdc, 1025, 155, L"Modify", _tcslen(L"Modify"));
-  TextOut(hdc, 990, 305, L"Algorithmic", _tcslen(L"Algorithmic"));
-  EndPaint(hWnd0, &ps);
 }
 void DrawPopup() {
   PAINTSTRUCT ps;
@@ -288,6 +268,35 @@ void DrawPopup() {
   TextOut(hdc, 20, 5, text_t, _tcslen(text_t));
   EndPaint(hWnd1, &ps);
 }
+
+// events
+void Start() {
+  AddButton("Insert", hWnd0, 0, {1000, 50});
+  AddButton("Insert multiple", hWnd0, 1, {1000, 85});
+  AddButton("Erase", hWnd0, 2, {1000, 120});
+
+  AddButton("Insert substring", hWnd0, 3, {1000, 200});
+  AddButton("Replace symbol", hWnd0, 4, {1000, 235});
+  AddButton("Replace substring", hWnd0, 5, {1000, 270});
+
+  AddButton("Rm zeroes", hWnd0, 6, {1000, 350});
+  AddButton("Rm asterisks", hWnd0, 7, {1000, 385});
+  AddButton("Rm { } content", hWnd0, 8, {1000, 420});
+  AddButton("Leave only ^ digits", hWnd0, 9, {1000, 455});
+
+  w.Insert("Perfect windows xp buttons <3");
+  w.Insert("Perfect Product Sans font <3");
+  w.Insert("python be like: import da");
+  w.Insert("c++ 20 be like: import <iostream>;");
+  w.Insert("-");
+  w.Insert("(Brackets) ha {ha} #include {<Windows.h>} goes brrrrrrrr");
+  w.Insert("-");
+  w.Insert("(Zeroes) 000000 01 0100 00000010 666 0 1488");
+  w.Insert("-");
+  w.Insert("(Asterisks) * ** *** **** ***** ****** ***** **** *** ** *");
+  w.Insert("-");
+  w.Insert("(Long string) Lorem ipsum dolor sit amet, {consectetur} adipiscing elit. Mauris vitae urna egestas, placerat {felis} tincidunt, ultrices leo. Nullam id suscipit metus. Curabitur ornare magna ut nibh lobortis, non condimentum nulla efficitur. Pellentesque mauris nulla, varius a condimentum sed, dignissim eu erat. Donec quam magna, luctus id finibus eget, ornare vitae metus. Etiam congue eros orci, ac faucibus leo elementum id. Sed cursus imperdiet lacinia. Sed auctor felis sit amet tristique tincidunt. Sed nec laoreet odio. Suspendisse potenti. Fusce in est gravida, ultrices metus quis, venenatis ligula. Nulla facilisi. Nulla pretium ligula nec erat tempus, convallis feugiat odio posuere. Praesent interdum.");
+}
 void OnButtonClick(int id) {
   if (id == 0) PopUpWindow(0);
   if (id == 1) PopUpWindow(1);
@@ -297,6 +306,8 @@ void OnButtonClick(int id) {
   if (id == 5) PopUpWindow(5);
   if (id == 6) PopUpWindow(6);
   if (id == 7) PopUpWindow(7);
+  if (id == 8) PopUpWindow(8);
+  if (id == 9) PopUpWindow(9);
 
   if (id == 100) EndInput(0);
   if (id == 101) EndInput(1);
@@ -306,4 +317,6 @@ void OnButtonClick(int id) {
   if (id == 105) EndInput(5);
   if (id == 106) EndInput(6);
   if (id == 107) EndInput(7);
+  if (id == 108) EndInput(8);
+  if (id == 109) EndInput(9);
 }
