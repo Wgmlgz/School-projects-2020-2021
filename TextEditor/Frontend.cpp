@@ -123,11 +123,15 @@ int GetInt(HWND w, int i) {
 }
 
 // uptate ui
-void RedrawWindow(HWND hWnd) { InvalidateRect(hWnd, NULL, NULL); }
+void RedrawWindow(HWND hWnd) {
+  InvalidateRect(hWnd, NULL, NULL);
+  return;
+}
 void SetText(std::string s) {
   text = s + "                                                                          ";
   RedrawWindow(hWnd0); 
   //MessageBox(NULL, _T("Call to CreateWindow failed!"), _T("Windows Desktop Guided Tour"), NULL);
+  return;
 }
 void DrawMain() {
   PAINTSTRUCT ps;
@@ -139,16 +143,17 @@ void DrawMain() {
   SetBkMode(hdc, TRANSPARENT);
 
   int j = 0;
+  int k = 0;
   for (auto i : w.strings) {
-    std::string tmp_str;
-    for (int p = 0, k = 0; p < i->size(); ++p, ++k) {
+    ++k;
+    std::string tmp_str = std::to_string(k) + ": ";
+    for (int p = 0; p < i->size(); ++p) {
       tmp_str += (*i)[p];
-      if (k > 105 || p == i->size() - 1) {
+      if (tmp_str.size() > 105 || p == i->size() - 1) {
         TCHAR text_t[1000] = L"";
         _tcscpy_s(text_t, CA2T((tmp_str).c_str()));
         TextOut(hdc, 20, j * 20 + 40, text_t, _tcslen(text_t));
         tmp_str = "";
-        k = 0;
         ++j;
       }
     }
@@ -163,10 +168,13 @@ void DrawMain() {
   TextOut(hdc, 1025, 155, L"Modify", _tcslen(L"Modify"));
   TextOut(hdc, 990, 305, L"Algorithmic", _tcslen(L"Algorithmic"));
   EndPaint(hWnd0, &ps);
+  return;
 }
 
 // popup window
 void PopUpWindow(int id) {
+  if (hWnd1 != nullptr) PostMessage(hWnd1, WM_CLOSE, 0, 0);
+
   std::string func_name;
 
   std::string s1;
@@ -237,11 +245,12 @@ void PopUpWindow(int id) {
 
   ShowWindow(hWnd1, nCmd);
   UpdateWindow(hWnd1);
+  return;
 }
 void EndInput(int id) {
     
-  if (id == 0) w.Insert(GetVal(text1), GetInt(text2));
-  if (id == 1) w.InsertMultiple(w.Split(GetVal(text1), "\n"), GetInt(text2));
+  if (id == 0) w.Insert(GetVal(text1), GetInt(text2, 0));
+  if (id == 1) w.InsertMultiple(w.Split(GetVal(text1), "\n"), GetInt(text2, 0));
   if (id == 2) w.Erase(GetInt(text1));
   if (id == 3) w.InsertSubstring(GetVal(text1), GetInt(text2), GetInt(text3));
   if (id == 4) w.ReplaceSymbol(GetVal(text1)[0], GetInt(text1), GetInt(text2));
@@ -253,6 +262,7 @@ void EndInput(int id) {
 
   SetText(w.GetAll());
   PostMessage(hWnd1, WM_CLOSE, 0, 0);
+  return;
 }
 void DrawPopup() {
   PAINTSTRUCT ps;
@@ -267,6 +277,7 @@ void DrawPopup() {
   _tcscpy_s(text_t, CA2T(now_name.c_str()));
   TextOut(hdc, 20, 5, text_t, _tcslen(text_t));
   EndPaint(hWnd1, &ps);
+  return;
 }
 
 // events
@@ -291,11 +302,14 @@ void Start() {
   w.Insert("-");
   w.Insert("(Brackets) ha {ha} #include {<Windows.h>} goes brrrrrrrr");
   w.Insert("-");
+  w.Insert("(only increasing numbers) 123456 654321 0100 00000010 666 0 1488 ");
+  w.Insert("-");
   w.Insert("(Zeroes) 000000 01 0100 00000010 666 0 1488");
   w.Insert("-");
   w.Insert("(Asterisks) * ** *** **** ***** ****** ***** **** *** ** *");
   w.Insert("-");
   w.Insert("(Long string) Lorem ipsum dolor sit amet, {consectetur} adipiscing elit. Mauris vitae urna egestas, placerat {felis} tincidunt, ultrices leo. Nullam id suscipit metus. Curabitur ornare magna ut nibh lobortis, non condimentum nulla efficitur. Pellentesque mauris nulla, varius a condimentum sed, dignissim eu erat. Donec quam magna, luctus id finibus eget, ornare vitae metus. Etiam congue eros orci, ac faucibus leo elementum id. Sed cursus imperdiet lacinia. Sed auctor felis sit amet tristique tincidunt. Sed nec laoreet odio. Suspendisse potenti. Fusce in est gravida, ultrices metus quis, venenatis ligula. Nulla facilisi. Nulla pretium ligula nec erat tempus, convallis feugiat odio posuere. Praesent interdum.");
+  return;
 }
 void OnButtonClick(int id) {
   if (id == 0) PopUpWindow(0);
@@ -319,4 +333,6 @@ void OnButtonClick(int id) {
   if (id == 107) EndInput(7);
   if (id == 108) EndInput(8);
   if (id == 109) EndInput(9);
+
+  return;
 }

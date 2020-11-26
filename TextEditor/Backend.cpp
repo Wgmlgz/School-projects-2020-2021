@@ -5,6 +5,7 @@ void WgzStrings::Insert(std::string s, int pos) {
   if (pos == -1) pos = 0;
   if (pos >= strings.size()) strings.resize(pos, new std::string("$"));
   strings.insert(strings.begin() + pos, new std::string(s));
+  return;
 }
 void WgzStrings::InsertMultiple(std::vector<std::string> strs, int pos) {
   if (pos >= strings.size()) {
@@ -15,10 +16,12 @@ void WgzStrings::InsertMultiple(std::vector<std::string> strs, int pos) {
     for (int i = 0; i < strs.size(); ++i)
       strings.insert(strings.begin() + pos + i, new std::string(strs[i]));
   }
+  return;
 }
 void WgzStrings::Erase(int pos) {
   --pos;
   strings.erase(strings.begin() + pos);
+  return;
 }
 
 // modify
@@ -26,11 +29,13 @@ void WgzStrings::InsertSubstring(std::string s, int str_pos, int char_pos) {
   --str_pos;
   --char_pos;
   strings[str_pos]->insert(char_pos, s);
+  return;
 }
 void WgzStrings::ReplaceSymbol(char ch, int str_pos, int char_pos) {
   --str_pos;
   --char_pos;
   (*strings[str_pos])[char_pos] = ch;
+  return;
 }
 void WgzStrings::ReplaceSubstring(std::string old_str, std::string new_str, int begin_index, int end_index) {
   if (end_index == -1) end_index = strings.size();
@@ -43,6 +48,7 @@ void WgzStrings::ReplaceSubstring(std::string old_str, std::string new_str, int 
       pos = strings[i]->find(old_str, pos + new_str.size());
     }
   }
+  return;
 }
 
 // algorithmic
@@ -66,6 +72,7 @@ void WgzStrings::RemoveZeroes(int begin_index, int end_index) {
       }
     }
   }
+  return;
 }
 void WgzStrings::RemoveAsterisks(int begin_index, int end_index) {
   if (end_index == -1) end_index = strings.size();
@@ -88,6 +95,7 @@ void WgzStrings::RemoveAsterisks(int begin_index, int end_index) {
     }
     strings[i]->erase(--strings[i]->end());
   }
+  return;
 }
 void WgzStrings::RemoveBracketsContent(int begin_index, int end_index) {
   if (end_index == -1) end_index = strings.size();
@@ -95,13 +103,16 @@ void WgzStrings::RemoveBracketsContent(int begin_index, int end_index) {
   --begin_index;
   for (auto i = strings.begin() + begin_index;
        i < strings.begin() + end_index; ++i) {
+    *(*i) += "6";
     for (auto j = (*i)->begin(); j < (*i)->end(); ++j) {
       if (*j == '{') {
         for (; *j != '}'; (*i)->erase(j)) continue;
         (*i)->erase(j);
       }
     }
+    (*i)->erase(--(*i)->end());
   }
+  return;
 }
 void WgzStrings::RemoveDigitsWithIncreasingValues(int begin_index, int end_index) {
   if (end_index == -1) end_index = strings.size();
@@ -109,17 +120,27 @@ void WgzStrings::RemoveDigitsWithIncreasingValues(int begin_index, int end_index
   --begin_index;
   for (auto i = strings.begin() + begin_index; i < strings.begin() + end_index;
        ++i) {
-    for (auto j = (*i)->begin(); j < (*i)->end(); ++j) {
+    *(*i) += "f";
+    for (auto j = (*i)->begin(); j < (*i)->end() - 1; ++j) {
       auto IsDigit = [](char ch) -> bool {
         return std::string("0123456789").find(ch) != -1;
       };
       if (IsDigit(*j)) {
-        auto k = j;
-        for (;;)
-          ;
+        auto k = j+1;
+        for (; IsDigit(*k) && k < (*i)->end() - 1; ++k) continue;
+        if (k - j > 1) {
+          for (auto t = j; t < k - 1; ++t) {
+            if (*t >= *(t + 1)) {
+              (*i)->erase(j, k);
+              break;
+            }
+          }
+        }
       }
     }
+    (*i)->erase(--(*i)->end());
   }
+  return;
 }
 
 // helper methods
