@@ -8,10 +8,14 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <windows.h>
+#include <conio.h>
 
-// help me pls
+    // help me pls
 using str_it = std::string::iterator;
 using string = std::string;
+
+void CoutColor(string, int color = -1);
 
 // error custom type
 struct error {
@@ -38,7 +42,17 @@ void CheckBrackets(str_it start, str_it end) {
 std::pair<std::pair<str_it, str_it>, std::pair<str_it, str_it>> GetTwoOperands(
     str_it start, str_it end) {
   CheckBrackets(start, end);
-  auto comma_find = find(start + 1, end - 1, ',');
+  int brackets = 0;
+  auto comma_find = end;
+  for (auto cur = start + 1; cur < end - 1; ++cur) {
+    if (*cur == '(') ++brackets;
+    if (*cur == ')') --brackets;
+    if (*cur == ',' and brackets == 0) {
+      comma_find = cur;
+      break;
+    }
+  }
+
   if (comma_find == end) {
     string content = string(start + 1, end - 1);
     throw error("Expected 2 operands, separated by comma", start + 1);
@@ -50,9 +64,14 @@ std::pair<std::pair<str_it, str_it>, std::pair<str_it, str_it>> GetTwoOperands(
 bool BoolExpression(str_it start, str_it end) {
   string s = string(start, end);
 
-  if (s.size() < 4) throw error("smol", start);
+  if (s.size() == 0) throw error("Empty expression", start);
   if (s == "true") return true;
   if (s == "false") return false;
+  if (s.size() < 9) {
+    if (*start == 't') throw error("Do you mean \"true\"?", start);
+    if (*start == 'f') throw error("Do you mean \"false\"?", start);
+    throw error("Unknown word \"" + s + "\"", start);
+  } 
 
   string oper;
   oper += string() + *start + *(start + 1);
@@ -72,7 +91,9 @@ bool BoolExpression(str_it start, str_it end) {
     CheckBrackets(start + 3, end);
     return !BoolExpression(start + 4, end - 1);
   }
-  throw error("bruh", start);
+  if (*start == 't') throw error("Do you mean \"true\"?", start);
+  if (*start == 'f') throw error("Do you mean \"false\"?", start);
+  throw error("Unknown word \"" + s + "\"", start);
 }
 
 // run
@@ -90,7 +111,7 @@ string Exec(const char* cmd) {
 }
 
 // checkers
-string TestGCC(string test) {
+void TestGCC(string test) {
   string ret;
   string programm;
   programm += "#include <iostream>\n";
@@ -101,11 +122,11 @@ string TestGCC(string test) {
   programm += "bool OR(bool a, bool b) { return a || b; }\n";
   programm += "bool NOT(bool a) { return !a; }\n";
   programm += "bool Check() {\n";
-  programm += "  bool b =\n";
+  programm += "bool b =\n";
   std::transform(test.begin(), test.end(), test.begin(), ::toupper);
   programm += test;
-  programm += ";\n";
-  programm += "  return b;\n";
+  programm += "\n";
+  programm += ";return b;\n";
   programm += "}\n";
   programm += "int main(){std::cout << Check();}\n";
   std::ofstream GCC_check;
@@ -113,62 +134,76 @@ string TestGCC(string test) {
   GCC_check << programm;
   GCC_check.close();
   string gcc_result = Exec("gcc GCC_check.cpp -lstdc++");
-  std::cout << gcc_result;
+  //std::cout << gcc_result;
   if (gcc_result == "") {
     gcc_result += (Exec(".\\a.exe") == "1" ? "true" : "false") + string("\n");
-    return gcc_result;
+    CoutColor(gcc_result, 10);
   } else {
-    return "";
+    return;
   }
 }
-string TestWgmlgz(string test) {
+void TestWgmlgz(string test) {
   string ret;
   try {
     string tt = (BoolExpression(test.begin(), test.end()) ? "true" : "false");
     ret += tt + "\n";
+    CoutColor(ret, 10);
   } catch (const error e) {
     ret += test + '\n';
     string error_pointer;
     for (auto i = test.begin(); i < e.pos; ++i) error_pointer += " ";
     ret += error_pointer + "^" + "\n";
     ret += error_pointer + "|" + "\n";
-    ret += e.er + ", at " + std::to_string(e.pos - test.begin()) + "\n";
+    ret += e.er + ", at " + std::to_string(e.pos - test.begin() + 1) + "\n";
+    CoutColor(ret, 12);
   }
-  return ret;
+}
+void CoutColor(string s, int color) {
+  if (color == -1) color = 7;
+  HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+  SetConsoleTextAttribute(hConsole, color);
+  std::cout << s;
+  SetConsoleTextAttribute(hConsole, 7);
 }
 void CheckAll(string test) {
-  std::cout << "--- Wgmlgz ------------------------------------\n";
-  std::cout << TestWgmlgz(test);
-  std::cout << "--- GCC ---------------------------------------\n";
-  std::cout << TestGCC(test);
-  std::cout << "-----------------------------------------------\n\n\n";
+  system("CLS");
+  CoutColor(test + "\n");
+  CoutColor("\n--------------------- Da ----------------------\n\n", 112);
+  TestWgmlgz(test);
+  CoutColor("\n--------------------- GCC ---------------------\n\n", 112);
+  TestGCC(test);
+  CoutColor("\n-----------------------------------------------\n", 112);
+  CoutColor("Press enter for new test...", 112);
+  _getch();
+  system("CLS");
 }
 
 // main
 int main() {
   std::cout << "Hi\n";
-  std::vector<string> st = {//"d",
-                            //"true", "not(true)"
-                            //"false",
-                            //"or()",
-                            //"or(false,true)",
-                            //"or(true,true)",
-                            //"or(false,false)",
-                            //"or(false,or(false,true))",
-                            //"or(falfalse,or(false,true))",
-                            //
-                            //"and(true,false)",
-                            //"and(false,true)",
-                            //"and(true,true)",
-                            //"and(false,false)",
-                            //"not(and(false,or(false,true)))",
-                            //"and(falfalse,or(false,true))"
+  std::vector<string> st = {"or(or(false,false),false)",
+                            "true", "not(true)"
+                            "false",
+                            "or()",
+                            "or(pizda,true)",
+                            "or(true,true)",
+                            "or(false,false)",
+                            "o(false,or(false,true))",
+                            "or(falfalse,or(false,true))",
+                            
+                            "and(true,false)",
+                            "and(false,true)",
+                            "and(true,true)",
+                            "and(false,false)",
+                            "not(and(false,or(false,true)))",
+                            "and(falfalse,or(false,true))"
   };
   for (string i : st) {
-    CheckAll(i);
+    //CheckAll(i);
   }
   for (;;) {
     string s;
+    CoutColor("Please, type new test: ", 112);
     std::cin >> s;
     CheckAll(s);
   }
