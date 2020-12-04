@@ -6,7 +6,7 @@ bool OR(bool a, bool b) { return a || b; }
 bool NOT(bool a) { return !a; }
 bool Check() {
 bool b =
-STRAX
+OR(FALSE,FALSE,FALSE)
 ;return b;
 }
 int main(){std::cout << Check();}

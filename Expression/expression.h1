@@ -1,0 +1,43 @@
+#pragma once
+#include <algorithm>
+#include <array>
+#include <cstdio>
+#include <fstream>
+#include <iostream>
+#include <memory>
+#include <stdexcept>
+#include <string>
+#include <utility>
+#include <vector>
+#include <windows.h>
+#include <conio.h>
+
+// help me pls
+using str_it = std::string::iterator;
+using string = std::string;
+using pair_it = std::pair<str_it, str_it>;
+using pair_pair_it = std::pair<pair_it, pair_it>;
+
+// console commands
+void CoutColor(string, int color = -1);
+string Exec(const char* cmd);
+
+// custom error type
+struct error {
+  string er;
+  str_it pos;
+  error(string s, str_it i) {
+    er = s;
+    pos = i;
+  }
+};
+
+// expression checker
+void CheckBrackets(str_it start, str_it end);
+pair_pair_it GetTwoOperands(str_it start, str_it end);
+bool BoolExpression(str_it start, str_it end);
+
+// tests
+void TestGCC(string test);
+void TestWgmlgz(string test);
+void CheckAll(string test);
