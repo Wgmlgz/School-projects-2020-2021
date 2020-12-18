@@ -3,9 +3,10 @@
 #include <vector>
 int main() {
   std::vector<string> tests = {
-      "sin(9*2*5)"};
+      "5+64534+435-45*2",
+  "-1*(1-1)", "--1", "sin(666)"};
   for (auto s : tests) {
-    std::cout << ConvertToPostfix(s) << std::endl;
+    //std::cout << ConvertToPostfix(s, true) << std::endl;
   }
   for(;;) {
     string s ;

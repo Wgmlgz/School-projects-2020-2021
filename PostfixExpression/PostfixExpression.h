@@ -2,6 +2,7 @@
 #include <stack>
 #include <string>
 #include <math.h>
+#include <vector>
 
 // easy life
 using str_it = std::string::iterator;
@@ -65,7 +66,55 @@ int CalculatePostfix(string str) {
 
   return st.top();
 }
-string ConvertToPostfix(string str) {
+double calc(string s) {
+  char ch;
+  std::vector<double> st;
+  for (int i = 0; i < s.size(); i++) {
+    ch = s[i];
+    if (ch == ' ') continue;
+    if (ch == '_') {
+      double b = st.back();
+      st.pop_back();
+      st.push_back(-b);
+    } else if (ch == 's') {
+      double b = st.back();
+      st.pop_back();
+      st.push_back(std::sin(b));
+    } 
+    else if (ch >= '0' && ch <= '9') {
+      string number = "";
+      while (i < s.size() && s[i] >= '0' && s[i] <= '9') {
+        number += s[i++];
+      }
+      i--;
+      int x = 0;
+      for (int j = number.size() - 1, p = 1; j >= 0; p *= 10, j--)
+        x += (number[j] - '0') * p;
+      st.push_back(x);
+    } else {
+      if (st.size() < 2) std::exception("Not enough operands for binary operation");
+      double b = st.back();
+      st.pop_back();
+      double a = st.back();
+      st.pop_back();
+      if (ch == '+') {
+        st.push_back(a + b);
+      } else if (ch == '-') {
+        st.push_back(a - b);
+      } else if (ch == '*') {
+        st.push_back(a * b);
+      } else if (ch == '/') {
+        if (b == 0) throw std::exception("Division by zero");
+        st.push_back(a / b);
+      } else if (ch == '^') {
+        st.push_back(pow(a, b));
+      }
+    }
+  }
+  if (st.size() > 1) std::exception("WTF HOW???");
+  return st.back();
+}
+string ConvertToPostfix(string str, bool display_str = false) {
   string ret;
   try {
     string res;
@@ -77,10 +126,20 @@ string ConvertToPostfix(string str) {
       st.pop();
       return tmp;
     };
-    char last = '\0';
+    auto pushOperation = [&res](char val) {
+      //res.push_back(' ');
+      res.push_back(val);
+      //res.push_back(' ');
+    };
+    char last = 'q';
     for (auto i = str.begin(); i < str.end(); ++i) {
-      //PrintStack(st);
       char val = *i;
+      if (st.empty()) {
+        //std::cout << "&&&&&&&" << val << "&&&&&&&";
+        // throw error("Expected a '('", str.end());
+      }
+      //PrintStack(st);
+      
       auto threeLetterFunc = [&st, &val, &i, &str, get,
                               &res](string exp) -> bool {
         auto old_i = i;
@@ -104,15 +163,16 @@ string ConvertToPostfix(string str) {
           throw error("Only numbers or ')' are allowed before operetions", i);
       }
       if (hasChar("0123456789", val)) {
-        if (hasChar("0123456789", last))
-          throw error("Sorry, but only numbers < 10", i);
+        if (!hasChar("0123456789", last)) pushOperation(' ');
         res.push_back(val);
-      } else if (val == '(') {
+      }
+      else if (val == '(') {
         st.push(val);
-      } else if (val == ')') {
+      }
+      else if (val == ')') {
         if (!hasChar(")0123456789", last)) {
           if (i == str.end() - 1) {
-            throw error("Only numbers or ')' are allowed at the end of expression", i);
+            throw error("Only numbers or ')' are allowed at the end of expression", str.begin());
           } else {
             throw error("Only numbers or ')' are allowed before ')'", i);
           }
@@ -122,38 +182,40 @@ string ConvertToPostfix(string str) {
         while (!st.empty()) {
           char tmp = get();
           if (tmp != '(') {
-            res.push_back(tmp);
+            pushOperation(tmp);
           } else {
             flag = false;
             break;
           }
         }
         if (flag) {
-          throw error("Expected an expression before ')'", i);
+          throw error("Expected an expression before ')'", str.begin());
         }
       }
       // + -
       else if (hasChar("+-", val)) {
-        if (hasChar("^(*/+-\0", last)) {
+        //std::cout << "&" << last << "%" << val << "!";
+        if (hasChar("_s^(*/+-q", last)) {
+          
           if (val == '-') st.push('_');
         } else {
-          while (!st.empty() && hasChar("s^*/+-", (st.top()))) {
-            res.push_back(get());
+          while (!st.empty() && hasChar("_s^*/+-", (st.top()))) {
+            pushOperation(get());
           }
           st.push(val);
         }
       }
       // * /
       else if (hasChar("*/", val)) {
-        while (!st.empty() && hasChar("s^*/", (st.top()))) {
-          res.push_back(get());
+        while (!st.empty() && hasChar("_s^*/", (st.top()))) {
+          pushOperation(get());
         }
         st.push(val);
       }
       // ^
       else if (hasChar("^", val)) {
-        while (!st.empty() && hasChar("s", (st.top()))) {
-          res.push_back(get());
+        while (!st.empty() && hasChar("_s", (st.top()))) {
+          pushOperation(get());
         }
         st.push(val);
       }
@@ -165,39 +227,33 @@ string ConvertToPostfix(string str) {
       else {
         throw error("Unknown expression", i);
       }
-      //if (st.empty()) {
-      //  if (i == str.end() - 1) {
-      //    throw error(
-      //        "You probably missed something here",
-      //        i);
-      //  } else {
-      //    throw error(
-      //        "Extra ')' found (maybe remove it or add '(' someware before?)",
-      //        i);
-      //  }
+      //if (hasChar("-+_*/s^", val) && hasChar("0123456789", last)) {
+      //  res.insert(res.end() - 1, ' ');
       //}
+
       last = val;
     }
+
     if (!st.empty()) {
-      throw error("Expected a '('", str.end());
+      throw error("Expected a ')'", str.end());
     }
 
     str.erase(str.end() - 1);
-    ret += str + " =\n";
-    ret += "= " + res + " =\n";
+    if (display_str) ret += str + " =\n";
+    ret += "=" + res + " =\n";
     try {
-      int i_res = CalculatePostfix(res);
+      double i_res = calc(res);
       ret += "= " + to_string(i_res) + "\n";
-    } catch (...) {
-      ret += "= Bruh error while calculation(\n";
+    } catch (std::exception er) {
+      ret += "= " + string(er.what()) + "\n";
     }
     //ret += 
   } catch (error e) {
     str.erase(str.end() - 1);
     ret += str + '\n';
     string error_pointer;
-    for (auto i = str.begin(); i < e.pos; ++i) error_pointer += " ";
-    ret += error_pointer + "^" + "\n";
+    //for (auto i = str.begin(); i < e.pos; ++i) error_pointer += " ";
+    //ret += error_pointer + "^" + "\n";
     //ret += error_pointer + "|" + "\n";
     ret += e.er + ", at " + std::to_string(e.pos - str.begin() + 1) + "\n";
   }

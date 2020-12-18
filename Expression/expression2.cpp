@@ -8,7 +8,6 @@ void CoutColor(string s, int color) {
   SetConsoleTextAttribute(hConsole, 7);
 }
 
-
 bool IsStartEqual(str_it start, str_it end, string s) {
   if (end - start < s.size()) return false;
   auto cur = start;
