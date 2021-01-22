@@ -35,7 +35,7 @@ double endTest() {
   //csv << elapsed_seconds.count() << ", ";
 }
 
-double h_sort(int N, int tests = 10) {
+double h_sort(int N, int tests = 3) {
   std::ofstream out_file("heap_sort.csv", std::ios::app);
   vec.resize(N);
   out_file << N;
@@ -52,7 +52,7 @@ double h_sort(int N, int tests = 10) {
   averange /= tests;
   return averange;
 }
-double q_sort(int N, int tests = 10) {
+double q_sort(int N, int tests = 3) {
   std::ofstream out_file("quick_sort.csv", std::ios::app);
   vec.resize(N);
   out_file << N;
@@ -69,7 +69,7 @@ double q_sort(int N, int tests = 10) {
   averange /= tests;
   return averange;
 }
-double r_sort(int N, int tests = 10) {
+double r_sort(int N, int tests = 3) {
   std::ofstream out_file("radix_sort.csv", std::ios::app);
   vec.resize(N);
   out_file << N;
@@ -86,14 +86,14 @@ double r_sort(int N, int tests = 10) {
   averange /= tests;
   return averange;
 }
-double w_sort(int N, int tests = 10) {
+double w_sort(int N, int tests = 3) {
   std::ofstream out_file("wgmlgz_sort.csv", std::ios::app);
   vec.resize(N);
   out_file << N;
   double averange = 0;
   for (int i = 0; i < tests; ++i) {
     startTest("wgmlgz sort");
-    wgmlgzSort(vec.begin(), vec.end(), 200 * 1024 * 1024);
+    wgmlgzSort(vec.begin(), vec.end(), 50 * 1024 * 1024);
     auto res = endTest();
     averange += res;
     out_file << ", " << res;
@@ -110,12 +110,12 @@ void testSorts(int N) {
   vec.resize(N);
   log("create end\n");
 
-  // for (int i = 1; i < 27; ++i) {
+  //for (int i = 1; i < 27; ++i) {
   //  startTest("radix " + std::to_string(i) + " bit");
   //  radixSort_double(vec.begin(), vec.end(), i);
   //  endTest();
   //}
-  csv << ", ";
+  csv << N << ", ";
   csv << h_sort(N) << ", ";
   csv << q_sort(N) << ", ";
   csv << r_sort(N) << ", ";
@@ -132,14 +132,26 @@ void testSorts(int N) {
   //log("[test end] number of Elements -> " + std::to_string(N) + "\n");
 }
 
+void testRadixBits() {
+  std::ofstream out_file("wgmlgz_sort.csv");
+  vec.resize(10000000);
+  for (int i = 1; i < 27; ++i) {
+    startTest("radix " + std::to_string(i) + " bit");
+    radixSort_double(vec.begin(), vec.end(), i);
+    auto res = endTest();
+    out_file << i << ", " << res << std::endl;
+  }
+  out_file.close();
+}
+
 int main() {
+  testRadixBits();
+  return 0;
+  //fillRandomVec(v);
+  //mergeSort(v.begin(), v.end());
+  //std::cout << std::boolalpha <<isSortedVec(v);
 
-  vector v(100);
-  fillRandomVec(v);
-  mergeSort(v.begin(), v.end());
-  std::cout << std::boolalpha <<isSortedVec(v);
-
-    return 0;
+    ///return 0;
   std::ofstream out_file;
   out_file.open("heap_sort.csv");
   out_file.close();
@@ -150,7 +162,7 @@ int main() {
   out_file.open("wgmlgz_sort.csv");
   out_file.close();
   csv << "N, heap_sort, quick_sort, radix_sort, wgmlgz_sort" << std::endl;
-  for (int i = 1000000; i < 10000000; i += 500000)
+  for (int i = 50000000; i < 20000001; i += 2000000)
     testSorts(i);
   log("end!");
   for (;;)

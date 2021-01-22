@@ -143,7 +143,7 @@ void wgmlgzSort(vec_it begin, vec_it end, size_t max_mem = 1) {
   auto getMem = [&]() -> size_t {
     return std::distance(begin, end) * 8 + (1 << 18) * 4;
   };
-  if (max_mem == 0 || 50 * 1024 * 1024 > max_mem) {
+  if (max_mem == 0 || 10 * 1024 * 1024 > max_mem) {
     std::sort(begin, end);
     return;
   }
