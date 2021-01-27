@@ -3,7 +3,7 @@
 #include "converter.h"
 
 int main() {
-  Table table(4, 28413);
+  Table table(4, 48336);
   //std::cout << table.true_ans;
   table.printAns();
 }

@@ -196,20 +196,29 @@ class Table {
     parceAnsRec(v, 1);
   }
   void parceAnsRec(vector<pair<int, int>> v, int index) {
-
-    if (index == table_length) {
-      string res;
+    if (index == table_length + 1) {
+      string res = true_ans;
       for (auto i : v) {
         res += vecToLet(i.first, i.second);
         res += " ";
       }
+
       ans.push_back(res);
       return;
     }
     for (int i = 0; i < table.size(); ++i) {
       if (colors[i][index][0] < 9) {
-        v.push_back(make_pair(i, index));
-        parceAnsRec(v, index + 1);
+        bool b = true;
+        for (auto j = v.begin(); j < v.end(); ++j) {
+          if (colors[j->first][j->second] == colors[i][index] && i == j->first) {
+            b = false;
+          }
+        }
+        auto c = v;
+        if (b) {
+          c.push_back(make_pair(i, index));
+        }
+        parceAnsRec(c, index + 1);
       }
     }
   }
