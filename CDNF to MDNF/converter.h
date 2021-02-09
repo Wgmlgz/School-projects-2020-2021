@@ -8,6 +8,7 @@ using namespace std;
 
 class Table {
  public:
+  size_t vars, num;
   size_t table_length;
   vector<vector<vector<int>>> table;
   vector<vector<vector<int>>> colors;
@@ -27,6 +28,14 @@ class Table {
     int res = 0;
     for (auto i : v) res += i;
     return res;
+  }
+  void setDefaultColors() {
+      colors = table;
+      for (int i = 0; i < table_length + 1; ++i)
+          for (int t = 0; t < table.size(); ++t)
+              for (int j = 0; j < table[t][i].size(); ++j)
+                  if (table[t][i][j] < 0) colors[t][i][j] = 9;
+                  else colors[t][i][j] = colors[t][i][j] ? 7 : 8;
   }
   void createDefaultTable(size_t vars) {
     table_length = 1 << vars;
@@ -53,14 +62,7 @@ class Table {
         }
       }
     }
-  }
-  void setDefaultColors() {
-    colors = table;
-    for (int i = 0; i < table_length + 1; ++i)
-      for (int t = 0; t < table.size(); ++t)
-        for (int j = 0; j < table[t][i].size(); ++j)
-          if (table[t][i][j] < 0) colors[t][i][j] = 9;
-          else colors[t][i][j] = colors[t][i][j] ? 7 : 8;
+    setDefaultColors();
   }
   void removeZeroRows(int number) {
     auto bin = toBin(number, table_length);
@@ -240,31 +242,27 @@ class Table {
       }
     }
   }
-  Table(size_t vars, size_t num) {
 
-    createDefaultTable(vars);
-    setDefaultColors();
+  void calc(size_t nvars, size_t nnum, int step) {
+      vars = nvars;
+      num = nnum;
+      if (step >= 0) createDefaultTable(vars);
+      if (step >= 1) removeZeroRows(num);
+      if (step >= 2) removeExistingInZeroRows();
+      if (step >= 3) absorptionInString();
+      if (step >= 4) removeBadCols();
+      if (step >= 5) findGood();
+      if (step >= 6) clearStuff();
+      if (step >= 7) parceAns();
+      if (step >= 8) removeLong();
+  }
 
-    removeZeroRows(num);
-    printTable();
+  Table(size_t nvars, size_t nnum) {
+    calc(nvars, nnum, 0);
+  }
+  
+  void printTableLong(int size) {
 
-    removeExistingInZeroRows();
-    printTable();
-
-    absorptionInString();
-    printTable();
-
-    removeBadCols();
-    printTable();
-
-    findGood();
-    printTable();
-
-    clearStuff();
-    printTable();
-
-    parceAns();
-    removeLong();
   }
   void printTable() {
     for (int i = 0; i < table_length + 1; ++i) {
@@ -286,6 +284,35 @@ class Table {
       cout << "'" << endl;
     }
     cout << endl;
+  }
+  std::vector<std::vector<std::pair<std::string, int>>> genTable(int step) {
+      std::vector<std::vector<std::pair<std::string, int>>> vec;
+      for (int i = 0; i < table_length + 1; ++i) {
+          std::vector<std::pair<std::string, int>> tmp;
+          for (int t = 0; t < table.size(); ++t) {
+              for (int j = 0; j < table[t][i].size(); ++j) {
+                  //HANDLE hConsole;
+                  //hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+                  //SetConsoleTextAttribute(hConsole, colors[t][i][j]);
+                  if (table[t][i][j] < 0) {
+                      std::string s;
+
+                      s.push_back((-table[t][i][j] - 1) + 'a');
+                      tmp.push_back(make_pair(s, colors[t][i][j]));
+                  }
+                  else {
+                      tmp.push_back(make_pair(std::to_string(table[t][i][j]), colors[t][i][j]));
+                  }
+                  //cout << " ";
+                  //SetConsoleTextAttribute(hConsole, 7);
+              }
+              tmp.push_back(make_pair(" ", 0));
+          }
+          vec.push_back(tmp);
+      }
+      
+      //cout << endl;
+      return vec;
   }
   void printAns() {
     for (auto i : ans) std::cout << i << std::endl;
