@@ -38,6 +38,12 @@ class Table {
                   else colors[t][i][j] = colors[t][i][j] ? 7 : 8;
   }
   void createDefaultTable(size_t vars) {
+    table.clear();
+    colors.clear();
+    helper.clear();
+    ans.clear();
+    true_ans.clear();
+
     table_length = 1 << vars;
     helper.resize(table_length + 1);
     helper[0].resize(vars);
@@ -246,6 +252,8 @@ class Table {
   void calc(size_t nvars, size_t nnum, int step) {
       vars = nvars;
       num = nnum;
+      // 012345678901230123456789 012345678901230123456789 012345678901230123456789 012345678901230123456789 012345678901230123456789
+      // default table | removing zero rows | remove cells that existing in zero rows | absorption in strings | remove bad columns | 
       if (step >= 0) createDefaultTable(vars);
       if (step >= 1) removeZeroRows(num);
       if (step >= 2) removeExistingInZeroRows();
@@ -258,7 +266,7 @@ class Table {
   }
 
   Table(size_t nvars, size_t nnum) {
-    calc(nvars, nnum, 0);
+    calc(nvars, nnum, 8);
   }
   
   void printTableLong(int size) {
@@ -285,36 +293,46 @@ class Table {
     }
     cout << endl;
   }
-  std::vector<std::vector<std::pair<std::string, int>>> genTable(int step) {
+  std::pair<std::vector<std::vector<std::pair<std::string, int>>>, int> genTable(int vars, int num, int step) {
+      calc(vars, num, step);
       std::vector<std::vector<std::pair<std::string, int>>> vec;
+      int length = 0;
       for (int i = 0; i < table_length + 1; ++i) {
           std::vector<std::pair<std::string, int>> tmp;
           for (int t = 0; t < table.size(); ++t) {
+              std::pair<std::string, int> tmp_cell;
               for (int j = 0; j < table[t][i].size(); ++j) {
-                  //HANDLE hConsole;
-                  //hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-                  //SetConsoleTextAttribute(hConsole, colors[t][i][j]);
+                  if (i == 0) ++length;
                   if (table[t][i][j] < 0) {
                       std::string s;
-
                       s.push_back((-table[t][i][j] - 1) + 'a');
-                      tmp.push_back(make_pair(s, colors[t][i][j]));
+                      tmp_cell.first += s;
                   }
                   else {
-                      tmp.push_back(make_pair(std::to_string(table[t][i][j]), colors[t][i][j]));
+                      tmp_cell.first += std::to_string(table[t][i][j]);
                   }
-                  //cout << " ";
-                  //SetConsoleTextAttribute(hConsole, 7);
+                  tmp_cell.second = colors[t][i][j];
               }
-              tmp.push_back(make_pair(" ", 0));
+              //std::cout << tmp_cell.first << " ";
+              tmp.push_back(tmp_cell);
+              //tmp.push_back(make_pair(" ", 0));
           }
+          //std::cout << std::endl;
           vec.push_back(tmp);
       }
       
       //cout << endl;
-      return vec;
+      return std::make_pair(vec, length);
   }
   void printAns() {
     for (auto i : ans) std::cout << i << std::endl;
+  }
+  std::string genAns() {
+      std::string res;
+      for (auto i : ans) {
+          res += i;
+          res += "\n";
+      }
+      return res;
   }
 };
