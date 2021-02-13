@@ -3,73 +3,121 @@
 #include <vector>
 #include <memory>
 
+enum class Dir { left, none, right };
+const auto left = Dir::left;
+const auto right = Dir::right;
+const auto none = Dir::none;
+struct Act {
+	char ch = '\t';
+	Dir dir = right;
+	int q = -2;
+};
+const char SKIP = '\t';
+const char ERR = '-';
+const Act STOP{ SKIP , none, -1 };
+const Act LEFT{ SKIP , left, -2 };
+const Act RIGHT{ SKIP , right, -2 };
+const Act NONE{ '-' , none, -2 };
 class TuringMachine {
 public:
+
 	struct Cell {
 		char ch = '~';
 		Cell* left = nullptr;
 		Cell* right = nullptr;
 	};
-	struct Action {
-		enum Dir {left, right};
-		char ch = '~';
-		Dir dir = right;
-		int q = -2;
-	};
 
 	Cell* last;
 	Cell* curr;
+	Cell* anchor;
 	int state = 0;
-	std::vector<Cell> cells;
-	std::vector<std::pair<char, std::vector<Action>>> table;
+	//std::vector<Cell> cells;
+	std::vector<std::pair<char, std::vector<Act>>> table;
 
 	int iteration = 0;
 	const int max_iterations = 5000;
 
 	void setDefault(std::string s, int pos = 0) {
-		cells.clear();
-		cells.resize(s.length());
-		for (int i = 0; i < s.size(); ++i)     cells[i].ch    = s[i];
-		for (int i = 1; i < s.size(); ++i)     cells[i].left  = &cells[i - 1];
-		for (int i = 0; i < s.size() - 1; ++i) cells[i].right = &cells[i + 1];
-		curr = &cells[pos];
+		Cell* left = nullptr;
+		Cell* right = nullptr;
+		for (auto i : s) {
+			auto tmp_cell = new Cell{ i, left, right };
+			if (left != nullptr) left->right = tmp_cell;
+			else curr = tmp_cell, anchor = tmp_cell;
+			left = tmp_cell;
+		}
+		for (int i = 0; i < pos; ++i) curr = curr->right;
 	}
 	bool iterate() {
 		++iteration;
 		if (state == -1 || iteration > max_iterations) return false;
-		Action* act = nullptr;
+		Act act{ '\0' };
+
 		for (auto i : table) {
 			if (i.first == curr->ch) {
 				if (state >= i.second.size() || state < 0) throw std::exception("Current state is outside of table");
-				act = &i.second[state];
+				act = i.second[state];
 			}
 		}
-		if (act == nullptr) throw std::exception("This symbol is not allowed");
-		if (act->q != -2) state = act->q;
-		curr->ch = act->ch;
-		if (act->dir == Action::left) {
-			if (curr->left == nullptr) cells.push_back(Cell({'~', nullptr, curr}));
-			curr->left = &cells[cells.size() - 1];
+		std::string er = "This symbol ("; er.push_back(curr->ch); er += ") is not allowed";
+		if (act.ch == '\0') throw std::exception(er.c_str());
+		if (act.q != -2) state = act.q;
+		if (act.ch == ERR) throw std::exception("Looks like you have some error in algorithm");
+		if (act.ch != SKIP) curr->ch = act.ch;
+		Cell* tmp_cell;
+		if (act.dir == left) {
+			if (curr->left == nullptr) {
+				tmp_cell = new Cell{ '~', nullptr, curr };
+				curr->left = tmp_cell;
+			}
 			curr = curr->left;
 		}
-		else if (act->dir == Action::right) {
-			if (curr->left == nullptr) cells.push_back(Cell({'~', curr, nullptr}));
-			curr->right = &cells[cells.size() - 1];
+		else if (act.dir == right) {
+			if (curr->right == nullptr) {
+				tmp_cell = new Cell{ '~', curr, nullptr };
+				curr->right = tmp_cell;
+			}
 			curr = curr->right;
 		}
 	}
 	std::string toStr() {
-		Cell* left = &cells[0];
+
+		Cell* left = anchor;
 		while (left->left != nullptr) left = left->left;
-		std::string res;
+		std::string top;
+		std::string bottom;
+		bool do_bot = true;
 		do {
-			res.push_back(left->ch);
+			top.push_back(left->ch);
+			if (do_bot) {
+				if (left == curr) {
+					bottom.push_back('^');
+					bottom += std::to_string(state);
+					do_bot = false;
+				}
+				else {
+					bottom.push_back(' ');
+				}
+			}
 			left = left->right;
-		} while (left->right != nullptr);
-		return res;
+		} while (left != nullptr);
+
+		return top + "\n" + bottom;
 	}
-	TuringMachine(std::string s, std::vector<std::pair<char, std::vector<Action>>> ntable, int pos = 0) {
+	void run(bool show = true) {
+		try {
+			do { if (show) std::cout << toStr() << std::endl; } while (iterate());
+		}
+		catch (const std::exception& err) {
+			std::cout << err.what() << std::endl;
+		}
+	}
+	std::string getRes(bool show = true) {
+		run(show);
+		return toStr();
+	}
+	TuringMachine(std::string s, std::vector<std::pair<char, std::vector<Act>>> ntable, int pos = 0) {
 		setDefault(s, pos);
-		do { std::cout << toStr() << std::endl; } while (iterate());
+		table = ntable;
 	}
 };
