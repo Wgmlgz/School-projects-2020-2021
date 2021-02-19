@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include <chrono>
 
 using cell_t = std::string;
 //using std::vector<std::pair<cell_t, std::vector<Act>>> = std::vector<std::pair<cell_t, std::vector<Act>>>;
@@ -15,11 +16,11 @@ struct Act {
 	int q = -2;
 };
 const cell_t SKIP = "\t";
-const cell_t ERR = "e";
+const cell_t ERR = "ERR";
 const Act ST{ SKIP , nn, -1 };
 const Act LT{ SKIP , lt, -2 };
 const Act RT{ SKIP , rt, -2 };
-const Act NN{ "-" , nn, -2 };
+const Act NN{ ERR , nn, -2 };
 class TuringMachine {
 public:
 
@@ -37,9 +38,11 @@ public:
 	std::vector<std::pair<cell_t, std::vector<Act>>> table;
 
 	int iteration = 0;
-	const int max_iterations = 100000;
+	const int max_iterations = 1000000;
 
 	void setDefault(std::string s, int pos = 0) {
+		state = 0;
+		iteration = 0;
 		Cell* left = nullptr;
 		Cell* right = nullptr;
 		for (auto i : s) {
@@ -51,6 +54,14 @@ public:
 			left = tmp_cell;
 		}
 		for (int i = 0; i < pos; ++i) curr = curr->right;
+	}
+	void addSymbol(std::pair<cell_t, std::vector<Act>> data) {
+		table.push_back(data);
+	}
+	void addState(std::vector<Act> data) {
+		for (int i = 0; i < data.size() && i < table.size(); ++i) {
+			table[i].second.push_back(data[i]);
+		}
 	}
 	bool iterate() {
 		++iteration;
@@ -85,7 +96,6 @@ public:
 		}
 	}
 	std::string toStr() {
-
 		Cell* left = anchor;
 		while (left->left != nullptr) left = left->left;
 		std::string top;
@@ -108,20 +118,37 @@ public:
 
 		return top + "\n" + bottom;
 	}
-	void run(bool show = true) {
+	void run(int show = -1) {
+		auto t_start = std::chrono::high_resolution_clock::now();
+		static auto last_show = std::chrono::high_resolution_clock::now();
 		try {
-			do { if (show) std::cout << toStr() << std::endl; } while (iterate());
+			do { 
+				if (show == -1 || std::chrono::duration<double, std::milli>(std::chrono::high_resolution_clock::now() - last_show).count() > show) {
+					std::cout << toStr() << std::endl;
+					last_show = std::chrono::high_resolution_clock::now();
+				}
+			} while (iterate());
 		}
 		catch (const std::exception& err) {
 			std::cout << err.what() << std::endl;
 		}
+		auto t_end = std::chrono::high_resolution_clock::now();
+		std::cout << "Run time: " << std::chrono::duration<double, std::milli>(t_end - t_start).count() << " ms\n";
 	}
-	std::string getRes(bool show = true) {
+	std::string getRes(int show = -1) {
 		run(show);
 		return toStr();
 	}
+	std::string getRes(std::string n_str, int show = -1) {
+		setDefault(n_str);
+		return getRes(show);
+	}
 	TuringMachine(std::string s, std::vector<std::pair<cell_t, std::vector<Act>>> ntable, int pos = 0) {
 		setDefault(s, pos);
+		table = ntable;
+	}
+	TuringMachine(std::vector<std::pair<cell_t, std::vector<Act>>> ntable) {
+		setDefault("", 0);
 		table = ntable;
 	}
 };
