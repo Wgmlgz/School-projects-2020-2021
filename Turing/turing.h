@@ -3,26 +3,28 @@
 #include <vector>
 #include <memory>
 
+using cell_t = std::string;
+//using std::vector<std::pair<cell_t, std::vector<Act>>> = std::vector<std::pair<cell_t, std::vector<Act>>>;
 enum class Dir { left, none, right };
-const auto left = Dir::left;
-const auto right = Dir::right;
-const auto none = Dir::none;
+const auto lt = Dir::left;
+const auto rt = Dir::right;
+const auto nn = Dir::none;
 struct Act {
-	char ch = '\t';
-	Dir dir = right;
+	cell_t ch = "\t";
+	Dir dir = rt;
 	int q = -2;
 };
-const char SKIP = '\t';
-const char ERR = '-';
-const Act STOP{ SKIP , none, -1 };
-const Act LEFT{ SKIP , left, -2 };
-const Act RIGHT{ SKIP , right, -2 };
-const Act NONE{ '-' , none, -2 };
+const cell_t SKIP = "\t";
+const cell_t ERR = "e";
+const Act ST{ SKIP , nn, -1 };
+const Act LT{ SKIP , lt, -2 };
+const Act RT{ SKIP , rt, -2 };
+const Act NN{ "-" , nn, -2 };
 class TuringMachine {
 public:
 
 	struct Cell {
-		char ch = '~';
+		std::string ch = "~";
 		Cell* left = nullptr;
 		Cell* right = nullptr;
 	};
@@ -32,16 +34,18 @@ public:
 	Cell* anchor;
 	int state = 0;
 	//std::vector<Cell> cells;
-	std::vector<std::pair<char, std::vector<Act>>> table;
+	std::vector<std::pair<cell_t, std::vector<Act>>> table;
 
 	int iteration = 0;
-	const int max_iterations = 5000;
+	const int max_iterations = 100000;
 
 	void setDefault(std::string s, int pos = 0) {
 		Cell* left = nullptr;
 		Cell* right = nullptr;
 		for (auto i : s) {
-			auto tmp_cell = new Cell{ i, left, right };
+			cell_t str;
+			str.push_back(i);
+			auto tmp_cell = new Cell{ str, left, right };
 			if (left != nullptr) left->right = tmp_cell;
 			else curr = tmp_cell, anchor = tmp_cell;
 			left = tmp_cell;
@@ -51,7 +55,7 @@ public:
 	bool iterate() {
 		++iteration;
 		if (state == -1 || iteration > max_iterations) return false;
-		Act act{ '\0' };
+		Act act{ "\0" };
 
 		for (auto i : table) {
 			if (i.first == curr->ch) {
@@ -59,22 +63,22 @@ public:
 				act = i.second[state];
 			}
 		}
-		std::string er = "This symbol ("; er.push_back(curr->ch); er += ") is not allowed";
-		if (act.ch == '\0') throw std::exception(er.c_str());
+		std::string er = "This symbol (" + curr->ch + ") is not allowed";
+		if (act.ch == "\0") throw std::exception(er.c_str());
 		if (act.q != -2) state = act.q;
 		if (act.ch == ERR) throw std::exception("Looks like you have some error in algorithm");
 		if (act.ch != SKIP) curr->ch = act.ch;
 		Cell* tmp_cell;
-		if (act.dir == left) {
+		if (act.dir == lt) {
 			if (curr->left == nullptr) {
-				tmp_cell = new Cell{ '~', nullptr, curr };
+				tmp_cell = new Cell{ "~", nullptr, curr };
 				curr->left = tmp_cell;
 			}
 			curr = curr->left;
 		}
-		else if (act.dir == right) {
+		else if (act.dir == rt) {
 			if (curr->right == nullptr) {
-				tmp_cell = new Cell{ '~', curr, nullptr };
+				tmp_cell = new Cell{ "~", curr, nullptr };
 				curr->right = tmp_cell;
 			}
 			curr = curr->right;
@@ -88,7 +92,7 @@ public:
 		std::string bottom;
 		bool do_bot = true;
 		do {
-			top.push_back(left->ch);
+			top += left->ch;
 			if (do_bot) {
 				if (left == curr) {
 					bottom.push_back('^');
@@ -96,7 +100,7 @@ public:
 					do_bot = false;
 				}
 				else {
-					bottom.push_back(' ');
+					for (int i = 0; i < left->ch.size(); ++i) bottom.push_back(' ');
 				}
 			}
 			left = left->right;
@@ -116,7 +120,7 @@ public:
 		run(show);
 		return toStr();
 	}
-	TuringMachine(std::string s, std::vector<std::pair<char, std::vector<Act>>> ntable, int pos = 0) {
+	TuringMachine(std::string s, std::vector<std::pair<cell_t, std::vector<Act>>> ntable, int pos = 0) {
 		setDefault(s, pos);
 		table = ntable;
 	}
