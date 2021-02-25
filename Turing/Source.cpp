@@ -61,11 +61,11 @@ int main() {
 	 /*v28*/ "28",
 	 /*v29*/ "29",
 	 /*v2A*/ "2A",
-	 /*v2B*/ "2B",
+	 /*v2B*/ "+ ",
 	 /*v2C*/ "2C",
-	 /*v2D*/ "2D",
+	 /*v2D*/ "- ",
 	 /*v2E*/ "2E",
-	 /*v2F*/ "2F",
+	 /*v2F*/ "/ ",
 	 /*v30*/ "0",  
 	 /*v31*/ "1",	 
 	 /*v32*/ "2",	 
@@ -148,7 +148,7 @@ int main() {
 	 /*v7F*/ "7F",
 };
 	// rough table
-	std::vector<std::pair<cell_t, std::vector<Act>>> brain_fuck_table = {
+	std::vector<std::pair<cell_t, std::vector<Act>>> brainfuck_table = {
 		// 0:init program pointer
 		// 1:init space between programm and data pointer
 		// 2:init data pointer
@@ -166,7 +166,6 @@ int main() {
 		//	  14:open all [
 		//    15:close first {
 		//    16:return all to [] and move p to end
-		//  
 		//   17:open all ]
 		//   18:close first }
 		//   19 return all to [] and move p to start
@@ -174,82 +173,66 @@ int main() {
 		// 21:init output pointer
 		// 22:go to d
 		// 23:find p, ++p and do (find and right side)
-		// 24 - ?: grab d to o
+		// 24:find : and 25
+		// 25 - ?: grab d to o
+		// 25 - ?: grab d to o
 	//                                                                                                                                                                  
-	//     0               1              2         3        4              5         6         7        8              9         10       11         12             13        14          15        16          17          18        19        20               21             22        23     
-	{"~",  {ST,  {"__", rt, 2},{v[0] + "d", nn, 3}, NN,      NN,            NN,       NN,       NN,      NN,            NN,{v[0] + "d",lt, 6},NN,     NN,            NN,       NN,         NN,       NN,         NN,         NN,       NN, {"__", lt, 21},  {"_o", rt, 1},       RT,  {"_o", rt}   }},
-	{"__", {ST,             RT,           NN,       LT,      RT,            RT,       LT,       ST,      RT,            RT,       NN,      RT,        LT,            LT,       NN,         NN,       NN,         NN,         NN,       NN,       NN,              NN,            RT,       RT      }},
-	{"+",  {{"+p", lt, 20}, RT,           NN,       LT,      RT,            RT,       LT, {"+p", nn, 3}, RT,            RT,       NN,      RT,        LT,            LT,       RT,         LT,       RT,         LT,         RT,       LT,       NN,              NN,            RT,       RT      }},
-	{"-",  {{"-p", lt, 20}, RT,           NN,       LT,      RT,            RT,       LT, {"-p", nn, 3}, RT,            RT,       NN,      RT,        LT,            LT,       RT,         LT,       RT,         LT,         RT,       LT,       NN,              NN,            RT,       RT      }},
-	{"<",  {{"<p", lt, 20}, RT,           NN,       LT,      RT,            RT,       LT, {"<p", nn, 3}, RT,            RT,       NN,      RT,        LT,            LT,       RT,         LT,       RT,         LT,         RT,       LT,       NN,              NN,            RT,       RT      }},
-	{">",  {{">p", lt, 20}, RT,           NN,       LT,      RT,            RT,       LT, {">p", nn, 3}, RT,            RT,       NN,      RT,        LT,            LT,       RT,         LT,       RT,         LT,         RT,       LT,       NN,              NN,            RT,       RT      }},
-	{"[",  {{"[p", lt, 20}, RT,           NN,       LT,      RT,            RT,       LT, {"[p", nn, 3}, RT,            RT,       NN,      RT,        LT,            LT,    {"{", rt},     NN,       NN,      {"{", rt, 18}, NN,       NN,       NN,              NN,            RT,       RT      }},
-	{"]",  {{"]p", lt, 20}, RT,           NN,       LT,      RT,            RT,       LT, {"]p", nn, 3}, RT,            RT,       NN,      RT,        LT,            LT,    {"}", lt, 15}, NN,       NN,      {"}", lt},     NN,       NN,       NN,              NN,            RT,       RT      }},
-	{".",  {{".p", lt, 20}, RT,           NN,       LT,      RT,            RT,       LT, {".p", nn, 3}, RT,            RT,       NN,      RT,        LT,            LT,       RT,         LT,       RT,         LT,         RT,       LT,       NN,              NN,            RT,       RT      }},
-	{".p", {NN,             RT,           NN, {SKIP, rt, 22},NN,            NN,  {".", rt, 7},  NN,      NN,            NN,       NN,      NN,        NN,            NN,       NN,         NN,       NN,         NN,         NN,       NN,       NN,              NN,            RT,  {".", rt, 7} }},
-	{"+p", {NN,             RT,           NN, {SKIP, rt, 4}, NN,            NN,  {"+", rt, 7},  NN,      NN,            NN,       NN,      NN,        NN,            NN,       NN,         NN,       NN,         NN,         NN,       NN,       NN,              NN,            RT,  {"+", rt, 7} }},
-	{"-p", {NN,             RT,           NN, {SKIP, rt, 5}, NN,            NN,  {"-", rt, 7},  NN,      NN,            NN,       NN,      NN,        NN,            NN,       NN,         NN,       NN,         NN,         NN,       NN,       NN,              NN,            RT,  {"-", rt, 7} }},
-	{"<p", {NN,             RT,           NN, {SKIP, rt, 8}, NN,            NN,  {"<", rt, 7},  NN,      NN,            NN,       NN,      NN,        NN,            NN,       NN,         NN,       NN,         NN,         NN,       NN,       NN,              NN,            RT,  {"<", rt, 7} }},
-	{">p", {NN,             RT,           NN, {SKIP, rt, 9}, NN,            NN,  {">", rt, 7},  NN,      NN,            NN,       NN,      NN,        NN,            NN,       NN,         NN,       NN,         NN,         NN,       NN,       NN,              NN,            RT,  {">", rt, 7} }},
-	{"[p", {NN,             RT,           NN, {SKIP, rt, 11},NN,            NN,  {"[", rt, 7},  NN,      NN,            NN,       NN,      NN,   {"[", rt, 7}, {SKIP, rt, 14}, NN,    {"[", rt, 16}, NN,         NN,         NN,       NN,       NN,              NN,            RT,  {"[", rt, 7} }},
-	{"]p", {NN,             RT,           NN, {SKIP, lt, 17},NN,            NN,  {"]", rt, 7},  NN,      NN,            NN,       NN,      NN,        NN,            NN,       NN,         NN,       NN,         NN,    {"]", lt, 19}, NN,       NN,              NN,            RT,  {"]", rt, 7} }},
-	{"{",  {NN,             NN,           NN,       NN,      NN,            NN,       NN,       NN,      NN,            NN,       NN,      NN,        NN,            NN,       RT,    {"(", rt, 14}, NN,     {"(", lt},      NN,  {"[p", nn, 3}, NN,              NN,            RT,       NN      }},
-	{"}",  {NN,             NN,           NN,       NN,      NN,            NN,       NN,       NN,      NN,            NN,       NN,      NN,        NN,            NN,  {")", rt},       NN,  {"]", rt, 7},    LT,    {")", lt, 17}, NN,       NN,              NN,            RT,       NN      }},
-	{"(",  {NN,             NN,           NN,       NN,      NN,            NN,       NN,       NN,      NN,            NN,       NN,      NN,        NN,            NN,       RT,         LT,    {"[", rt},     LT,         RT,    {"[", lt},   NN,              NN,            RT,       NN      }},
-	{")",  {NN,             NN,           NN,       NN,      NN,            NN,       NN,       NN,      NN,            NN,       NN,      NN,        NN,            NN,       RT,         LT,    {"]", rt},     LT,         RT,    {"]", lt},   NN,              NN,            RT,       NN      }},
-	{"_o", {NN,             NN,           NN,       NN,      NN,            NN,       NN,       NN,      NN,            NN,       NN,      NN,        NN,            NN,       NN,         NN,       NN,         NN,         NN,       NN,       NN,              NN,            NN,       NN      }},
-	//{v[0]+"d", {NN,          NN,           NN,       LT, {v[1] + "d", lt, 6}, {v[127] + "d", lt, 6}, NN,       NN, {v[0], lt, 10}, {v[0], rt, 10}, NN, {SKIP, lt, 13}, NN,            NN,       NN,         NN,       NN,         NN,         NN,       NN,       NN,              NN, {SKIP, lt, 24 +  0}, NN,          NN                                        }},
-	//{v01+"d", {NN,          NN,           NN,       LT, {"2d", lt, 6}, {"0d", lt, 6}, NN,       NN, {v01, lt, 10}, {v01, rt, 10}, NN, {SKIP, lt, 12}, NN,            NN,       NN,         NN,       NN,         NN,         NN,       NN,       NN,              NN, {SKIP, lt, 24 +  1}, NN,          NN                  }},
-	//{v02+"d", {NN,          NN,           NN,       LT, {"3d", lt, 6}, {"1d", lt, 6}, NN,       NN, {v02, lt, 10}, {v02, rt, 10}, NN, {SKIP, lt, 12}, NN,            NN,       NN,         NN,       NN,         NN,         NN,       NN,       NN,              NN, {SKIP, lt, 24 +  2}, NN,          NN                  }},
-	//{v03+"d", {NN,          NN,           NN,       LT, {"4d", lt, 6}, {"2d", lt, 6}, NN,       NN, {v03, lt, 10}, {v03, rt, 10}, NN, {SKIP, lt, 12}, NN,            NN,       NN,         NN,       NN,         NN,         NN,       NN,       NN,              NN, {SKIP, lt, 24 +  3}, NN,          NN                  }},
-	//{v04+"d", {NN,          NN,           NN,       LT, {"5d", lt, 6}, {"3d", lt, 6}, NN,       NN, {v04, lt, 10}, {v04, rt, 10}, NN, {SKIP, lt, 12}, NN,            NN,       NN,         NN,       NN,         NN,         NN,       NN,       NN,              NN, {SKIP, lt, 24 +  4}, NN,          NN                  }},
-	//{v05+"d", {NN,          NN,           NN,       LT, {"6d", lt, 6}, {"4d", lt, 6}, NN,       NN, {v05, lt, 10}, {v05, rt, 10}, NN, {SKIP, lt, 12}, NN,            NN,       NN,         NN,       NN,         NN,         NN,       NN,       NN,              NN, {SKIP, lt, 24 +  5}, NN,          NN                  }},
-	//{v06+"d", {NN,          NN,           NN,       LT, {"7d", lt, 6}, {"5d", lt, 6}, NN,       NN, {v06, lt, 10}, {v06, rt, 10}, NN, {SKIP, lt, 12}, NN,            NN,       NN,         NN,       NN,         NN,         NN,       NN,       NN,              NN, {SKIP, lt, 24 +  6}, NN,          NN                  }},
-	//{v07+"d", {NN,          NN,           NN,       LT, {"8d", lt, 6}, {"6d", lt, 6}, NN,       NN, {v07, lt, 10}, {v07, rt, 10}, NN, {SKIP, lt, 12}, NN,            NN,       NN,         NN,       NN,         NN,         NN,       NN,       NN,              NN, {SKIP, lt, 24 +  7}, NN,          NN                  }},
-	//{v08+"d", {NN,          NN,           NN,       LT, {"9d", lt, 6}, {"7d", lt, 6}, NN,       NN, {v08, lt, 10}, {v08, rt, 10}, NN, {SKIP, lt, 12}, NN,            NN,       NN,         NN,       NN,         NN,         NN,       NN,       NN,              NN, {SKIP, lt, 24 +  8}, NN,          NN                  }},
-	//{v09+"d", {NN,          NN,           NN,       LT, {"Ad", lt, 6}, {"8d", lt, 6}, NN,       NN, {v09, lt, 10}, {v09, rt, 10}, NN, {SKIP, lt, 12}, NN,            NN,       NN,         NN,       NN,         NN,         NN,       NN,       NN,              NN, {SKIP, lt, 24 +  9}, NN,          NN                  }},
-	//{v0A+"d", {NN,          NN,           NN,       LT, {"Bd", lt, 6}, {"9d", lt, 6}, NN,       NN, {v0A, lt, 10}, {v0A, rt, 10}, NN, {SKIP, lt, 12}, NN,            NN,       NN,         NN,       NN,         NN,         NN,       NN,       NN,              NN, {SKIP, lt, 24 + 10}, NN,          NN                  }},
-	//{v0B+"d", {NN,          NN,           NN,       LT, {"Cd", lt, 6}, {"Ad", lt, 6}, NN,       NN, {v0B, lt, 10}, {v0B, rt, 10}, NN, {SKIP, lt, 12}, NN,            NN,       NN,         NN,       NN,         NN,         NN,       NN,       NN,              NN, {SKIP, lt, 24 + 11}, NN,          NN                  }},
-	//{v0C+"d", {NN,          NN,           NN,       LT, {"Dd", lt, 6}, {"Bd", lt, 6}, NN,       NN, {v0C, lt, 10}, {v0C, rt, 10}, NN, {SKIP, lt, 12}, NN,            NN,       NN,         NN,       NN,         NN,         NN,       NN,       NN,              NN, {SKIP, lt, 24 + 12}, NN,          NN                  }},
-	//{v0D+"d", {NN,          NN,           NN,       LT, {"Ed", lt, 6}, {"Cd", lt, 6}, NN,       NN, {v0D, lt, 10}, {v0D, rt, 10}, NN, {SKIP, lt, 12}, NN,            NN,       NN,         NN,       NN,         NN,         NN,       NN,       NN,              NN, {SKIP, lt, 24 + 13}, NN,          NN                  }},
-	//{v0E+"d", {NN,          NN,           NN,       LT, {"Fd", lt, 6}, {"Dd", lt, 6}, NN,       NN, {v0E, lt, 10}, {v0E, rt, 10}, NN, {SKIP, lt, 12}, NN,            NN,       NN,         NN,       NN,         NN,         NN,       NN,       NN,              NN, {SKIP, lt, 24 + 14}, NN,          NN                  }},
-	//{v0F+"d", {NN,          NN,           NN,       LT, {"0d", lt, 6}, {"Ed", lt, 6}, NN,       NN, {v0F, lt, 10}, {v0F, rt, 10}, NN, {SKIP, lt, 12}, NN,            NN,       NN,         NN,       NN,         NN,         NN,       NN,       NN,              NN, {SKIP, lt, 24 + 15}, NN,          NN                  }},
-	//{v00,  {NN,             NN,           NN,       LT,      RT,            RT,       LT,       NN,      RT,            RT,{v00 + "d",lt, 6}, RT,        LT,            LT,       NN,         NN,       NN,         NN,         NN,       NN,       NN,              NN,            RT,       RT,         LT                  }},
-	//{v01,  {NN,             NN,           NN,       LT,      RT,            RT,       LT,       NN,      RT,            RT,{v01 + "d",lt, 6}, RT,        LT,            LT,       NN,         NN,       NN,         NN,         NN,       NN,       NN,              NN,            RT,       RT,         LT                  }},
-	//{v02,  {NN,             NN,           NN,       LT,      RT,            RT,       LT,       NN,      RT,            RT,{v02 + "d",lt, 6}, RT,        LT,            LT,       NN,         NN,       NN,         NN,         NN,       NN,       NN,              NN,            RT,       RT,         LT                  }},
-	//{v03,  {NN,             NN,           NN,       LT,      RT,            RT,       LT,       NN,      RT,            RT,{v03 + "d",lt, 6}, RT,        LT,            LT,       NN,         NN,       NN,         NN,         NN,       NN,       NN,              NN,            RT,       RT,         LT                  }},
-	//{v04,  {NN,             NN,           NN,       LT,      RT,            RT,       LT,       NN,      RT,            RT,{v04 + "d",lt, 6}, RT,        LT,            LT,       NN,         NN,       NN,         NN,         NN,       NN,       NN,              NN,            RT,       RT,         LT                  }},
-	//{v05,  {NN,             NN,           NN,       LT,      RT,            RT,       LT,       NN,      RT,            RT,{v05 + "d",lt, 6}, RT,        LT,            LT,       NN,         NN,       NN,         NN,         NN,       NN,       NN,              NN,            RT,       RT,         LT                  }},
-	//{v06,  {NN,             NN,           NN,       LT,      RT,            RT,       LT,       NN,      RT,            RT,{v06 + "d",lt, 6}, RT,        LT,            LT,       NN,         NN,       NN,         NN,         NN,       NN,       NN,              NN,            RT,       RT,         LT                  }},
-	//{v07,  {NN,             NN,           NN,       LT,      RT,            RT,       LT,       NN,      RT,            RT,{v07 + "d",lt, 6}, RT,        LT,            LT,       NN,         NN,       NN,         NN,         NN,       NN,       NN,              NN,            RT,       RT,         LT                  }},
-	//{v08,  {NN,             NN,           NN,       LT,      RT,            RT,       LT,       NN,      RT,            RT,{v08 + "d",lt, 6}, RT,        LT,            LT,       NN,         NN,       NN,         NN,         NN,       NN,       NN,              NN,            RT,       RT,         LT                  }},
-	//{v09,  {NN,             NN,           NN,       LT,      RT,            RT,       LT,       NN,      RT,            RT,{v09 + "d",lt, 6}, RT,        LT,            LT,       NN,         NN,       NN,         NN,         NN,       NN,       NN,              NN,            RT,       RT,         LT                  }},
-	//{v0A,  {NN,             NN,           NN,       LT,      RT,            RT,       LT,       NN,      RT,            RT,{v0A + "d",lt, 6}, RT,        LT,            LT,       NN,         NN,       NN,         NN,         NN,       NN,       NN,              NN,            RT,       RT,         LT                  }},
-	//{v0B,  {NN,             NN,           NN,       LT,      RT,            RT,       LT,       NN,      RT,            RT,{v0B + "d",lt, 6}, RT,        LT,            LT,       NN,         NN,       NN,         NN,         NN,       NN,       NN,              NN,            RT,       RT,         LT                  }},
-	//{v0C,  {NN,             NN,           NN,       LT,      RT,            RT,       LT,       NN,      RT,            RT,{v0C + "d",lt, 6}, RT,        LT,            LT,       NN,         NN,       NN,         NN,         NN,       NN,       NN,              NN,            RT,       RT,         LT                  }},
-	//{v0D,  {NN,             NN,           NN,       LT,      RT,            RT,       LT,       NN,      RT,            RT,{v0D + "d",lt, 6}, RT,        LT,            LT,       NN,         NN,       NN,         NN,         NN,       NN,       NN,              NN,            RT,       RT,         LT                  }},
-	//{v0E,  {NN,             NN,           NN,       LT,      RT,            RT,       LT,       NN,      RT,            RT,{v0E + "d",lt, 6}, RT,        LT,            LT,       NN,         NN,       NN,         NN,         NN,       NN,       NN,              NN,            RT,       RT,         LT                  }},
-	//{v0F,  {NN,             NN,           NN,       LT,      RT,            RT,       LT,       NN,      RT,            RT,{v0F+"d",lt, 6}, RT,        LT,            LT,       NN,         NN,       NN,         NN,         NN,       NN,       NN,              NN,            RT,       RT,         LT                  }},
-		  //{"<p", {NONE,             NONE,                                  }},
-		  //{">p", {NONE,             NONE,                                   }},
-
-			//{"[", },
-			//{"]", },
+	//     0               1              2         3        4              5         6         7        8              9         10       11         12             13        14          15        16          17          18        19        20               21             22        23       24
+	{"~",  {ST,  {"||", rt, 2},{v[0] + "d", nn, 3}, NN,      NN,            NN,       NN,       NN,      NN,            NN,{v[0] + "d",lt, 6},NN,     NN,            NN,       NN,         NN,       NN,         NN,         NN,       NN, {"||", lt, 21},  {"|o", rt, 1},       RT,  {"|o", rt},   NN}},
+	{"||", {ST,             RT,           NN,       LT,      RT,            RT,       LT,       ST,      RT,            RT,       NN,      RT,        LT,            LT,       NN,         NN,       NN,         NN,         NN,       NN,       NN,              NN,            RT,       RT,{SKIP, rt, 24 + 128 + 127}}},
+	{"+",  {{"+p", lt, 20}, RT,           NN,       LT,      RT,            RT,       LT, {"+p", nn, 3}, RT,            RT,       NN,      RT,        LT,            LT,       RT,         LT,       RT,         LT,         RT,       LT,       NN,              NN,            RT,       RT,      RT}},
+	{"-",  {{"-p", lt, 20}, RT,           NN,       LT,      RT,            RT,       LT, {"-p", nn, 3}, RT,            RT,       NN,      RT,        LT,            LT,       RT,         LT,       RT,         LT,         RT,       LT,       NN,              NN,            RT,       RT,      RT}},
+	{"<",  {{"<p", lt, 20}, RT,           NN,       LT,      RT,            RT,       LT, {"<p", nn, 3}, RT,            RT,       NN,      RT,        LT,            LT,       RT,         LT,       RT,         LT,         RT,       LT,       NN,              NN,            RT,       RT,      RT}},
+	{">",  {{">p", lt, 20}, RT,           NN,       LT,      RT,            RT,       LT, {">p", nn, 3}, RT,            RT,       NN,      RT,        LT,            LT,       RT,         LT,       RT,         LT,         RT,       LT,       NN,              NN,            RT,       RT,      RT}},
+	{"[",  {{"[p", lt, 20}, RT,           NN,       LT,      RT,            RT,       LT, {"[p", nn, 3}, RT,            RT,       NN,      RT,        LT,            LT,    {"{", rt},     NN,       NN,      {"{", rt, 18}, NN,       NN,       NN,              NN,            RT,       RT,      RT}},
+	{"]",  {{"]p", lt, 20}, RT,           NN,       LT,      RT,            RT,       LT, {"]p", nn, 3}, RT,            RT,       NN,      RT,        LT,            LT,    {"}", lt, 15}, NN,       NN,      {"}", lt},     NN,       NN,       NN,              NN,            RT,       RT,      RT}},
+	{".",  {{".p", lt, 20}, RT,           NN,       LT,      RT,            RT,       LT, {".p", nn, 3}, RT,            RT,       NN,      RT,        LT,            LT,       RT,         LT,       RT,         LT,         RT,       LT,       NN,              NN,            RT,       RT,      RT}},
+	{".p", {NN,             RT,           NN, {SKIP, rt, 22},NN,            NN,  {".", rt, 7},  NN,      NN,            NN,       NN,      NN,        NN,            NN,       NN,         NN,       NN,         NN,         NN,       NN,       NN,              NN,            RT,  {".", rt, 7}, RT}},
+	{"+p", {NN,             RT,           NN, {SKIP, rt, 4}, NN,            NN,  {"+", rt, 7},  NN,      NN,            NN,       NN,      NN,        NN,            NN,       NN,         NN,       NN,         NN,         NN,       NN,       NN,              NN,            RT,  {"+", rt, 7}, RT}},
+	{"-p", {NN,             RT,           NN, {SKIP, rt, 5}, NN,            NN,  {"-", rt, 7},  NN,      NN,            NN,       NN,      NN,        NN,            NN,       NN,         NN,       NN,         NN,         NN,       NN,       NN,              NN,            RT,  {"-", rt, 7}, RT}},
+	{"<p", {NN,             RT,           NN, {SKIP, rt, 8}, NN,            NN,  {"<", rt, 7},  NN,      NN,            NN,       NN,      NN,        NN,            NN,       NN,         NN,       NN,         NN,         NN,       NN,       NN,              NN,            RT,  {"<", rt, 7}, RT}},
+	{">p", {NN,             RT,           NN, {SKIP, rt, 9}, NN,            NN,  {">", rt, 7},  NN,      NN,            NN,       NN,      NN,        NN,            NN,       NN,         NN,       NN,         NN,         NN,       NN,       NN,              NN,            RT,  {">", rt, 7}, RT}},
+	{"[p", {NN,             RT,           NN, {SKIP, rt, 11},NN,            NN,  {"[", rt, 7},  NN,      NN,            NN,       NN,      NN,   {"[", rt, 7}, {SKIP, rt, 14}, NN,    {"[", rt, 16}, NN,         NN,         NN,       NN,       NN,              NN,            RT,  {"[", rt, 7}, RT}},
+	{"]p", {NN,             RT,           NN, {SKIP, lt, 17},NN,            NN,  {"]", rt, 7},  NN,      NN,            NN,       NN,      NN,        NN,            NN,       NN,         NN,       NN,         NN,    {"]", lt, 19}, NN,       NN,              NN,            RT,  {"]", rt, 7}, RT}},
+	{"{",  {NN,             NN,           NN,       NN,      NN,            NN,       NN,       NN,      NN,            NN,       NN,      NN,        NN,            NN,       RT,    {"(", rt, 14}, NN,     {"(", lt},      NN,  {"[p", nn, 3}, NN,              NN,            RT,       NN,      NN}},
+	{"}",  {NN,             NN,           NN,       NN,      NN,            NN,       NN,       NN,      NN,            NN,       NN,      NN,        NN,            NN,  {")", rt},       NN,  {"]", rt, 7},    LT,    {")", lt, 17}, NN,       NN,              NN,            RT,       NN,      NN}},
+	{"(",  {NN,             NN,           NN,       NN,      NN,            NN,       NN,       NN,      NN,            NN,       NN,      NN,        NN,            NN,       RT,         LT,    {"[", rt},     LT,         RT,    {"[", lt},   NN,              NN,            RT,       NN,      NN}},
+	{")",  {NN,             NN,           NN,       NN,      NN,            NN,       NN,       NN,      NN,            NN,       NN,      NN,        NN,            NN,       RT,         LT,    {"]", rt},     LT,         RT,    {"]", lt},   NN,              NN,            RT,       NN,      NN}},
+	{"|o", {NN,             NN,           NN,       NN,      NN,            NN,       NN,       NN,      NN,            NN,       NN,      NN,        NN,            NN,       NN,         NN,       NN,         NN,         NN,       NN,       NN,              NN,            NN,       NN,      NN}},
+	{":",  {ST,             RT,           NN,       LT,      RT,            RT,       LT,       ST,      RT,            RT,       NN,      RT,        LT,            LT,       NN,         NN,       NN,         NN,         NN,       NN,       NN,              NN,            RT,       RT,      RT}},
+	{",",  {{",p", lt, 20}, RT,           NN,       LT,      RT,            RT,       LT, {",p", nn, 3}, RT,            RT,       NN,      RT,        LT,            LT,       RT,         LT,       RT,         LT,         RT,       LT,       NN,              NN,            RT,       RT,      RT}},
+	{",p", {NN,             RT,           NN, {SKIP, rt, 24},NN,            NN,  {",", rt, 7},  NN,      NN,            NN,       NN,      NN,        NN,            NN,       NN,         NN,       NN,         NN,         NN,       NN,       NN,              NN,            RT,  {",", rt, 7}, RT}},
 	{"", {}} };
-	TuringMachine brain_fuck(brain_fuck_table);
+	TuringMachine brainfuck(brainfuck_table);
 
 	for (int i = 0; i < 128; ++i)
-		brain_fuck.addSymbol({ v[i] + "d", {NN, NN, NN, LT, {v[i == 127? 0 : i + 1] + "d", lt, 6}, {v[i?i - 1:127] + "d", lt, 6}, NN, NN, {v[i], lt, 10}, {v[i], rt, 10}, NN, {SKIP, lt, i?12:13}, NN, NN, NN, NN, NN, NN, NN, NN, NN, NN, {SKIP, lt, 24 + i}, NN}});
+		brainfuck.addSymbol({ v[i] + "d", {NN, NN, NN, LT, {v[i == 127? 0 : i + 1] + "d", lt, 6}, {v[i?i - 1:127] + "d", lt, 6}, NN, NN, {v[i], lt, 10}, {v[i], rt, 10}, NN, {SKIP, lt, i?12:13}, NN, NN, NN, NN, NN, NN, NN, NN, NN, NN, {SKIP, lt, 25 + i}, NN}});
 	for (int i = 0; i < 128; ++i)
-		brain_fuck.addSymbol({ v[i], {NN, NN, NN, LT, RT, RT, LT, NN, RT, RT,{v[i] + "d",lt, 6}, RT, LT, LT, NN, NN, NN, NN, NN, NN, NN, NN, RT, RT} });
-	std::vector<Act> tmp = {NN,LT,LT,LT,LT,LT,LT,LT,LT,LT,LT,LT,LT,LT,LT,LT,NN,NN,NN,NN,{v[0], lt, 23}};
+		//                            0   1   2   3   4   5   6   7   8   9      10             11  12  13  14  15  16  17  18  19  20  21  22  23    24
+		brainfuck.addSymbol({ v[i], {NN, RT, NN, LT, RT, RT, LT, NN, RT, RT,{v[i] + "d",lt, 6}, RT, LT, LT, NN, NN, NN, NN, NN, NN, NN, NN, RT, RT, {":", rt, i + 24 + 128}} });
+	std::vector<Act> tmp = {NN,LT,LT,LT,LT,LT,LT,LT,LT,LT,LT,LT,LT,LT,LT,LT,NN,NN,NN,NN,{v[0], lt, 23},LT,LT,LT};
 	for (int i = 0; i < 128; ++i) tmp.push_back(NN);
 	for (int i = 0; i < 128; ++i) tmp.push_back(LT);
 	for (int i = 0; i < 128; ++i) {
 		tmp[20].ch = v[i];
-		brain_fuck.addState(tmp);
+		brainfuck.addState(tmp);
+	}
+	//       0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 
+	tmp = { NN,RT,NN,NN,NN,NN,NN,NN,NN,NN,NN,NN,NN,NN,NN,NN,NN,NN,NN,NN,NN,NN,NN,NN,NN,NN,NN };
+	for (int i = 0; i < 128; ++i) tmp.push_back({v[0] + "d", lt, 6});
+	for (int i = 0; i < 128; ++i) tmp.push_back(RT);
+	for (int i = 0; i < 128; ++i) {
+		for (int j = 0; j < 128; ++j) {
+			tmp[25 + j].ch = v[i] + "d";
+		}
+		brainfuck.addState(tmp);
 	}
 
-	std::cout << brain_fuck.getRes("++>+++++[<+>-]++++++++[<++++++>-]<.", 1000);
-	std::cout << brain_fuck.getRes("+++++++++>[][].", 1000);
+	// Hello world!
+	std::cout << brainfuck.getRes("++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++.:aab");
+
+	// 2
+	//std::cout << brainfuck.getRes(",>,>,>>++++++++[-<++++++>>++++++<]<[-<<<->->->]<<<[->++++++++++<]>[-<+++++>]>>>>++<<<<<[->>>>>.>+<<<<<<[->>>>>-------.+++++++.<<<<<]]>>[->>>>[-<-------.+++++++>]<.---.+++.<<<[->>>-------.+++++++.---.+++.<<<]]:010", 1);
+	//+
+	//std::cout << brainfuck.getRes("+++++++++>[][].", 1000);
 }

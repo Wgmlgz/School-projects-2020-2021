@@ -1,8 +1,10 @@
 #pragma once
+#include <iostream>
 #include <string>
 #include <vector>
 #include <memory>
 #include <chrono>
+#include <map>
 
 using cell_t = std::string;
 //using std::vector<std::pair<cell_t, std::vector<Act>>> = std::vector<std::pair<cell_t, std::vector<Act>>>;
@@ -36,9 +38,10 @@ public:
 	int state = 0;
 	//std::vector<Cell> cells;
 	std::vector<std::pair<cell_t, std::vector<Act>>> table;
+	std::map<cell_t, std::vector<Act>> optimized_table;
 
 	int iteration = 0;
-	const int max_iterations = 1000000;
+	const int max_iterations = 100000000;
 
 	void setDefault(std::string s, int pos = 0) {
 		state = 0;
@@ -68,16 +71,21 @@ public:
 		if (state == -1 || iteration > max_iterations) return false;
 		Act act{ "\0" };
 
-		for (auto i : table) {
-			if (i.first == curr->ch) {
-				if (state >= i.second.size() || state < 0) throw std::exception("Current state is outside of table");
-				act = i.second[state];
-			}
+		auto search_res = optimized_table.find(curr->ch);
+		if (search_res != optimized_table.end()) {
+			if (state >= search_res->second.size() || state < 0) throw (std::runtime_error("Current state is outside of table"));
+			act = search_res->second[state];
 		}
-		std::string er = "This symbol (" + curr->ch + ") is not allowed";
-		if (act.ch == "\0") throw std::exception(er.c_str());
+		else {
+			std::string er = "This symbol (" + curr->ch + ") is not allowed";
+			if (act.ch == "\0") throw std::runtime_error(er.c_str());
+		}		
+		
 		if (act.q != -2) state = act.q;
-		if (act.ch == ERR) throw std::exception("Looks like you have some error in algorithm");
+		if (act.ch == ERR) {
+			std::string er = "Looks like you have some error in algorithm " + std::string(search_res->first);
+			throw std::runtime_error(er.c_str());
+		}
 		if (act.ch != SKIP) curr->ch = act.ch;
 		Cell* tmp_cell;
 		if (act.dir == lt) {
@@ -98,11 +106,26 @@ public:
 	std::string toStr() {
 		Cell* left = anchor;
 		while (left->left != nullptr) left = left->left;
-		std::string top;
+		std::vector<std::string> data;
 		std::string bottom;
+		int max_ch_size = 1;
+		int strip_size = 0;
+
+		while (left != nullptr) {
+			if (left->ch.size() > max_ch_size) max_ch_size = left->ch.size();
+			++strip_size;
+			left = left->right;
+		}
+
+		data.resize(max_ch_size);
 		bool do_bot = true;
-		do {
-			top += left->ch;
+		left = anchor;
+		while (left->left != nullptr) left = left->left;
+		int pos = 0;
+		while (left != nullptr) {
+			auto tmp = left->ch;
+			tmp.resize(max_ch_size, ' ');
+			for (int i = 0; i < max_ch_size; ++i) data[i].push_back(tmp[i]);
 			if (do_bot) {
 				if (left == curr) {
 					bottom.push_back('^');
@@ -110,15 +133,23 @@ public:
 					do_bot = false;
 				}
 				else {
-					for (int i = 0; i < left->ch.size(); ++i) bottom.push_back(' ');
+					bottom.push_back(' ');
 				}
 			}
 			left = left->right;
-		} while (left != nullptr);
+			++pos;
+		}
 
-		return top + "\n" + bottom;
+		std::string res;
+		for (auto i : data) res += i + "\n";
+		return res + bottom;
+	}
+	void createOptimizedTable() {
+		optimized_table.clear();
+		for (auto i : table) optimized_table.insert(i);
 	}
 	void run(int show = -1) {
+		createOptimizedTable();
 		auto t_start = std::chrono::high_resolution_clock::now();
 		static auto last_show = std::chrono::high_resolution_clock::now();
 		try {
@@ -129,7 +160,7 @@ public:
 				}
 			} while (iterate());
 		}
-		catch (const std::exception& err) {
+		catch (const std::runtime_error& err) {
 			std::cout << err.what() << std::endl;
 		}
 		auto t_end = std::chrono::high_resolution_clock::now();
