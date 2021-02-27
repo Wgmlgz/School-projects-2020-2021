@@ -18,9 +18,15 @@
     <ClCompile Include="Source.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="turing.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="turing.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="brainfuck.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

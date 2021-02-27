@@ -40,8 +40,15 @@ public:
 	std::vector<std::pair<cell_t, std::vector<Act>>> table;
 	std::map<cell_t, std::vector<Act>> optimized_table;
 
+	int add_left;
+	int add_right;
 	int iteration = 0;
 	const int max_iterations = 100000000;
+
+	void createOptimizedTable() {
+		optimized_table.clear();
+		for (auto i : table) optimized_table.insert(i);
+	}
 
 	void setDefault(std::string s, int pos = 0) {
 		state = 0;
@@ -57,6 +64,8 @@ public:
 			left = tmp_cell;
 		}
 		for (int i = 0; i < pos; ++i) curr = curr->right;
+		add_right = s.size();
+		createOptimizedTable();
 	}
 	void addSymbol(std::pair<cell_t, std::vector<Act>> data) {
 		table.push_back(data);
@@ -91,6 +100,7 @@ public:
 		if (act.dir == lt) {
 			if (curr->left == nullptr) {
 				tmp_cell = new Cell{ "~", nullptr, curr };
+				++add_left;
 				curr->left = tmp_cell;
 			}
 			curr = curr->left;
@@ -98,10 +108,39 @@ public:
 		else if (act.dir == rt) {
 			if (curr->right == nullptr) {
 				tmp_cell = new Cell{ "~", curr, nullptr };
+				++add_right;
 				curr->right = tmp_cell;
 			}
 			curr = curr->right;
 		}
+	}
+	std::string toStrUnity() {
+		std::string res;
+		Cell* left = anchor;
+		while (left->left != nullptr) left = left->left;
+		int pos = 0;
+		while (left != nullptr) {
+			if (left == curr) break;
+			else ++pos;
+			left = left->right;
+		}
+		res += std::to_string(pos);
+		res += "&";
+		res += std::to_string(state);
+		res += "&";
+		for (int i = 0; i < add_left; ++i) res += "l";
+		for (int i = 0; i < add_right; ++i) res += "r";
+		add_left = 0;
+		add_right = 0;
+		
+		while (left->left != nullptr) left = left->left;
+		while (left != nullptr) {
+			res += "`";
+			res += left->ch;
+			left = left->right;
+		}
+		res += "%";
+		return res;
 	}
 	std::string toStr() {
 		Cell* left = anchor;
@@ -144,9 +183,13 @@ public:
 		for (auto i : data) res += i + "\n";
 		return res + bottom;
 	}
-	void createOptimizedTable() {
-		optimized_table.clear();
-		for (auto i : table) optimized_table.insert(i);
+	void safeIterate() {
+		try {
+			iterate();
+		}
+		catch (const std::runtime_error& err) {
+			//std::cout << err.what() << std::endl;
+		}
 	}
 	void run(int show = -1) {
 		createOptimizedTable();
@@ -164,7 +207,7 @@ public:
 			std::cout << err.what() << std::endl;
 		}
 		auto t_end = std::chrono::high_resolution_clock::now();
-		std::cout << "Run time: " << std::chrono::duration<double, std::milli>(t_end - t_start).count() << " ms\n";
+		std::cout << "Run time: " << std::chrono::duration<double, std::milli>(t_end - t_start).count() << " ms iterations: " << iteration <<  "\n";
 	}
 	std::string getRes(int show = -1) {
 		run(show);
