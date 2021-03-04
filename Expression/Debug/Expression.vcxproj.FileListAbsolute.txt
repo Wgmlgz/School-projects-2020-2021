@@ -1,0 +1,2 @@
+C:\C\School\Expression\Debug\Expression.exe
+C:\C\School\Expression\Debug\Expression.pdb

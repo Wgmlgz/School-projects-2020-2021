@@ -1,0 +1,3 @@
+﻿  Source.cpp
+C:\C\School\Turing\turing.h(82): warning C4715: 'TuringMachine::iterate': not all control paths return a value
+  Turing.vcxproj -> C:\C\School\Turing\x64\Debug\Turing.exe

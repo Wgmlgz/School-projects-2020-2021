@@ -1,0 +1,35 @@
+﻿  main.cpp
+C:\C\School\CDNF to MDNF\converter.h(34,25): warning C4018: '<': signed/unsigned mismatch
+C:\C\School\CDNF to MDNF\converter.h(35,29): warning C4018: '<': signed/unsigned mismatch
+C:\C\School\CDNF to MDNF\converter.h(36,33): warning C4018: '<': signed/unsigned mismatch
+C:\C\School\CDNF to MDNF\converter.h(44,23): warning C4018: '<=': signed/unsigned mismatch
+C:\C\School\CDNF to MDNF\converter.h(45,23): warning C4018: '<=': signed/unsigned mismatch
+C:\C\School\CDNF to MDNF\converter.h(48,23): warning C4018: '<=': signed/unsigned mismatch
+C:\C\School\CDNF to MDNF\converter.h(53,29): warning C4018: '<': signed/unsigned mismatch
+C:\C\School\CDNF to MDNF\converter.h(69,23): warning C4018: '<=': signed/unsigned mismatch
+C:\C\School\CDNF to MDNF\converter.h(71,27): warning C4018: '<': signed/unsigned mismatch
+C:\C\School\CDNF to MDNF\converter.h(72,29): warning C4018: '<': signed/unsigned mismatch
+C:\C\School\CDNF to MDNF\converter.h(78,23): warning C4018: '<': signed/unsigned mismatch
+C:\C\School\CDNF to MDNF\converter.h(79,25): warning C4018: '<': signed/unsigned mismatch
+C:\C\School\CDNF to MDNF\converter.h(80,27): warning C4018: '<': signed/unsigned mismatch
+C:\C\School\CDNF to MDNF\converter.h(89,23): warning C4018: '<': signed/unsigned mismatch
+C:\C\School\CDNF to MDNF\converter.h(90,25): warning C4018: '<': signed/unsigned mismatch
+C:\C\School\CDNF to MDNF\converter.h(92,33): warning C4018: '<': signed/unsigned mismatch
+C:\C\School\CDNF to MDNF\converter.h(108,23): warning C4018: '<': signed/unsigned mismatch
+C:\C\School\CDNF to MDNF\converter.h(121,23): warning C4018: '<': signed/unsigned mismatch
+C:\C\School\CDNF to MDNF\converter.h(128,23): warning C4018: '<': signed/unsigned mismatch
+C:\C\School\CDNF to MDNF\converter.h(131,25): warning C4018: '<': signed/unsigned mismatch
+C:\C\School\CDNF to MDNF\converter.h(141,27): warning C4018: '<': signed/unsigned mismatch
+C:\C\School\CDNF to MDNF\converter.h(143,31): warning C4018: '<': signed/unsigned mismatch
+C:\C\School\CDNF to MDNF\converter.h(182,23): warning C4018: '<': signed/unsigned mismatch
+C:\C\School\CDNF to MDNF\converter.h(184,25): warning C4018: '<': signed/unsigned mismatch
+C:\C\School\CDNF to MDNF\converter.h(211,23): warning C4018: '<': signed/unsigned mismatch
+C:\C\School\CDNF to MDNF\converter.h(229,23): warning C4018: '<': signed/unsigned mismatch
+C:\C\School\CDNF to MDNF\converter.h(235,23): warning C4018: '<': signed/unsigned mismatch
+C:\C\School\CDNF to MDNF\converter.h(268,23): warning C4018: '<': signed/unsigned mismatch
+C:\C\School\CDNF to MDNF\converter.h(269,25): warning C4018: '<': signed/unsigned mismatch
+C:\C\School\CDNF to MDNF\converter.h(270,27): warning C4018: '<': signed/unsigned mismatch
+C:\C\School\CDNF to MDNF\converter.h(290,25): warning C4018: '<': signed/unsigned mismatch
+C:\C\School\CDNF to MDNF\converter.h(292,29): warning C4018: '<': signed/unsigned mismatch
+C:\C\School\CDNF to MDNF\converter.h(293,33): warning C4018: '<': signed/unsigned mismatch
+  CDNF to MDNF.vcxproj -> C:\C\School\CDNF to MDNF\Debug\CDNF to MDNF.exe

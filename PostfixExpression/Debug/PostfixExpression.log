@@ -1,0 +1,3 @@
+﻿  Source.cpp
+C:\C\School\PostfixExpression\PostfixExpression.h(62,23): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+  PostfixExpression.vcxproj -> C:\C\School\PostfixExpression\Debug\PostfixExpression.exe
