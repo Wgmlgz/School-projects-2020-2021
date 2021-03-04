@@ -140,7 +140,10 @@ public class TuringMachineGO : MonoBehaviour {
 
         // spiral
         x += size / 2;
-        var pos = new Vector3(x * 0.15f, 0, 0);
+        var r = x * 0.15f;
+        var pos = new Vector3(r, 0, 0);
+        var c = 2 * Mathf.PI * r;
+        var target_angle = 1;
         pos = Quaternion.AngleAxis(Mathf.Pow(x, 0.4f) * size * 10f, Vector3.up) * pos;
         return pos;
     }
