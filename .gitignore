@@ -365,6 +365,7 @@ FodyWeavers.xsd
 #
 # Get latest from https://github.com/github/gitignore/blob/master/Unity.gitignore
 #
+#/Turing/Turing emulator/Library/
 /Turing/Turing emulator/[Ll]ibrary/
 /Turing/Turing emulator/[Tt]emp/
 /Turing/Turing emulator/[Oo]bj/
@@ -432,3 +433,6 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+
+#Turing/Turing emulator/Library/
+/Turing/
