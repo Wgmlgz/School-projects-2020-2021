@@ -25,7 +25,91 @@ const Act RT{ SKIP , rt, -2 };
 const Act NN{ ERR , nn, -2 };
 class TuringMachine {
 public:
+	//csv
+#pragma region csv
+	enum class CSVState {
+		UnquotedField,
+		QuotedField,
+		QuotedQuote
+	};
 
+	std::vector<std::string> readCSVRow(const std::string& row) {
+		CSVState state = CSVState::UnquotedField;
+		std::vector<std::string> fields{ "" };
+		size_t i = 0; // index of the current field
+		for (char c : row) {
+			switch (state) {
+			case CSVState::UnquotedField:
+				switch (c) {
+				case ',': // end of field
+					fields.push_back(""); i++;
+					break;
+				case '"': state = CSVState::QuotedField;
+					break;
+				default:  fields[i].push_back(c);
+					break;
+				}
+				break;
+			case CSVState::QuotedField:
+				switch (c) {
+				case '"': state = CSVState::QuotedQuote;
+					break;
+				default:  fields[i].push_back(c);
+					break;
+				}
+				break;
+			case CSVState::QuotedQuote:
+				switch (c) {
+				case ',': // , after closing quote
+					fields.push_back(""); i++;
+					state = CSVState::UnquotedField;
+					break;
+				case '"': // "" -> "
+					fields[i].push_back('"');
+					state = CSVState::QuotedField;
+					break;
+				default:  // end of quote
+					state = CSVState::UnquotedField;
+					break;
+				}
+				break;
+			}
+		}
+		return fields;
+	}
+	std::vector<std::string> split(const std::string& str, const std::string& delim) {
+		std::vector<std::string> tokens;
+		size_t prev = 0, pos = 0;
+		do {
+			pos = str.find(delim, prev);
+			if (pos == std::string::npos) pos = str.length();
+			std::string token = str.substr(prev, pos - prev);
+			if (!token.empty()) tokens.push_back(token);
+			prev = pos + delim.length();
+		} while (pos < str.length() && prev < str.length());
+		return tokens;
+	}
+	/// Read CSV file, Excel dialect. Accept "quoted fields ""with quotes"""
+	std::vector<std::vector<std::string>> readCSV(std::string& str) {
+		std::vector<std::vector<std::string>> table;
+		for (auto i : split(str, "\n"))
+			table.push_back(readCSVRow(i));
+		return table;
+	}
+	std::vector<std::vector<std::string>> readCSV(std::istream& in) {
+		std::vector<std::vector<std::string>> table;
+		std::string row;
+		while (!in.eof()) {
+			std::getline(in, row);
+			if (in.bad() || in.fail()) {
+				break;
+			}
+			auto fields = readCSVRow(row);
+			table.push_back(fields);
+		}
+		return table;
+	}
+#pragma endregion
 	struct Cell {
 		std::string ch = "~";
 		Cell* left = nullptr;
@@ -49,7 +133,40 @@ public:
 		optimized_table.clear();
 		for (auto i : table) optimized_table.insert(i);
 	}
+	std::vector<std::pair<cell_t, std::vector<Act>>> parceStrToTable(std::string str) {
+		auto csv_input = readCSV(str);
 
+		std::vector<std::pair<cell_t, std::vector<Act>>> table;
+		for (auto i : csv_input) {
+			std::pair<cell_t, std::vector<Act>> line;
+			for (size_t j = 0; j < i.size(); ++j) {
+				if (j == 0) {
+					line.first = i[0];
+				}
+				else {
+					Act tmp_act;
+					if (i[j] == "ST") tmp_act = ST;
+					if (i[j] == "LT") tmp_act = LT;
+					if (i[j] == "RT") tmp_act = RT;
+					if (i[j] == "NN") tmp_act = NN;
+					else {
+						tmp_act.ch = i[j];
+						if (i[j + 1] == "<") tmp_act.dir = lt;
+						if (i[j + 1] == ">") tmp_act.dir = rt;
+						if (i[j + 1] == "lt") tmp_act.dir = lt;
+						if (i[j + 1] == "rt") tmp_act.dir = rt;
+						if (i[j + 1] == "=") tmp_act.dir = nn;
+						if (i[j + 1] == "nn") tmp_act.dir = nn;
+						tmp_act.q = std::stoi(i[j + 2]);
+						j += 2;
+					}
+					line.second.push_back(tmp_act);
+				}
+			}
+			table.push_back(line);
+		}
+		return table;
+	}
 	void setDefault(std::string s, int pos = 0) {
 		state = 0;
 		iteration = 0;

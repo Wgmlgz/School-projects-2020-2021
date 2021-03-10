@@ -1,7 +1,10 @@
 ﻿  Source.cpp
-  Generating code
-  1 of 262 functions ( 0.4%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    10 functions had inline decision re-evaluated but remain unchanged
-  Finished generating code
-  Turing.vcxproj -> C:\C\School\Turing\x64\Release\Turing.exe
+C:\C\School\Turing\turing.h(82,1): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\C\School\Turing\turing.h(169,1): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\C\School\Turing\turing.h(205,36): warning C4101: 'err': unreferenced local variable
+C:\C\School\Turing\Source.cpp(21,12): error C2039: 'parceStrToTable': is not a member of 'TuringMachine'
+C:\C\School\Turing\turing.h(27): message : see declaration of 'TuringMachine'
+  turing.cc
+C:\C\School\Turing\turing.h(82,1): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\C\School\Turing\turing.h(169,1): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\C\School\Turing\turing.h(205,36): warning C4101: 'err': unreferenced local variable

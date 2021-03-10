@@ -1,3 +1,12 @@
 ﻿  Source.cpp
-C:\C\School\Turing\turing.h(82): warning C4715: 'TuringMachine::iterate': not all control paths return a value
+C:\C\School\Turing\turing.h(184,1): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\C\School\Turing\turing.h(271,1): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\C\School\Turing\turing.h(307,36): warning C4101: 'err': unreferenced local variable
+  turing.cc
+C:\C\School\Turing\turing.h(184,1): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\C\School\Turing\turing.h(271,1): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\C\School\Turing\turing.h(307,36): warning C4101: 'err': unreferenced local variable
+  Generating Code...
+C:\C\School\Turing\turing.h(233): warning C4715: 'TuringMachine::iterate': not all control paths return a value
+C:\C\School\Turing\turing.h(233): warning C4715: 'TuringMachine::iterate': not all control paths return a value
   Turing.vcxproj -> C:\C\School\Turing\x64\Debug\Turing.exe
