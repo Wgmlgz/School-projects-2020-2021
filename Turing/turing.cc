@@ -3,24 +3,20 @@
 #include <string.h>
 #include "brainfuck.h"
 #pragma warning(disable:4996)
-extern "C" {
-    TuringMachine* init(){
-        TuringMachine* a_to_b = new TuringMachine("aaaa", {
-            {"a", {{"b", rt}}},
-            {"~", {RT}}
-        });
-        return a_to_b;
-    }
-    TuringMachine* initBrainfuck() {
-        auto bf_tm = brainfuckTM();
-        TuringMachine* p = new TuringMachine(bf_tm);
-        return p;
-    }
-    void run(TuringMachine* tm, char* buf) {
-        std::string st = tm->getRes(666);
 
-        strcpy(buf, st.c_str());
+extern "C" {
+    TuringMachine* init(const char* s_table, const char* str, int pos) {
+        std::string std_s_table(s_table);
+        std::string std_str(str);
+        TuringMachine* tm_p = new TuringMachine(std_s_table, std_str, pos);
+        return tm_p;
     }
+    //TuringMachine* init() {
+    //    std::string std_s_table("   a, b,   >   , 0\n~, ~    ,=, -1");
+    //    std::string std_str("aaa");
+    //    TuringMachine* tm_p = new TuringMachine(std_s_table, std_str, 0);
+    //    return tm_p;
+    //}
     void safeIterate(TuringMachine* tm) {
         tm->safeIterate();
     }

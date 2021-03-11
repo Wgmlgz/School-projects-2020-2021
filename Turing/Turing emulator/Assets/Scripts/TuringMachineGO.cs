@@ -14,10 +14,15 @@ public class TuringMachineGO : MonoBehaviour {
     public TMPro.TextMeshProUGUI ips_t;
     public TMPro.TextMeshProUGUI total_iterations_t;
     public Toggle auto_t;
+    public TMPro.TMP_InputField table_t;
+    public TMPro.TMP_InputField str_t;
+    public TMPro.TMP_InputField new_pos_t;
+
     public int total_iterations;
     float last_display_ips;
     float ips;
     int iterations = 0;
+    int state;
     public float update_ips_time = 0.5f;
 
     public GameObject blink;
@@ -28,10 +33,10 @@ public class TuringMachineGO : MonoBehaviour {
 
     IntPtr tm_p;
 
-    [DllImport("turing")]
-    private static extern IntPtr init();
-    [DllImport("turing")]
-    private static extern IntPtr initBrainfuck();
+    [DllImport("turing", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr init(string s1, string s2, int i);
+    //[DllImport("turing")]
+    //private static extern IntPtr initBrainfuck();
     //[DllImport("turing")]
     //private static extern void run(IntPtr tm, byte[] buf);
     [DllImport("turing")]
@@ -39,18 +44,38 @@ public class TuringMachineGO : MonoBehaviour {
     [DllImport("turing")]
     private static extern void getStr(IntPtr tm, byte[] buf);
 
+    public void resetTm() {
+        string s1 = table_t.text;
+        string s2 = str_t.text;
+        int p = int.Parse(new_pos_t.text);
+        for (int i = 0; i < cells.Count; i++) {
+            Destroy(cells[i].gameObject);
+        }
+        cells.Clear();
+        min_x = 0;
+        iterations = 0;
+        tm_p = init(s1, s2, p);
+        PlayerPrefs.SetString("table", s1);
+        PlayerPrefs.SetString("str", s2);
+        PlayerPrefs.SetInt("pos", p);
+        
+        //Application.LoadLevel(Application.loadedLevel);
+    }
+
     private void Awake() {
         head.tm = this;
     }
     void Start() {
-        //tm_p = init();
-        tm_p = initBrainfuck();
+        tm_p = init("~,~,=,-1", "~", 0);
+        table_t.text = PlayerPrefs.GetString("table");
+        str_t.text = PlayerPrefs.GetString("str");
+        new_pos_t.text = PlayerPrefs.GetInt("pos").ToString();
         //byte[] buf = new byte[300];
         //run(t, buf);
         //Debug.Log(System.Text.Encoding.ASCII.GetString(buf));
     }
     GameObject createCell(int x) {
-        Debug.Log(min_x.ToString() + " " + x.ToString());
+        //Debug.Log(min_x.ToString() + " " + x.ToString());
         var tmp_cell = Instantiate(cell_example);
         var c = tmp_cell.GetComponent<Cell>();
         c.tm = this;
@@ -72,9 +97,8 @@ public class TuringMachineGO : MonoBehaviour {
         safeIterate(tm_p);
         blink.SetActive(!blink.activeSelf);
     }
-
     void Update() {
-        if (auto_t.isOn) {
+        if (auto_t.isOn && state != -1) {
             update_time = Mathf.Pow(speed_slider.value, 7f);
             for (cur_time += Time.deltaTime; cur_time > update_time; cur_time -= update_time) {
                 iterate();
@@ -105,7 +129,7 @@ public class TuringMachineGO : MonoBehaviour {
 
         int i = 0;
         string tmp = "";
-        int pos, state;
+        int pos;
 
         for (; str[i] != '&'; ++i) tmp += str[i];
         pos = int.Parse(tmp);
@@ -130,21 +154,21 @@ public class TuringMachineGO : MonoBehaviour {
         int size = 40;
 
         // liniar
-        //x += size / 2;
-        //var pos = Vector3.zero;
-        //float x_mod = x % size;
-        //if (x_mod < 0) x_mod = size + x_mod;
-        //pos.x = (x_mod - size / 2) * 1.5f;
-        //pos.z = (x / size - (x_mod / size)) * 4;
-        //return pos;
+        x += size / 2;
+        var pos = Vector3.zero;
+        float x_mod = x % size;
+        if (x_mod < 0) x_mod = size + x_mod;
+        pos.x = (x_mod - size / 2) * 1.5f;
+        pos.z = (x / size - (x_mod / size)) * 4;
+        return pos;
 
         // spiral
-        x += size / 2;
-        var r = x * 0.15f;
-        var pos = new Vector3(r, 0, 0);
-        var c = 2 * Mathf.PI * r;
-        var target_angle = 1;
-        pos = Quaternion.AngleAxis(Mathf.Pow(x, 0.4f) * size * 10f, Vector3.up) * pos;
-        return pos;
+        //x += size / 2;
+        //var r = x * 0.15f;
+        //var pos = new Vector3(r, 0, 0);
+        //var c = 2 * Mathf.PI * r;
+        //var target_angle = 1;
+        //pos = Quaternion.AngleAxis(Mathf.Pow(x, 0.4f) * size * 10f, Vector3.up) * pos;
+        //return pos;
     }
 }

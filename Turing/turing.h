@@ -124,8 +124,8 @@ public:
 	std::vector<std::pair<cell_t, std::vector<Act>>> table;
 	std::map<cell_t, std::vector<Act>> optimized_table;
 
-	int add_left;
-	int add_right;
+	int add_left = 0;
+	int add_right = 0;
 	int iteration = 0;
 	const int max_iterations = 100000000;
 
@@ -133,11 +133,22 @@ public:
 		optimized_table.clear();
 		for (auto i : table) optimized_table.insert(i);
 	}
+	std::string removeSpace(std::string str) {
+		if (str.size() == 0) return "";
+		int st = 0;
+		while (str[st] == ' ') ++st;
+		int end = str.size() - 1;
+		while (str[end] == ' ') --end;
+		return str.substr(st, end - st + 1);
+	}
 	std::vector<std::pair<cell_t, std::vector<Act>>> parceStrToTable(std::string str) {
 		auto csv_input = readCSV(str);
 
+		for (auto& i : csv_input) for (auto& j : i) j = removeSpace(j);
+
 		std::vector<std::pair<cell_t, std::vector<Act>>> table;
-		for (auto i : csv_input) {
+		for (auto& i : csv_input) {
+
 			std::pair<cell_t, std::vector<Act>> line;
 			for (size_t j = 0; j < i.size(); ++j) {
 				if (j == 0) {
@@ -205,8 +216,8 @@ public:
 		else {
 			std::string er = "This symbol (" + curr->ch + ") is not allowed";
 			if (act.ch == "\0") throw std::runtime_error(er.c_str());
-		}		
-		
+		}
+
 		if (act.q != -2) state = act.q;
 		if (act.ch == ERR) {
 			std::string er = "Looks like you have some error in algorithm " + std::string(search_res->first);
@@ -249,7 +260,7 @@ public:
 		for (int i = 0; i < add_right; ++i) res += "r";
 		add_left = 0;
 		add_right = 0;
-		
+
 		while (left->left != nullptr) left = left->left;
 		while (left != nullptr) {
 			res += "`";
@@ -313,7 +324,7 @@ public:
 		auto t_start = std::chrono::high_resolution_clock::now();
 		static auto last_show = std::chrono::high_resolution_clock::now();
 		try {
-			do { 
+			do {
 				if (show == -1 || std::chrono::duration<double, std::milli>(std::chrono::high_resolution_clock::now() - last_show).count() > show) {
 					std::cout << toStr() << std::endl;
 					last_show = std::chrono::high_resolution_clock::now();
@@ -324,7 +335,7 @@ public:
 			std::cout << err.what() << std::endl;
 		}
 		auto t_end = std::chrono::high_resolution_clock::now();
-		std::cout << "Run time: " << std::chrono::duration<double, std::milli>(t_end - t_start).count() << " ms iterations: " << iteration <<  "\n";
+		std::cout << "Run time: " << std::chrono::duration<double, std::milli>(t_end - t_start).count() << " ms iterations: " << iteration << "\n";
 	}
 	std::string getRes(int show = -1) {
 		run(show);
@@ -341,5 +352,15 @@ public:
 	TuringMachine(std::vector<std::pair<cell_t, std::vector<Act>>> ntable) {
 		setDefault("", 0);
 		table = ntable;
+	}
+	TuringMachine(std::string stable, std::string str, int pos = 0) {
+		try {
+			setDefault(str, pos);
+			table = parceStrToTable(stable);
+			createOptimizedTable();
+		}
+		catch (const std::runtime_error& err) {
+			//std::cout << err.what() << std::endl;
+		}
 	}
 };

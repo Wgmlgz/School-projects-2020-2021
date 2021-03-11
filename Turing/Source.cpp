@@ -17,15 +17,18 @@ int main() {
 		{"~", { {SKIP, rt, 3}, {"c", nn, 0}, {"d", nn, 0}, ST         }}
 	}, 8);
 
+	auto da = TuringMachine("   a   ,   b   ,   >   ,     0\n~,  ~    ,=,-1","aaaaaaa");
 	auto brainfuck = brainfuckTM();
-	auto t = brainfuck.parceStrToTable("a,b,>,0\n~,~,=,-1");
+	auto t = brainfuck.parceStrToTable("   a   ,   b   ,   >   ,     0\n~,  ~    ,=,-1");
 	brainfuck.table = t;
 	//brainfuck.setDefault("++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++.:aab");
 	brainfuck.setDefault("aaaaaaa");
+
 	for (int i = 0; i < 10000000; ++i) {
-		//std::cout << brainfuck.toStrUnity() << std::endl;
-		std::cout << brainfuck.toStr() << std::endl;
-		brainfuck.safeIterate();
+
+		std::cout << brainfuck.toStrUnity() << std::endl;
+		//std::cout << da.toStr() << std::endl;
+		da.safeIterate();
 	}
 
 	

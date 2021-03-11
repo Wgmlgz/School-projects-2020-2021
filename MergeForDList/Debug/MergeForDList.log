@@ -1,0 +1,4 @@
+﻿  Source.cpp
+C:\C\School\MergeForDList\Source.cpp(102,20): warning C4018: '<': signed/unsigned mismatch
+C:\C\School\MergeForDList\Source.cpp(112,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  MergeForDList.vcxproj -> C:\C\School\MergeForDList\Debug\MergeForDList.exe

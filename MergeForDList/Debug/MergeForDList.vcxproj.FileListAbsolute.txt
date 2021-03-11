@@ -1,0 +1,2 @@
+C:\C\School\MergeForDList\Debug\MergeForDList.exe
+C:\C\School\MergeForDList\Debug\MergeForDList.pdb
