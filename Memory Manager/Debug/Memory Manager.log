@@ -1,0 +1,36 @@
+﻿  Source.cpp
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29333\include\type_traits(524,28): error C2139: 'MemoryManager::APtrComp': an undefined class is not allowed as an argument to compiler intrinsic type trait '__is_empty'
+C:\C\School\Memory Manager\Source.cpp(22): message : see declaration of 'MemoryManager::APtrComp'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29333\include\xmemory(1329): message : see reference to variable template 'const bool is_empty_v<MemoryManager::APtrComp>' being compiled
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29333\include\set(223): message : see reference to class template instantiation 'std::_Tree<std::_Tset_traits<_Kty,_Pr,_Alloc,true>>' being compiled
+          with
+          [
+              _Kty=MemoryManager::Area *,
+              _Pr=MemoryManager::APtrComp,
+              _Alloc=std::allocator<MemoryManager::Area *>
+          ]
+C:\C\School\Memory Manager\Source.cpp(23): message : see reference to class template instantiation 'std::multiset<MemoryManager::Area *,MemoryManager::APtrComp,std::allocator<MemoryManager::Area *>>' being compiled
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29333\include\type_traits(545,28): error C2139: 'MemoryManager::APtrComp': an undefined class is not allowed as an argument to compiler intrinsic type trait '__is_final'
+C:\C\School\Memory Manager\Source.cpp(22): message : see declaration of 'MemoryManager::APtrComp'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29333\include\xmemory(1329): message : see reference to variable template 'const bool is_final_v<MemoryManager::APtrComp>' being compiled
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29333\include\xmemory(1358,10): error C2079: 'std::_Compressed_pair<MemoryManager::APtrComp,std::_Compressed_pair<std::allocator<std::_Tree_node<MemoryManager::Area *,std::_Default_allocator_traits<_Alloc>::void_pointer>>,std::_Tree_val<std::_Tree_simple_types<MemoryManager::Area *>>,true>,false>::_Myval1' uses undefined struct 'MemoryManager::APtrComp'
+          with
+          [
+              _Alloc=std::allocator<MemoryManager::Area *>
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29333\include\xtree(2055): message : see reference to class template instantiation 'std::_Compressed_pair<MemoryManager::APtrComp,std::_Compressed_pair<std::allocator<std::_Tree_node<MemoryManager::Area *,std::_Default_allocator_traits<_Alloc>::void_pointer>>,std::_Tree_val<std::_Tree_simple_types<MemoryManager::Area *>>,true>,false>' being compiled
+          with
+          [
+              _Alloc=std::allocator<MemoryManager::Area *>
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29333\include\xmemory(51,51): error C2064: term does not evaluate to a function taking 2 arguments
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29333\include\xtree(1783): message : see reference to variable template 'const bool _Nothrow_compare<MemoryManager::APtrComp,MemoryManager::Area *,MemoryManager::Area *>' being compiled
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29333\include\xtree(1782): message : while compiling class template member function 'std::pair<std::_Tree_node<MemoryManager::Area *,std::_Default_allocator_traits<_Alloc>::void_pointer> *,std::_Tree_node<MemoryManager::Area *,std::_Default_allocator_traits<_Alloc>::void_pointer> *> std::_Tree<std::_Tset_traits<_Kty,_Pr,_Alloc,true>>::_Eqrange<MemoryManager::Area*>(const _Other &) noexcept(<expr>) const'
+          with
+          [
+              _Alloc=std::allocator<MemoryManager::Area *>,
+              _Kty=MemoryManager::Area *,
+              _Pr=MemoryManager::APtrComp,
+              _Other=MemoryManager::Area *
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29333\include\xmemory(50,47): error C2056: illegal expression

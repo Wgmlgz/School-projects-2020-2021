@@ -48,6 +48,8 @@ public class TuringMachineGO : MonoBehaviour {
         string s1 = table_t.text;
         string s2 = str_t.text;
         int p = int.Parse(new_pos_t.text);
+        if (p < 0) p = 0;
+        if (p >= s2.Length) p = 0;
         for (int i = 0; i < cells.Count; i++) {
             Destroy(cells[i].gameObject);
         }

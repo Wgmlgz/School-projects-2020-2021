@@ -4,8 +4,8 @@
 using std::pair;
 
 struct node {
-	node* l = nullptr;
-	node* r = nullptr;
+	node* prev = nullptr;
+	node* next = nullptr;
 	int data = 0;
 };
 using np = node*;
@@ -17,9 +17,9 @@ lst genRandomList(int sz) {
 	for (int i = 0; i < sz; ++i) {
 		auto t = new node;
 		t->data = rand() % 10;
-		if (cur) cur->r = t;
+		if (cur) cur->next = t;
 		if (!h) h = t;
-		t->l = cur;
+		t->prev = cur;
 		cur = t;
 	}
 	return { h, cur };
@@ -28,58 +28,58 @@ void printList(lst ls) {
 	auto cur = ls.first;
 	while (cur != nullptr) {
 		std::cout << cur->data << " ";
-		cur = cur->r;
+		cur = cur->next;
 	}
 	std::cout << std::endl;
 }
 
 lst merge(lst a, lst b) {
 	lst ret;
-	auto prev = a.first->l;
-	auto end = b.second->r;
+	auto prev = a.first->prev;
+	auto end = b.second->next;
 	np ap = a.first;
 	np bp = b.first;
 	np rp;
-	a.second->r = nullptr;
-	b.second->r = nullptr;
-	a.first->l = nullptr;
-	b.first->l = nullptr;
+	a.second->next = nullptr;
+	b.second->next = nullptr;
+	a.first->prev = nullptr;
+	b.first->prev = nullptr;
 
 	if (ap->data < bp->data) {
 		rp = ap;
-		ap = ap->r;
+		ap = ap->next;
 	}
 	else {
 		rp = bp;
-		bp = bp->r;
+		bp = bp->next;
 	}
 	ret.first = rp;
-	if (prev) prev->r = rp;
+	if (prev) prev->next = rp;
 
 	while (ap != nullptr && bp != nullptr) {
 		if (ap->data < bp->data) {
-			rp->r = ap;
-			ap->l = rp;
-			ap = ap->r;
+			rp->next = ap;
+			ap->prev = rp;
+			ap = ap->next;
 		}
 		else {
-			rp->r = bp;
-			bp->l = rp;
-			bp = bp->r;
+			rp->next = bp;
+			bp->prev = rp;
+			bp = bp->next;
 		}
-		rp = rp->r;
+		rp = rp->next;
 	}
 
 	if (ap != nullptr) {
-		rp->r = ap;
-		ap->l = rp;
-		if (end) { end->l = a.second; a.second->r = end;}
+		rp->next = ap;
+		ap->prev = rp;
+		if (end) { end->prev = a.second; a.second->next = end;}
 		ret.second = a.second;
 	}
 	else if (bp != nullptr) {
-		rp->r = bp;
-		bp->l = rp;
-		if (end) { end->l = b.second; b.second->r = end; }
+		rp->next = bp;
+		bp->prev = rp;
+		if (end) { end->prev = b.second; b.second->next = end; }
 		ret.second = b.second;
 	}
 
@@ -91,7 +91,7 @@ lst mergeSort(lst& ls, size_t sz = -1) {
 		sz = 0;
 		auto t = ls.first;
 		while (t != nullptr) {
-			t = t->r;
+			t = t->next;
 			++sz;
 		}
 	}
@@ -99,8 +99,8 @@ lst mergeSort(lst& ls, size_t sz = -1) {
 	lst b = { nullptr, ls.second };
 
 	np mid = ls.first;
-	for (int i = 0; i < sz / 2; ++i) mid = mid->r;
-	a.second = mid->l;
+	for (int i = 0; i < sz / 2; ++i) mid = mid->next;
+	a.second = mid->prev;
 	b.first = mid;
 	a = mergeSort(a, sz / 2);
 	b = mergeSort(b, sz - sz / 2);

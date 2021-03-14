@@ -1,0 +1,28 @@
+﻿  Source.cpp
+C:\C\School\Memory Manager\Source.cpp(37,1): error C2027: use of undefined type 'MemoryManager::Area'
+C:\C\School\Memory Manager\Source.cpp(20): message : see declaration of 'MemoryManager::Area'
+C:\C\School\Memory Manager\Source.cpp(38,1): error C2027: use of undefined type 'MemoryManager::Area'
+C:\C\School\Memory Manager\Source.cpp(20): message : see declaration of 'MemoryManager::Area'
+C:\C\School\Memory Manager\Source.cpp(41,1): error C2027: use of undefined type 'MemoryManager::Area'
+C:\C\School\Memory Manager\Source.cpp(20): message : see declaration of 'MemoryManager::Area'
+C:\C\School\Memory Manager\Source.cpp(119,1): error C2819: type 'MemoryManager::AreaNP' does not have an overloaded member 'operator ->'
+C:\C\School\Memory Manager\Source.cpp(21): message : see declaration of 'MemoryManager::AreaNP'
+C:\C\School\Memory Manager\Source.cpp(119,1): message : did you intend to use '.' instead?
+C:\C\School\Memory Manager\Source.cpp(119,33): error C2039: 'pos': is not a member of 'MemoryManager::AreaNP'
+C:\C\School\Memory Manager\Source.cpp(21): message : see declaration of 'MemoryManager::AreaNP'
+C:\C\School\Memory Manager\Source.cpp(137,12): error C2819: type 'MemoryManager::AreaNP' does not have an overloaded member 'operator ->'
+C:\C\School\Memory Manager\Source.cpp(21): message : see declaration of 'MemoryManager::AreaNP'
+C:\C\School\Memory Manager\Source.cpp(137,12): message : did you intend to use '.' instead?
+C:\C\School\Memory Manager\Source.cpp(137,20): error C2039: 'size': is not a member of 'MemoryManager::AreaNP'
+C:\C\School\Memory Manager\Source.cpp(21): message : see declaration of 'MemoryManager::AreaNP'
+C:\C\School\Memory Manager\Source.cpp(138,26): error C2819: type 'MemoryManager::AreaNP' does not have an overloaded member 'operator ->'
+C:\C\School\Memory Manager\Source.cpp(21): message : see declaration of 'MemoryManager::AreaNP'
+C:\C\School\Memory Manager\Source.cpp(138,26): message : did you intend to use '.' instead?
+C:\C\School\Memory Manager\Source.cpp(138,28): error C2039: 'pos': is not a member of 'MemoryManager::AreaNP'
+C:\C\School\Memory Manager\Source.cpp(21): message : see declaration of 'MemoryManager::AreaNP'
+C:\C\School\Memory Manager\Source.cpp(139,27): error C2819: type 'MemoryManager::AreaNP' does not have an overloaded member 'operator ->'
+C:\C\School\Memory Manager\Source.cpp(21): message : see declaration of 'MemoryManager::AreaNP'
+C:\C\School\Memory Manager\Source.cpp(139,27): message : did you intend to use '.' instead?
+C:\C\School\Memory Manager\Source.cpp(139,29): error C2039: 'give': is not a member of 'MemoryManager::AreaNP'
+C:\C\School\Memory Manager\Source.cpp(21): message : see declaration of 'MemoryManager::AreaNP'
+C:\C\School\Memory Manager\Source.cpp(140,37): error C3536: 't': cannot be used before it is initialized
