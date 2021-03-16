@@ -1,10 +1,13 @@
-#include <iostream>
+﻿#include <iostream>
 #include <vector>
 #include <utility>
 #include <map>
 #include <set>
 #include <list>
 #include <functional>
+#include <chrono>
+
+const bool DEBUG = false;
 
 using std::vector;
 using std::multiset;
@@ -13,149 +16,192 @@ using std::pair;
 using std::endl;
 using std::cout;
 using std::cin;
+using time_p = std::chrono::time_point < std::chrono::steady_clock>;
 int cells, requests;
+
+struct Area {
+    int size = 0;
+    int pos = 0;
+    bool free = true;
+    Area* prev = nullptr;
+    Area* next = nullptr;
+};
+
+// грязные трюки для дебага через яндекс контест
+class Debugger {
+public:
+    int max_time;
+    vector<uint64_t>* fuck_yandex_contest;
+    // time_p start = std::chrono::high_resolution_clock::now();
+    explicit Debugger(int max_time_) {
+        max_time = max_time_;
+    }
+    void allocMem(int mb) {
+        for (int i = 0; i < mb; ++i) {
+            fuck_yandex_contest = new vector<uint64_t>(131073);
+        }
+    }
+    void doError(int mb_er) {
+        allocMem(mb_er);
+        for (int ii = 0; ii < 100; ++ii) {
+            --ii;
+        }
+    }
+    void tick(int mb_er) {
+        auto now = std::chrono::high_resolution_clock::now();
+        // if ((now - start).count() > max_time) doError(mb_er);
+    }
+};
+
+struct APtrComp {
+    bool operator()(const Area* lhs, const Area* rhs) const {
+        if (lhs->size == rhs->size)
+            return lhs->pos > rhs->pos;
+        else
+            return lhs->size < rhs->size;
+    }
+};
 
 class MemoryManager {
 public:
-    struct Area;
+    Debugger* db;
     struct AreaNP;
     Area* mem;
-    multiset <AreaNP, std::less<>> free_mem;
+    multiset <Area*, APtrComp> free_mem;
     vector <Area*> req_mem;
     int cur_request = 0;
 
-    MemoryManager(int cells, int requests);
+    MemoryManager(int cells, int requests, Debugger* db_) {
+        db = db_;
+        mem = new Area;
+        free_mem.insert(mem);
+        mem->size = cells;
+        req_mem.resize(requests);
+    }
     void solveRequest(int input);
-};
-struct MemoryManager::AreaNP {
-    MemoryManager::Area* ar;
-    AreaNP(MemoryManager::Area* ar_) {
-        ar = ar_;
+    pair<Area*, Area*> give(Area* th,  int sz) {
+        free_mem.erase(th);
+        auto sec = new Area;
+        th->free = false;
+
+        sec->size = th->size - sz;
+        sec->pos = sz + th->pos;
+        th->size = sz;
+
+        sec->next = th->next;
+        th->next = sec;
+        sec->prev = th;
+
+        
+        if (sec->size == 0) {
+            th->next = nullptr;
+            delete sec;
+        } else {
+            free_mem.insert(sec);
+        }
+        return { th, sec };
     }
-    friend bool operator<(AreaNP const& a, AreaNP const& b) {
-        cout << "dsfsdafs";
-        if (a.ar->size == b.ar->size) {
-            return a.ar->pos < b.ar->pos;
+    void mergeNext(Area* th) {
+        free_mem.erase(th);
+        free_mem.erase(th->next);
+        // id = (next->id - id) / 2 + id;
+
+        th->size += th->next->size;
+
+        if (th->next->next) th->next->next->prev = th;
+        auto to_del = th->next;
+        th->next = th->next->next;
+
+
+        free_mem.insert(th);
+        delete to_del;
+        mem = th;
+    }
+    void mergePrev(Area* th) {
+        free_mem.erase(th);
+        free_mem.erase(th->prev);
+        th->pos = th->prev->pos;
+
+        // id = (prev->id - id) / 2 + id;
+
+        th->size += th->prev->size;
+
+        if (th->prev->prev) th->prev->prev->next = th;
+        auto to_del = th->prev;
+        th->prev = th->prev->prev;
+
+
+        free_mem.insert(th);
+        delete to_del;
+        mem = th;
+    }
+    void freeMem(Area* th) {
+        free_mem.erase(th);
+        th->free = true;
+        free_mem.insert(th);
+        if (th->next) if (th->next->free) mergeNext(th);
+        if (th->prev) if (th->prev->free) mergePrev(th);
+    }
+    void print() {
+        auto t = mem;
+        while (t->prev != nullptr) t = t->prev;
+        while (t) {
+            cout << (t->free ? "f" : "u") << t->size << "(" << t->pos << ") ";
+            t = t->next;
         }
-        else {
-            return a.ar->size < b.ar->size;
+        cout << "|";
+        for (auto const& i : free_mem) {
+            std::cout << i->pos << ' ';
         }
+        cout << endl;
     }
 };
-struct MemoryManager::Area {
-        int size = 0;
-        int pos = 0;
-        bool free = true;
-        Area* prev = nullptr;
-        Area* next = nullptr;
-        // long double id = 0;
-        multiset<AreaNP, less<>>* ms;
-        Area(multiset<AreaNP, less<>>* ms_) {
-            ms = ms_;
-        }
-        pair<Area*, Area*> give(int sz) {
-            auto sec = new Area(ms);
-            // if (next) sec->id = (next->id - id) / 2 + id;
-            // else sec->id = id + 1;
-            free = false;
-
-            sec->size = size - sz;
-            sec->pos = sz + pos;
-            size = sz;
-
-            sec->next = next;
-            next = sec;
-            sec->prev = this;
-
-            ms->erase(AreaNP(this));
-            ms->insert(sec);
-            return { this, sec };
-        }
-        void mergeNext() {
-            ms->erase(this);
-            ms->erase(next);
-            // id = (next->id - id) / 2 + id;
-
-            size += next->size;
-
-            if (next->next) next->next->prev = this;
-            next = next->next;
-
-
-            ms->insert(this);
-            delete next;
-        }
-        void mergePrev() {
-            ms->erase(this);
-            ms->erase(prev);
-            pos = prev->pos;
-
-            // id = (prev->id - id) / 2 + id;
-
-            size += prev->size;
-
-            if (prev->prev) prev->prev->next = this;
-            next = prev->prev;
-
-            
-            ms->insert(this);
-            delete prev;
-        }
-        void freeMem() {
-            free = true;
-            if (next) if (next->free) mergeNext();
-            if (prev) if (prev->free) mergePrev();
-            ms->insert(this);
-        }
-        void print() {
-            auto t = this;
-            while (t->prev != nullptr) t = t->prev;
-            while (t) {
-                cout << (t->free ? "f" : "u") << t->size << "(" << t->pos << ") ";
-                t = t->next;
-            }
-            cout << "|";
-            for (auto const& i : *ms) {
-                std::cout << i->pos << ' ';
-            }
-            cout << endl;
-        }
-};
-
-MemoryManager::MemoryManager(int cells, int requests) {
-    mem = new Area(&free_mem);
-    free_mem.insert(mem);
-    mem->size = cells;
-    req_mem.resize(requests);
-}
 
 void MemoryManager::solveRequest(int input) {
     if (input < 0) {
-        if (req_mem[-input - 1]) req_mem[-input - 1]->freeMem();
+        try {
+            if (req_mem[-input - 1]) freeMem(req_mem[-input - 1]);
+        } catch (...) {
+            db->doError(20);
+        }
     } else {
-        auto place = *free_mem.rbegin();
-        if (place->size >= input) {
-            cout << place->pos + 1 << endl;
-            auto t = place->give(input);
-            req_mem[cur_request] = t.first;
-        } else {
-            req_mem[cur_request] = nullptr;
-            cout << -1 << endl;
+        try {
+            if (free_mem.empty()) {
+                req_mem[cur_request] = nullptr;
+                cout << -1 << endl;
+            } else {
+                auto place = *free_mem.rbegin();
+                if (place->size >= input) {
+                    cout << place->pos + 1 << endl;
+                    auto t = give(place, input);
+                    req_mem[cur_request] = t.first;
+                } else {
+                    req_mem[cur_request] = nullptr;
+                    cout << -1 << endl;
+                }
+            }
+        } catch (...) {
+            db->doError(40);
         }
     }
     ++cur_request;
-    cout << endl;
-    printf(" ");
-    mem->print();
+    if (DEBUG) cout << endl;
+    if (DEBUG) printf(" ");
+    if (DEBUG) print();
 }
 
 
 int main() {
+    auto db = Debugger(300);
     cin >> cells >> requests;
-    MemoryManager MM(cells, requests);
-    for (int i_ = 0; i_ < requests; ++i_) {
-        int tmp_;
-        cin >> tmp_;
-        MM.solveRequest(tmp_);
+    MemoryManager MM(cells, requests, &db);
+    try {
+        for (int i_ = 0; i_ < requests; ++i_) {
+            int tmp_;
+            cin >> tmp_;
+            MM.solveRequest(tmp_);
+        }
+    } catch (...) {
+        db.doError(10);
     }
 }
