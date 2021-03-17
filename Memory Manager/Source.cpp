@@ -7,7 +7,7 @@
 #include <functional>
 #include <chrono>
 
-const bool DEBUG = true;
+const bool DEBUG = false;
 
 using std::vector;
 using std::multiset;
@@ -91,6 +91,7 @@ public:
 
         sec->size = th->size - sz;
         sec->pos = sz + th->pos;
+        if (th->next) th->next->prev = sec;
         th->size = sz;
 
         sec->next = th->next;
@@ -153,7 +154,7 @@ public:
 };
 
 void MemoryManager::solveRequest(int input) {
-    cout << "inp(" << cur_request << "): " << input << " ";
+    if (DEBUG) cout << "inp(" << cur_request << "): " << input << " ";
     if (input < 0) {
         try {
             if (req_mem[-input - 1]) freeMem(req_mem[-input - 1]);
@@ -187,37 +188,34 @@ void MemoryManager::solveRequest(int input) {
     if (DEBUG) print();
 }
 
-void genInput() {
-    cout << "--new--" << endl;
-    auto db = Debugger(300);
-    MemoryManager MM(84, 168, &db);
-    vector<int> rec;
-    vector<int> input;
-    for (int i = 0; i < 168; ++i) {
-        int r_type = rand() % 2;
-        if (rec.size() == 0) r_type = 1;
-        if (r_type == 1) {
-            int sz = rand() % 90;
-            rec.push_back(i + 1);
-            input.push_back(sz);
-            MM.solveRequest(sz);
-        }
-        else {
-            int nm = rand() % rec.size();
-            
-            input.push_back(-nm);
-            MM.solveRequest(-(rec[nm]));
-            rec.erase(rec.begin() + nm);
-        }
-    }
-    cout << "--end--" << endl;
-}
+// void genInput() {
+//    cout << "--new--" << endl;
+//    auto db = Debugger(300);
+//    MemoryManager MM(84, 168, &db);
+//    vector<int> rec;
+//    vector<int> input;
+//    for (int i = 0; i < 168; ++i) {
+//        int r_type = rand() % 2;
+//        if (rec.size() == 0) r_type = 1;
+//        if (r_type == 1) {
+//            int sz = rand() % 90;
+//            rec.push_back(i + 1);
+//            input.push_back(sz);
+//            MM.solveRequest(sz);
+//        }
+//        else {
+//            int nm = rand() % rec.size();
+//            
+//            input.push_back(-nm);
+//            MM.solveRequest(-(rec[nm]));
+//            rec.erase(rec.begin() + nm);
+//        }
+//    }
+//    cout << "--end--" << endl;
+// }
 
 int main() {
-    while (1) {
-        genInput();
-    }
-    /*auto db = Debugger(300);
+    auto db = Debugger(300);
     cin >> cells >> requests;
     MemoryManager MM(cells, requests, &db);
     try {
@@ -228,5 +226,5 @@ int main() {
         }
     } catch (...) {
         db.doError(10);
-    }*/
+    }
 }
