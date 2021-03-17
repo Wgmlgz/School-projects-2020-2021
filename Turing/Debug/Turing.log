@@ -4,13 +4,6 @@ C:\C\School\Turing\turing.h(202,40): warning C4018: '<': signed/unsigned mismatc
 C:\C\School\Turing\turing.h(213,14): warning C4018: '>=': signed/unsigned mismatch
 C:\C\School\Turing\turing.h(282,24): warning C4018: '>': signed/unsigned mismatch
 C:\C\School\Turing\turing.h(318,36): warning C4101: 'err': unreferenced local variable
-  turing.cc
-C:\C\School\Turing\turing.h(202,21): warning C4018: '<': signed/unsigned mismatch
-C:\C\School\Turing\turing.h(202,40): warning C4018: '<': signed/unsigned mismatch
-C:\C\School\Turing\turing.h(213,14): warning C4018: '>=': signed/unsigned mismatch
-C:\C\School\Turing\turing.h(282,24): warning C4018: '>': signed/unsigned mismatch
-C:\C\School\Turing\turing.h(318,36): warning C4101: 'err': unreferenced local variable
-  Generating Code...
-C:\C\School\Turing\turing.h(244): warning C4715: 'TuringMachine::iterate': not all control paths return a value
+C:\C\School\Turing\turing.h(362,36): warning C4101: 'err': unreferenced local variable
 C:\C\School\Turing\turing.h(244): warning C4715: 'TuringMachine::iterate': not all control paths return a value
   Turing.vcxproj -> C:\C\School\Turing\Debug\Turing.exe

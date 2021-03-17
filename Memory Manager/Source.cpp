@@ -7,7 +7,7 @@
 #include <functional>
 #include <chrono>
 
-const bool DEBUG = false;
+const bool DEBUG = true;
 
 using std::vector;
 using std::multiset;
@@ -23,8 +23,13 @@ struct Area {
     int size = 0;
     int pos = 0;
     bool free = true;
+    int rec_n = -1;
     Area* prev = nullptr;
     Area* next = nullptr;
+    ~Area() {
+        if (prev) prev->next = next;
+        if (next) next->prev = prev;
+    }
 };
 
 // грязные трюки для дебага через яндекс контест
@@ -104,17 +109,11 @@ public:
     void mergeNext(Area* th) {
         free_mem.erase(th);
         free_mem.erase(th->next);
-        // id = (next->id - id) / 2 + id;
 
         th->size += th->next->size;
 
-        if (th->next->next) th->next->next->prev = th;
-        auto to_del = th->next;
-        th->next = th->next->next;
-
-
+        delete th->next;
         free_mem.insert(th);
-        delete to_del;
         mem = th;
     }
     void mergePrev(Area* th) {
@@ -122,20 +121,16 @@ public:
         free_mem.erase(th->prev);
         th->pos = th->prev->pos;
 
-        // id = (prev->id - id) / 2 + id;
-
         th->size += th->prev->size;
 
-        if (th->prev->prev) th->prev->prev->next = th;
-        auto to_del = th->prev;
-        th->prev = th->prev->prev;
-
-
+        delete th->prev;
         free_mem.insert(th);
-        delete to_del;
         mem = th;
     }
     void freeMem(Area* th) {
+        if (th->rec_n == 47) {
+            cout << "";
+        }
         free_mem.erase(th);
         th->free = true;
         free_mem.insert(th);
@@ -146,7 +141,7 @@ public:
         auto t = mem;
         while (t->prev != nullptr) t = t->prev;
         while (t) {
-            cout << (t->free ? "f" : "u") << t->size << "(" << t->pos << ") ";
+            cout << (t->free ? "f" : "u") << t->size << "(" << t->pos << "," << t->rec_n<< ") ";
             t = t->next;
         }
         cout << "|";
@@ -158,6 +153,7 @@ public:
 };
 
 void MemoryManager::solveRequest(int input) {
+    cout << "inp(" << cur_request << "): " << input << " ";
     if (input < 0) {
         try {
             if (req_mem[-input - 1]) freeMem(req_mem[-input - 1]);
@@ -175,6 +171,7 @@ void MemoryManager::solveRequest(int input) {
                     cout << place->pos + 1 << endl;
                     auto t = give(place, input);
                     req_mem[cur_request] = t.first;
+                    t.first->rec_n = cur_request;
                 } else {
                     req_mem[cur_request] = nullptr;
                     cout << -1 << endl;
@@ -190,9 +187,37 @@ void MemoryManager::solveRequest(int input) {
     if (DEBUG) print();
 }
 
+void genInput() {
+    cout << "--new--" << endl;
+    auto db = Debugger(300);
+    MemoryManager MM(84, 168, &db);
+    vector<int> rec;
+    vector<int> input;
+    for (int i = 0; i < 168; ++i) {
+        int r_type = rand() % 2;
+        if (rec.size() == 0) r_type = 1;
+        if (r_type == 1) {
+            int sz = rand() % 90;
+            rec.push_back(i + 1);
+            input.push_back(sz);
+            MM.solveRequest(sz);
+        }
+        else {
+            int nm = rand() % rec.size();
+            
+            input.push_back(-nm);
+            MM.solveRequest(-(rec[nm]));
+            rec.erase(rec.begin() + nm);
+        }
+    }
+    cout << "--end--" << endl;
+}
 
 int main() {
-    auto db = Debugger(300);
+    while (1) {
+        genInput();
+    }
+    /*auto db = Debugger(300);
     cin >> cells >> requests;
     MemoryManager MM(cells, requests, &db);
     try {
@@ -203,5 +228,5 @@ int main() {
         }
     } catch (...) {
         db.doError(10);
-    }
+    }*/
 }

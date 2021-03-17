@@ -19,17 +19,18 @@ int main() {
 
 	auto da = TuringMachine("   a   ,   b   ,   >   ,     0\n~,  ~    ,=,-1","aaaaaaa");
 	auto brainfuck = brainfuckTM();
-	auto t = brainfuck.parceStrToTable("   a   ,   b   ,   >   ,     0\n~,  ~    ,=,-1");
-	brainfuck.table = t;
-	//brainfuck.setDefault("++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++.:aab");
-	brainfuck.setDefault("aaaaaaa");
-
-	for (int i = 0; i < 10000000; ++i) {
-
-		std::cout << brainfuck.toStrUnity() << std::endl;
-		//std::cout << da.toStr() << std::endl;
-		da.safeIterate();
-	}
+	//auto t = brainfuck.parceStrToTable("   a   ,   b   ,   >   ,     0\n~,  ~    ,=,-1");
+	//brainfuck.table = t;
+	brainfuck.setDefault("++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++.:aab");
+	//brainfuck.setDefault("aaaaaaa");
+	brainfuck.run(100);
+	std::cout << brainfuck.toStr() << std::endl;
+	//for (int i = 0; i < 10000000; ++i) {
+	//
+	//	//std::cout << brainfuck.toStrUnity() << std::endl;
+	//	std::cout << brainfuck.toStr() << std::endl;
+	//	brainfuck.safeIterate();
+	//}
 
 	
 	// Hello world!
