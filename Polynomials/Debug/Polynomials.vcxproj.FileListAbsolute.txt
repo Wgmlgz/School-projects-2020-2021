@@ -1,0 +1,2 @@
+C:\C\School\Polynomials\Debug\Polynomials.exe
+C:\C\School\Polynomials\Debug\Polynomials.pdb
