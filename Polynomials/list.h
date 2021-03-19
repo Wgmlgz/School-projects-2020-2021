@@ -38,25 +38,22 @@ public:
 		if (nd == end) end = nd->prev;
 		--size;
 	}
-	void insAfter(Node<T>* nd, T t) {
-		if (!nd) {
-			if (begin == nullptr) {
-				Node<T>* new_node = new Node<T>(t);
-				begin = new_node;
-				end = new_node;
-				++size;
-				return;
-			} else {
-				throw std::exception("Cannot insert element after nullptr");
-			}
-		}
-		Node<T>* new_node = new Node<T>(t);
-		if (nd->next) nd->next->prev = new_node;
-		else end = new_node;
-		new_node->prev = nd;
-		new_node->next = nd->next;
-		nd->next = new_node;
+	void insertAfter(Node<T>* nd, T t) {
 		++size;
+		Node<T>* new_node = new Node<T>(t);
+		if (nd) {
+			if (nd->next) nd->next->prev = new_node;
+			else end = new_node;
+			new_node->prev = nd;
+			new_node->next = nd->next;
+			nd->next = new_node;
+		} else {
+			if (!end) end = new_node;
+			new_node->next = begin;
+			if (begin) begin->prev = new_node;
+			begin = new_node;
+		}
+		
 	}
 	Node<T>* find(T t) {
 		for (auto i = begin; i != nullptr; i = i->next) {
@@ -71,7 +68,37 @@ public:
 		}
 		return nullptr;
 	}
+    void pushBack(T t) {
+		insertAfter(end, t);
+	}
+};
+
+template<typename T>
+class SortedList : public List<T> {
+public:
+	function<bool(T, T)> less;
+	SortedList(function<bool(T, T)> cmp_) {
+		less = cmp_;
+	}
+	void insert(T t) {
+		Node<T>* last = nullptr;
+		for (Node<T>* i = List<T>::begin; i != nullptr; i = i->next) {
+			if (less(i->data, t) == false) {
+				List<T>::insertAfter(last, t);
+				return;
+			}
+		}
+		List<T>::insertAfter(List<T>::end, t);
+	}
+	SortedList<T> copy() {
+		Node<T>* prev = nullptr;
+		SortedList<T> new_list{less};
+		for (auto i = List<T>::begin; i != nullptr; i = i->next) {
+			new_list.insert(i->data);
+		}
+		return new_list;
+	}
 	void pushBack(T t) {
-		insAfter(end, t);
+		insert(t);
 	}
 };

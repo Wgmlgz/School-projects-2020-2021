@@ -2,21 +2,24 @@
 #include "polinom.h"
 
 int main() {
-	List<pair<string, int>> vars1;
-	vars1.pushBack({ "x", 2 });
+	SortedList<Polinom::Monom::VarT> vars1{Polinom::Monom::VarT::isLessVar};
+	vars1.insert({ 'x', 2 });
 
-	List<pair<string, int>> vars2;
-	vars2.pushBack({ "x", 3 });
-	vars2.pushBack({ "y", 4 });
+	SortedList<Polinom::Monom::VarT> vars2{ Polinom::Monom::VarT::isLessVar };
+	vars2.insert({ 'y', 4 });
+	vars2.insert({ 'x', 2 });
+	
 
-	Polinom t;
-	t.data.pushBack({ 2, vars1});
-	t.data.pushBack({ 4, vars2});
+	Polinom t, t2;
+	t.data.insert({ 2, vars1});
+	t.data.insert({ 4, vars2});
 
-	List<pair<string, int>> vals;
-	vals.pushBack({ "x", 2 });
-	vals.pushBack({ "y", 3 });
+	//List<pair<char, int>> vals;
+	//vals.pushBack({ 'x', 2 });
+	//vals.pushBack({ 'y', 3 });
 
-	cout << t.toStr() << " = " << t.valAtPoint(vals) << endl;
-	cout << "(" << t.toStr() << ")' = " << t.derivative("x").toStr() << endl;
+	//cout << t.toStr() << ") + (" << t2.toStr() << " = ";
+	//cout << (t + t2).toStr() << endl;
+	char der_ch = 'z';
+	cout << "d/d" << der_ch << "(" << t.toStr() << ") = " << t.derivative(der_ch).toStr() << endl;
 }
