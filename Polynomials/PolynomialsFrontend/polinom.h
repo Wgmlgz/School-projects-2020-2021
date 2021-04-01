@@ -8,7 +8,48 @@ int powInt(int x, int n) {
   for (int i = 0; i < n; i++) y *= x;
   return y;
 }
-
+Parser word_parser = Parser(
+    {
+        {"sp", {" \r\n"}},
+        {"int", {"0123456789"}},
+        {"var", {"abcdefghijklmnopqrstuvwxyz", 1}},
+        {"pow", {"^", 1}},
+        {"sign", {"-+", 1}},
+        {"mult", {"*", 1}},
+    },
+    {
+        {"1", "sp"},
+        {"2", "sign"},
+        {"3", "sp"},
+        {"4", "int"},
+        {"5", "sp"},
+        {"6", "mult"},
+        {"7", "sp"},
+        {"8", "var"},
+        {"9", "sp"},
+        {"10", "pow"},
+        {"11", "sp"},
+        {"12", "int"},
+        {"13", "sp"},
+        {"14", "mult"},
+        {"15", "sp"},
+    },
+    {{"0", {"1", "2", "4", "8"}},
+     {"1", {"2"}},
+     {"2", {"3", "4", "8"}},
+     {"3", {"4", "8"}},
+     {"4", {"5", "6", "8", "2"}},
+     {"5", {"6", "8", "2"}},
+     {"6", {"7", "8"}},
+     {"7", {"8"}},
+     {"8", {"8", "9", "10", "2", "13", "14"}},
+     {"9", {"2", "10"}},
+     {"10", {"11", "12"}},
+     {"11", {"12"}},
+     {"12", {"13", "14", "2", "8"}},
+     {"13", {"14", "2"}},
+     {"14", {"15", "8"}},
+     {"15", {"8"}}});
 class Polinom {
  public:
   class Monom {
@@ -103,11 +144,11 @@ class Polinom {
       string monom_str;
       if (i_d.mult_val < 0 || i != monoms.begin) {
         //monom_str += " ";
-        monom_str += (i_d.mult_val > 0 ? " + " : " ");
+        monom_str += (i_d.mult_val > 0 ? "+ " : "-");
         //monom_str += " ";
       }
-      if (i_d.vars.size == 0 || i_d.mult_val != 1)
-        monom_str += std::to_string(i_d.mult_val);
+      if (i_d.vars.size == 0 || abs(i_d.mult_val) != 1)
+        monom_str += std::to_string(abs(i_d.mult_val));
       for (auto i = i_d.vars.begin; i != nullptr; i = i->next) {
         if (i->data.power != 0) {
           monom_str += i->data.name;
@@ -118,53 +159,14 @@ class Polinom {
         }
       }
       ret += monom_str;
+      ret += " ";
     }
     return ret;
   }
 
   Polinom(string str) {
     try {
-      auto words = Parser({
-        {"sp", {" "}},
-        {"int", {"0123456789"}},
-        {"var", {"abcdefghijklmnopqrstuvwxyz", 1}},
-        {"pow", {"^", 1}},
-        {"sign", {"-+", 1}},
-        {"mult", {"*", 1}},
-      }, {
-        {"1", "sp"},
-        {"2", "sign"},
-        {"3", "sp"},
-        {"4", "int"},
-        {"5", "sp"},
-        {"6", "mult"},
-        {"7", "sp"},
-        {"8", "var"},
-        {"9", "sp"},
-        {"10", "pow"},
-        {"11", "sp"},
-        {"12", "int"},
-        {"13", "sp"},
-        {"14", "mult"},
-        {"15", "sp"},
-      }, {
-        {"0", {"1", "2", "4", "8"}},
-        {"1", {"2"}},
-        {"2", {"3", "4", "8"}},
-        {"3", {"4", "8"}},
-        {"4", {"5", "6", "8", "2"}},
-        {"5", {"6", "8", "2"}},
-        {"6", {"7", "8"}},
-        {"7", {"8"}},
-        {"8", {"8", "9", "10", "2", "13", "14"}},
-        {"9", {"2", "10"}},
-        {"10", {"11", "12"}},
-        {"11", {"12"}},
-        {"12", {"13", "14", "2", "8"}},
-        {"13", {"14", "2"}},
-        {"14", {"15", "8"}},
-        {"15", {"8"}}
-      }).toWords(str);
+      auto words = word_parser.toWords(str);
       words.push_back({"sign", "+"});
       Monom monom;
       bool start = true;
@@ -180,7 +182,7 @@ class Polinom {
         } else if (words[i].name == "int") {
           start = false;
           if (last_var)
-            last_var->power = stoi(words[i].content);
+            last_var->power += stoi(words[i].content) - 1;
           else
             monom.mult_val *= stoi(words[i].content);
         } else if (words[i].name == "var") {
@@ -191,6 +193,9 @@ class Polinom {
     } catch (exception err) {
       cout << err.what() << endl;
     }
+  }
+  void sort() {
+    *this = Polinom(toStr());
   }
   Polinom copy() {
     return Polinom(toStr()); // this is cursed

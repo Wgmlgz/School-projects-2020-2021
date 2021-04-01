@@ -364,7 +364,7 @@ ref class PolyUi : public System::Windows::Forms::Form {
     this->Bank->ItemHeight = 19;
     this->Bank->Location = System::Drawing::Point(13, 51);
     this->Bank->Name = L"Bank";
-    this->Bank->Size = System::Drawing::Size(303, 593);
+    this->Bank->Size = System::Drawing::Size(461, 593);
     this->Bank->TabIndex = 3;
     //
     // HintDoSum
@@ -374,7 +374,7 @@ ref class PolyUi : public System::Windows::Forms::Form {
         L"Consolas", 30, System::Drawing::FontStyle::Bold,
         System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
     this->HintDoSum->ForeColor = System::Drawing::SystemColors::ButtonHighlight;
-    this->HintDoSum->Location = System::Drawing::Point(350, 12);
+    this->HintDoSum->Location = System::Drawing::Point(482, 12);
     this->HintDoSum->Name = L"HintDoSum";
     this->HintDoSum->Size = System::Drawing::Size(108, 47);
     this->HintDoSum->TabIndex = 4;
@@ -414,7 +414,7 @@ ref class PolyUi : public System::Windows::Forms::Form {
         L"Consolas", 10, System::Drawing::FontStyle::Regular,
         System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
     this->label1->ForeColor = System::Drawing::SystemColors::ButtonHighlight;
-    this->label1->Location = System::Drawing::Point(353, 65);
+    this->label1->Location = System::Drawing::Point(485, 65);
     this->label1->Name = L"label1";
     this->label1->Size = System::Drawing::Size(40, 17);
     this->label1->TabIndex = 7;
@@ -425,7 +425,7 @@ ref class PolyUi : public System::Windows::Forms::Form {
     this->SumNA->Font = (gcnew System::Drawing::Font(
         L"Consolas", 10, System::Drawing::FontStyle::Regular,
         System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
-    this->SumNA->Location = System::Drawing::Point(356, 85);
+    this->SumNA->Location = System::Drawing::Point(488, 85);
     this->SumNA->Name = L"SumNA";
     this->SumNA->Size = System::Drawing::Size(36, 23);
     this->SumNA->TabIndex = 8;
@@ -437,7 +437,7 @@ ref class PolyUi : public System::Windows::Forms::Form {
     this->SumStrA->Font = (gcnew System::Drawing::Font(
         L"Consolas", 10, System::Drawing::FontStyle::Regular,
         System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
-    this->SumStrA->Location = System::Drawing::Point(398, 85);
+    this->SumStrA->Location = System::Drawing::Point(530, 85);
     this->SumStrA->Name = L"SumStrA";
     this->SumStrA->Size = System::Drawing::Size(268, 23);
     this->SumStrA->TabIndex = 9;
@@ -451,7 +451,7 @@ ref class PolyUi : public System::Windows::Forms::Form {
         L"Consolas", 10, System::Drawing::FontStyle::Regular,
         System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
     this->label2->ForeColor = System::Drawing::SystemColors::ButtonHighlight;
-    this->label2->Location = System::Drawing::Point(672, 88);
+    this->label2->Location = System::Drawing::Point(804, 88);
     this->label2->Name = L"label2";
     this->label2->Size = System::Drawing::Size(16, 17);
     this->label2->TabIndex = 10;
@@ -462,7 +462,7 @@ ref class PolyUi : public System::Windows::Forms::Form {
     this->SumNB->Font = (gcnew System::Drawing::Font(
         L"Consolas", 10, System::Drawing::FontStyle::Regular,
         System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
-    this->SumNB->Location = System::Drawing::Point(694, 85);
+    this->SumNB->Location = System::Drawing::Point(826, 85);
     this->SumNB->Name = L"SumNB";
     this->SumNB->Size = System::Drawing::Size(36, 23);
     this->SumNB->TabIndex = 11;
@@ -474,7 +474,7 @@ ref class PolyUi : public System::Windows::Forms::Form {
     this->SumStrB->Font = (gcnew System::Drawing::Font(
         L"Consolas", 10, System::Drawing::FontStyle::Regular,
         System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
-    this->SumStrB->Location = System::Drawing::Point(736, 85);
+    this->SumStrB->Location = System::Drawing::Point(868, 85);
     this->SumStrB->Name = L"SumStrB";
     this->SumStrB->Size = System::Drawing::Size(268, 23);
     this->SumStrB->TabIndex = 12;
@@ -488,7 +488,7 @@ ref class PolyUi : public System::Windows::Forms::Form {
         L"Consolas", 10, System::Drawing::FontStyle::Regular,
         System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
     this->label3->ForeColor = System::Drawing::SystemColors::ButtonHighlight;
-    this->label3->Location = System::Drawing::Point(691, 65);
+    this->label3->Location = System::Drawing::Point(823, 65);
     this->label3->Name = L"label3";
     this->label3->Size = System::Drawing::Size(40, 17);
     this->label3->TabIndex = 13;
@@ -501,7 +501,7 @@ ref class PolyUi : public System::Windows::Forms::Form {
         L"Consolas", 10, System::Drawing::FontStyle::Regular,
         System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
     this->hint->ForeColor = System::Drawing::SystemColors::ControlLightLight;
-    this->hint->Location = System::Drawing::Point(399, 65);
+    this->hint->Location = System::Drawing::Point(531, 65);
     this->hint->Name = L"hint";
     this->hint->Size = System::Drawing::Size(56, 17);
     this->hint->TabIndex = 14;
@@ -514,7 +514,7 @@ ref class PolyUi : public System::Windows::Forms::Form {
         L"Consolas", 10, System::Drawing::FontStyle::Regular,
         System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
     this->label5->ForeColor = System::Drawing::SystemColors::ButtonHighlight;
-    this->label5->Location = System::Drawing::Point(737, 65);
+    this->label5->Location = System::Drawing::Point(869, 65);
     this->label5->Name = L"label5";
     this->label5->Size = System::Drawing::Size(56, 17);
     this->label5->TabIndex = 15;
@@ -527,7 +527,7 @@ ref class PolyUi : public System::Windows::Forms::Form {
         L"Consolas", 15, System::Drawing::FontStyle::Regular,
         System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
     this->SumRes->ForeColor = System::Drawing::SystemColors::ButtonHighlight;
-    this->SumRes->Location = System::Drawing::Point(353, 121);
+    this->SumRes->Location = System::Drawing::Point(485, 121);
     this->SumRes->Name = L"SumRes";
     this->SumRes->Size = System::Drawing::Size(164, 23);
     this->SumRes->TabIndex = 16;
@@ -540,7 +540,7 @@ ref class PolyUi : public System::Windows::Forms::Form {
         L"Consolas", 15, System::Drawing::FontStyle::Regular,
         System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
     this->MultRes->ForeColor = System::Drawing::SystemColors::ButtonHighlight;
-    this->MultRes->Location = System::Drawing::Point(353, 260);
+    this->MultRes->Location = System::Drawing::Point(485, 260);
     this->MultRes->Name = L"MultRes";
     this->MultRes->Size = System::Drawing::Size(164, 23);
     this->MultRes->TabIndex = 28;
@@ -553,7 +553,7 @@ ref class PolyUi : public System::Windows::Forms::Form {
         L"Consolas", 10, System::Drawing::FontStyle::Regular,
         System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
     this->label8->ForeColor = System::Drawing::SystemColors::ButtonHighlight;
-    this->label8->Location = System::Drawing::Point(737, 204);
+    this->label8->Location = System::Drawing::Point(869, 204);
     this->label8->Name = L"label8";
     this->label8->Size = System::Drawing::Size(56, 17);
     this->label8->TabIndex = 27;
@@ -566,7 +566,7 @@ ref class PolyUi : public System::Windows::Forms::Form {
         L"Consolas", 10, System::Drawing::FontStyle::Regular,
         System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
     this->label9->ForeColor = System::Drawing::SystemColors::ButtonHighlight;
-    this->label9->Location = System::Drawing::Point(399, 204);
+    this->label9->Location = System::Drawing::Point(531, 204);
     this->label9->Name = L"label9";
     this->label9->Size = System::Drawing::Size(56, 17);
     this->label9->TabIndex = 26;
@@ -579,7 +579,7 @@ ref class PolyUi : public System::Windows::Forms::Form {
         L"Consolas", 10, System::Drawing::FontStyle::Regular,
         System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
     this->label10->ForeColor = System::Drawing::SystemColors::ButtonHighlight;
-    this->label10->Location = System::Drawing::Point(691, 204);
+    this->label10->Location = System::Drawing::Point(823, 204);
     this->label10->Name = L"label10";
     this->label10->Size = System::Drawing::Size(40, 17);
     this->label10->TabIndex = 25;
@@ -590,7 +590,7 @@ ref class PolyUi : public System::Windows::Forms::Form {
     this->MultStrB->Font = (gcnew System::Drawing::Font(
         L"Consolas", 10, System::Drawing::FontStyle::Regular,
         System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
-    this->MultStrB->Location = System::Drawing::Point(736, 224);
+    this->MultStrB->Location = System::Drawing::Point(868, 224);
     this->MultStrB->Name = L"MultStrB";
     this->MultStrB->Size = System::Drawing::Size(268, 23);
     this->MultStrB->TabIndex = 24;
@@ -602,7 +602,7 @@ ref class PolyUi : public System::Windows::Forms::Form {
     this->MultNB->Font = (gcnew System::Drawing::Font(
         L"Consolas", 10, System::Drawing::FontStyle::Regular,
         System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
-    this->MultNB->Location = System::Drawing::Point(694, 224);
+    this->MultNB->Location = System::Drawing::Point(826, 224);
     this->MultNB->Name = L"MultNB";
     this->MultNB->Size = System::Drawing::Size(36, 23);
     this->MultNB->TabIndex = 23;
@@ -616,7 +616,7 @@ ref class PolyUi : public System::Windows::Forms::Form {
         L"Consolas", 10, System::Drawing::FontStyle::Regular,
         System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
     this->label11->ForeColor = System::Drawing::SystemColors::ButtonHighlight;
-    this->label11->Location = System::Drawing::Point(672, 227);
+    this->label11->Location = System::Drawing::Point(804, 227);
     this->label11->Name = L"label11";
     this->label11->Size = System::Drawing::Size(16, 17);
     this->label11->TabIndex = 22;
@@ -627,7 +627,7 @@ ref class PolyUi : public System::Windows::Forms::Form {
     this->MultStrA->Font = (gcnew System::Drawing::Font(
         L"Consolas", 10, System::Drawing::FontStyle::Regular,
         System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
-    this->MultStrA->Location = System::Drawing::Point(398, 224);
+    this->MultStrA->Location = System::Drawing::Point(530, 224);
     this->MultStrA->Name = L"MultStrA";
     this->MultStrA->Size = System::Drawing::Size(268, 23);
     this->MultStrA->TabIndex = 21;
@@ -639,7 +639,7 @@ ref class PolyUi : public System::Windows::Forms::Form {
     this->MultNA->Font = (gcnew System::Drawing::Font(
         L"Consolas", 10, System::Drawing::FontStyle::Regular,
         System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
-    this->MultNA->Location = System::Drawing::Point(356, 224);
+    this->MultNA->Location = System::Drawing::Point(488, 224);
     this->MultNA->Name = L"MultNA";
     this->MultNA->Size = System::Drawing::Size(36, 23);
     this->MultNA->TabIndex = 20;
@@ -653,7 +653,7 @@ ref class PolyUi : public System::Windows::Forms::Form {
         L"Consolas", 10, System::Drawing::FontStyle::Regular,
         System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
     this->label12->ForeColor = System::Drawing::SystemColors::ButtonHighlight;
-    this->label12->Location = System::Drawing::Point(353, 204);
+    this->label12->Location = System::Drawing::Point(485, 204);
     this->label12->Name = L"label12";
     this->label12->Size = System::Drawing::Size(40, 17);
     this->label12->TabIndex = 19;
@@ -666,7 +666,7 @@ ref class PolyUi : public System::Windows::Forms::Form {
         L"Consolas", 30, System::Drawing::FontStyle::Bold,
         System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
     this->label13->ForeColor = System::Drawing::SystemColors::ButtonHighlight;
-    this->label13->Location = System::Drawing::Point(350, 151);
+    this->label13->Location = System::Drawing::Point(482, 151);
     this->label13->Name = L"label13";
     this->label13->Size = System::Drawing::Size(196, 47);
     this->label13->TabIndex = 18;
@@ -679,7 +679,7 @@ ref class PolyUi : public System::Windows::Forms::Form {
         L"Consolas", 15, System::Drawing::FontStyle::Regular,
         System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
     this->DerRes->ForeColor = System::Drawing::SystemColors::ButtonHighlight;
-    this->DerRes->Location = System::Drawing::Point(353, 410);
+    this->DerRes->Location = System::Drawing::Point(485, 410);
     this->DerRes->Name = L"DerRes";
     this->DerRes->Size = System::Drawing::Size(164, 23);
     this->DerRes->TabIndex = 35;
@@ -692,7 +692,7 @@ ref class PolyUi : public System::Windows::Forms::Form {
         L"Consolas", 10, System::Drawing::FontStyle::Regular,
         System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
     this->label15->ForeColor = System::Drawing::SystemColors::ButtonHighlight;
-    this->label15->Location = System::Drawing::Point(399, 354);
+    this->label15->Location = System::Drawing::Point(531, 354);
     this->label15->Name = L"label15";
     this->label15->Size = System::Drawing::Size(56, 17);
     this->label15->TabIndex = 34;
@@ -703,7 +703,7 @@ ref class PolyUi : public System::Windows::Forms::Form {
     this->DerStr->Font = (gcnew System::Drawing::Font(
         L"Consolas", 10, System::Drawing::FontStyle::Regular,
         System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
-    this->DerStr->Location = System::Drawing::Point(398, 374);
+    this->DerStr->Location = System::Drawing::Point(530, 374);
     this->DerStr->Name = L"DerStr";
     this->DerStr->Size = System::Drawing::Size(268, 23);
     this->DerStr->TabIndex = 33;
@@ -715,7 +715,7 @@ ref class PolyUi : public System::Windows::Forms::Form {
     this->DerN->Font = (gcnew System::Drawing::Font(
         L"Consolas", 10, System::Drawing::FontStyle::Regular,
         System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
-    this->DerN->Location = System::Drawing::Point(356, 374);
+    this->DerN->Location = System::Drawing::Point(488, 374);
     this->DerN->Name = L"DerN";
     this->DerN->Size = System::Drawing::Size(36, 23);
     this->DerN->TabIndex = 32;
@@ -729,7 +729,7 @@ ref class PolyUi : public System::Windows::Forms::Form {
         L"Consolas", 10, System::Drawing::FontStyle::Regular,
         System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
     this->label16->ForeColor = System::Drawing::SystemColors::ButtonHighlight;
-    this->label16->Location = System::Drawing::Point(353, 354);
+    this->label16->Location = System::Drawing::Point(485, 354);
     this->label16->Name = L"label16";
     this->label16->Size = System::Drawing::Size(40, 17);
     this->label16->TabIndex = 31;
@@ -742,7 +742,7 @@ ref class PolyUi : public System::Windows::Forms::Form {
         L"Consolas", 30, System::Drawing::FontStyle::Bold,
         System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
     this->label17->ForeColor = System::Drawing::SystemColors::ButtonHighlight;
-    this->label17->Location = System::Drawing::Point(350, 301);
+    this->label17->Location = System::Drawing::Point(482, 301);
     this->label17->Name = L"label17";
     this->label17->Size = System::Drawing::Size(262, 47);
     this->label17->TabIndex = 30;
@@ -755,7 +755,7 @@ ref class PolyUi : public System::Windows::Forms::Form {
         L"Consolas", 15, System::Drawing::FontStyle::Regular,
         System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
     this->RootRes->ForeColor = System::Drawing::SystemColors::ButtonHighlight;
-    this->RootRes->Location = System::Drawing::Point(351, 694);
+    this->RootRes->Location = System::Drawing::Point(483, 694);
     this->RootRes->Name = L"RootRes";
     this->RootRes->Size = System::Drawing::Size(164, 23);
     this->RootRes->TabIndex = 41;
@@ -768,7 +768,7 @@ ref class PolyUi : public System::Windows::Forms::Form {
         L"Consolas", 10, System::Drawing::FontStyle::Regular,
         System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
     this->label19->ForeColor = System::Drawing::SystemColors::ButtonHighlight;
-    this->label19->Location = System::Drawing::Point(397, 638);
+    this->label19->Location = System::Drawing::Point(529, 638);
     this->label19->Name = L"label19";
     this->label19->Size = System::Drawing::Size(56, 17);
     this->label19->TabIndex = 40;
@@ -779,7 +779,7 @@ ref class PolyUi : public System::Windows::Forms::Form {
     this->RootStr->Font = (gcnew System::Drawing::Font(
         L"Consolas", 10, System::Drawing::FontStyle::Regular,
         System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
-    this->RootStr->Location = System::Drawing::Point(396, 658);
+    this->RootStr->Location = System::Drawing::Point(528, 658);
     this->RootStr->Name = L"RootStr";
     this->RootStr->Size = System::Drawing::Size(268, 23);
     this->RootStr->TabIndex = 39;
@@ -791,7 +791,7 @@ ref class PolyUi : public System::Windows::Forms::Form {
     this->RootN->Font = (gcnew System::Drawing::Font(
         L"Consolas", 10, System::Drawing::FontStyle::Regular,
         System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
-    this->RootN->Location = System::Drawing::Point(354, 658);
+    this->RootN->Location = System::Drawing::Point(486, 658);
     this->RootN->Name = L"RootN";
     this->RootN->Size = System::Drawing::Size(36, 23);
     this->RootN->TabIndex = 38;
@@ -805,7 +805,7 @@ ref class PolyUi : public System::Windows::Forms::Form {
         L"Consolas", 10, System::Drawing::FontStyle::Regular,
         System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
     this->label20->ForeColor = System::Drawing::SystemColors::ButtonHighlight;
-    this->label20->Location = System::Drawing::Point(351, 638);
+    this->label20->Location = System::Drawing::Point(483, 638);
     this->label20->Name = L"label20";
     this->label20->Size = System::Drawing::Size(40, 17);
     this->label20->TabIndex = 37;
@@ -818,7 +818,7 @@ ref class PolyUi : public System::Windows::Forms::Form {
         L"Consolas", 30, System::Drawing::FontStyle::Bold,
         System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
     this->label21->ForeColor = System::Drawing::SystemColors::ButtonHighlight;
-    this->label21->Location = System::Drawing::Point(348, 585);
+    this->label21->Location = System::Drawing::Point(480, 585);
     this->label21->Name = L"label21";
     this->label21->Size = System::Drawing::Size(240, 47);
     this->label21->TabIndex = 36;
@@ -831,7 +831,7 @@ ref class PolyUi : public System::Windows::Forms::Form {
         L"Consolas", 15, System::Drawing::FontStyle::Regular,
         System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
     this->ValRes->ForeColor = System::Drawing::SystemColors::ButtonHighlight;
-    this->ValRes->Location = System::Drawing::Point(353, 552);
+    this->ValRes->Location = System::Drawing::Point(485, 552);
     this->ValRes->Name = L"ValRes";
     this->ValRes->Size = System::Drawing::Size(164, 23);
     this->ValRes->TabIndex = 47;
@@ -844,7 +844,7 @@ ref class PolyUi : public System::Windows::Forms::Form {
         L"Consolas", 10, System::Drawing::FontStyle::Regular,
         System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
     this->label23->ForeColor = System::Drawing::SystemColors::ButtonHighlight;
-    this->label23->Location = System::Drawing::Point(399, 496);
+    this->label23->Location = System::Drawing::Point(531, 496);
     this->label23->Name = L"label23";
     this->label23->Size = System::Drawing::Size(56, 17);
     this->label23->TabIndex = 46;
@@ -855,7 +855,7 @@ ref class PolyUi : public System::Windows::Forms::Form {
     this->textBox13->Font = (gcnew System::Drawing::Font(
         L"Consolas", 10, System::Drawing::FontStyle::Regular,
         System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
-    this->textBox13->Location = System::Drawing::Point(398, 516);
+    this->textBox13->Location = System::Drawing::Point(530, 516);
     this->textBox13->Name = L"textBox13";
     this->textBox13->Size = System::Drawing::Size(268, 23);
     this->textBox13->TabIndex = 45;
@@ -865,7 +865,7 @@ ref class PolyUi : public System::Windows::Forms::Form {
     this->textBox14->Font = (gcnew System::Drawing::Font(
         L"Consolas", 10, System::Drawing::FontStyle::Regular,
         System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
-    this->textBox14->Location = System::Drawing::Point(356, 516);
+    this->textBox14->Location = System::Drawing::Point(488, 516);
     this->textBox14->Name = L"textBox14";
     this->textBox14->Size = System::Drawing::Size(36, 23);
     this->textBox14->TabIndex = 44;
@@ -877,7 +877,7 @@ ref class PolyUi : public System::Windows::Forms::Form {
         L"Consolas", 10, System::Drawing::FontStyle::Regular,
         System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
     this->label24->ForeColor = System::Drawing::SystemColors::ButtonHighlight;
-    this->label24->Location = System::Drawing::Point(353, 496);
+    this->label24->Location = System::Drawing::Point(485, 496);
     this->label24->Name = L"label24";
     this->label24->Size = System::Drawing::Size(40, 17);
     this->label24->TabIndex = 43;
@@ -890,7 +890,7 @@ ref class PolyUi : public System::Windows::Forms::Form {
         L"Consolas", 30, System::Drawing::FontStyle::Bold,
         System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
     this->label25->ForeColor = System::Drawing::SystemColors::ButtonHighlight;
-    this->label25->Location = System::Drawing::Point(350, 443);
+    this->label25->Location = System::Drawing::Point(482, 443);
     this->label25->Name = L"label25";
     this->label25->Size = System::Drawing::Size(306, 47);
     this->label25->TabIndex = 42;
@@ -901,7 +901,7 @@ ref class PolyUi : public System::Windows::Forms::Form {
     this->textBox15->Font = (gcnew System::Drawing::Font(
         L"Consolas", 10, System::Drawing::FontStyle::Regular,
         System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
-    this->textBox15->Location = System::Drawing::Point(692, 516);
+    this->textBox15->Location = System::Drawing::Point(824, 516);
     this->textBox15->Name = L"textBox15";
     this->textBox15->Size = System::Drawing::Size(268, 23);
     this->textBox15->TabIndex = 48;
@@ -913,7 +913,7 @@ ref class PolyUi : public System::Windows::Forms::Form {
         L"Consolas", 10, System::Drawing::FontStyle::Regular,
         System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
     this->label26->ForeColor = System::Drawing::SystemColors::ButtonHighlight;
-    this->label26->Location = System::Drawing::Point(691, 496);
+    this->label26->Location = System::Drawing::Point(823, 496);
     this->label26->Name = L"label26";
     this->label26->Size = System::Drawing::Size(240, 17);
     this->label26->TabIndex = 49;
@@ -924,10 +924,11 @@ ref class PolyUi : public System::Windows::Forms::Form {
     this->DerVar->Font = (gcnew System::Drawing::Font(
         L"Consolas", 10, System::Drawing::FontStyle::Regular,
         System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
-    this->DerVar->Location = System::Drawing::Point(672, 374);
+    this->DerVar->Location = System::Drawing::Point(804, 374);
     this->DerVar->Name = L"DerVar";
     this->DerVar->Size = System::Drawing::Size(36, 23);
     this->DerVar->TabIndex = 50;
+    this->DerVar->Text = L"x";
     this->DerVar->TextChanged +=
         gcnew System::EventHandler(this, &PolyUi::DerVar_TextChanged);
     //
@@ -938,7 +939,7 @@ ref class PolyUi : public System::Windows::Forms::Form {
         L"Consolas", 10, System::Drawing::FontStyle::Regular,
         System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
     this->label4->ForeColor = System::Drawing::SystemColors::ButtonHighlight;
-    this->label4->Location = System::Drawing::Point(672, 354);
+    this->label4->Location = System::Drawing::Point(804, 354);
     this->label4->Name = L"label4";
     this->label4->Size = System::Drawing::Size(40, 17);
     this->label4->TabIndex = 51;
@@ -951,7 +952,7 @@ ref class PolyUi : public System::Windows::Forms::Form {
         L"Consolas", 10, System::Drawing::FontStyle::Regular,
         System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
     this->label6->ForeColor = System::Drawing::SystemColors::ButtonHighlight;
-    this->label6->Location = System::Drawing::Point(718, 354);
+    this->label6->Location = System::Drawing::Point(850, 354);
     this->label6->Name = L"label6";
     this->label6->Size = System::Drawing::Size(24, 17);
     this->label6->TabIndex = 53;
@@ -962,10 +963,11 @@ ref class PolyUi : public System::Windows::Forms::Form {
     this->DerTimes->Font = (gcnew System::Drawing::Font(
         L"Consolas", 10, System::Drawing::FontStyle::Regular,
         System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
-    this->DerTimes->Location = System::Drawing::Point(714, 374);
+    this->DerTimes->Location = System::Drawing::Point(846, 374);
     this->DerTimes->Name = L"DerTimes";
     this->DerTimes->Size = System::Drawing::Size(36, 23);
     this->DerTimes->TabIndex = 54;
+    this->DerTimes->Text = L"1";
     this->DerTimes->TextChanged +=
         gcnew System::EventHandler(this, &PolyUi::DerTimes_TextChanged);
     //
@@ -989,9 +991,8 @@ ref class PolyUi : public System::Windows::Forms::Form {
     this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
     this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
     this->BackColor = System::Drawing::Color::BlueViolet;
-    this->ClientSize = System::Drawing::Size(1174, 727);
+    this->ClientSize = System::Drawing::Size(1348, 727);
     this->Controls->Add(this->FromFile);
-    this->Controls->Add(this->DerTimes);
     this->Controls->Add(this->label6);
     this->Controls->Add(this->label4);
     this->Controls->Add(this->DerVar);
@@ -1042,6 +1043,7 @@ ref class PolyUi : public System::Windows::Forms::Form {
     this->Controls->Add(this->Bank);
     this->Controls->Add(this->NewStr);
     this->Controls->Add(this->PushButton);
+    this->Controls->Add(this->DerTimes);
     this->Name = L"PolyUi";
     this->Text = L"PolyUi";
     this->ResumeLayout(false);
@@ -1121,11 +1123,12 @@ ref class PolyUi : public System::Windows::Forms::Form {
     auto tmp_pol = Polinom(str);
     if (!tmp_pol.isNull()) {
       pols->pushBack(tmp_pol);
+      Polinom sec = tmp_pol + Polinom();
       Bank->Items->Add(gcnew String(
-          (std::to_string(pols->size) + ": " + tmp_pol.toStr()).c_str()));
+          (std::to_string(pols->size) + ": " + sec.toStr()).c_str()));
       NewStr->Text = "";
     }
-    updateMult();
+    //updateMult();
   }
   System::Void button1_Click(System::Object ^ sender, System::EventArgs ^ e) {
     std::string str = marshal_as<std::string>(NewStr->Text->ToString());
@@ -1244,11 +1247,9 @@ ref class PolyUi : public System::Windows::Forms::Form {
           System::Windows::Forms::DialogResult::OK) {
         if ((myStream = openFileDialog1->OpenFile()) != nullptr) {
           try {
-            auto sr = new StreamReader(myStream);
-            std::string str = marshal_as<std::string>(myStream->ToString());
-            auto strs = split_string(str, "\n");
-            pols->clear();
-            for (auto i : strs) {
+            //pols->clear();
+            auto str = marshal_as<std::string>(StreamReader(myStream).ReadToEnd());
+            for (auto i : split_string(str, "\n")) {
               try {
                 std::cout << i;
                 pushToBank(i);
