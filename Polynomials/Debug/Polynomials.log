@@ -1,2 +1,3 @@
 ﻿  Source.cpp
+C:\C\School\Polynomials\polinom.h(171,25): warning C4018: '<': signed/unsigned mismatch
   Polynomials.vcxproj -> C:\C\School\Polynomials\Debug\Polynomials.exe

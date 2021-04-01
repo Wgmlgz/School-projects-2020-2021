@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\C\School\Polynomials\Debug\Polynomials.exe</FullPath>
+      <FullPath>C:\C\School\Polynomials\Release\Polynomials.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />

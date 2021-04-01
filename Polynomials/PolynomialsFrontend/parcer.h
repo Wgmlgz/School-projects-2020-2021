@@ -27,6 +27,7 @@ class Parser {
 
   // run
   vector<Word> toWords(string str) {
+    const bool DEBUG = false;
     str += end_char;
     string state = "0";
     int last_pos = -1;
@@ -51,7 +52,7 @@ class Parser {
             string wrd = last_pos != -1 ? str.substr(last_pos, cur_size) : "";
             if (states[state].word_id != none_id) {
               words.push_back(Word{states[state].word_id, wrd});
-              cout << states[state].word_id << "_" << wrd << endl;
+              if (DEBUG) cout << states[state].word_id << "_" << wrd << endl;
             }
             last_pos += cur_size;
             cur_size = 0;
@@ -60,10 +61,13 @@ class Parser {
             break;
           }
         }
-        if (find == false) throw exception("This symbol is't allowed here");
+        string err = "This symbol is't allowed here: '";
+        err.push_back(ch);
+        err += "'";
+        if (find == false) throw exception(err.c_str());
       }
     }
-    cout << "" << endl;
+    if (DEBUG) cout << "" << endl;
     return words;
   }
 
@@ -89,3 +93,19 @@ class Parser {
     setConnections(dict3);
   }
 };
+std::vector<std::string> split_string(const std::string& str,
+                                      const std::string& delimiter) {
+  std::vector<std::string> strings;
+
+  std::string::size_type pos = 0;
+  std::string::size_type prev = 0;
+  while ((pos = str.find(delimiter, prev)) != std::string::npos) {
+    strings.push_back(str.substr(prev, pos - prev));
+    prev = pos + 1;
+  }
+
+  // To get the last substring (or only, if delimiter is not found)
+  strings.push_back(str.substr(prev));
+
+  return strings;
+}

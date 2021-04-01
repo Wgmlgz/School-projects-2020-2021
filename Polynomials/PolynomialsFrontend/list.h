@@ -33,8 +33,9 @@ class List {
     if (nd == begin) begin = nd->next;
     if (nd == end) end = nd->prev;
     --size;
+    //delete nd;
   }
-  void insertAfter(Node<T>* nd, T t) {
+  Node<T>* insertAfter(Node<T>* nd, T t) {
     ++size;
     Node<T>* new_node = new Node<T>(t);
     if (nd) {
@@ -51,6 +52,7 @@ class List {
       if (begin) begin->prev = new_node;
       begin = new_node;
     }
+    return new_node;
   }
   Node<T>* find(T t) {
     for (auto i = begin; i != nullptr; i = i->next) {
@@ -66,11 +68,23 @@ class List {
     return nullptr;
   }
   void clear() {
+    begin = nullptr;
+    end = nullptr;
+    size = 0;
+    return;
     for (auto i = begin; i != nullptr;) {
       auto next = i->next;
-      delete i;
+      remove(i);
       i = next;
     }
+  }
+  Node<T>* at(size_t sz) {
+    if (sz >= List<T>::size) throw(exception("Index out of range"));
+    auto j = List<T>::begin;
+    for (int i = 0; i < sz; ++i) {
+      j = j->next;
+    }
+    return j;
   }
   void pushBack(T t) { insertAfter(end, t); }
 };
@@ -80,15 +94,14 @@ class SortedList : public List<T> {
  public:
   function<bool(T, T)> less;
   SortedList(function<bool(T, T)> cmp_) { less = cmp_; }
-  void insert(T t) {
+  Node<T>* insert(T t) {
     Node<T>* last = nullptr;
     for (Node<T>* i = List<T>::begin; i != nullptr; i = i->next) {
-      if (less(i->data, t) == false) {
-        List<T>::insertAfter(last, t);
-        return;
+      if (less(i->data, t)) {
+        return List<T>::insertAfter(last, t);
       }
     }
-    List<T>::insertAfter(List<T>::end, t);
+    return List<T>::insertAfter(List<T>::end, t);
   }
   SortedList<T> copy() {
     Node<T>* prev = nullptr;

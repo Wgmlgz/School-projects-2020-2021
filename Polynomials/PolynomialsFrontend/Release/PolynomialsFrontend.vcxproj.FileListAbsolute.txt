@@ -1,0 +1,4 @@
+C:\C\School\Polynomials\PolynomialsFrontend\Release\PolynomialsFrontend.PolyUi.resources
+C:\C\School\Polynomials\PolynomialsFrontend\Release\PolynomialsFrontend.vcxproj.GenerateResource.cache
+C:\C\School\Polynomials\PolynomialsFrontend\Release\PolynomialsFrontend.exe
+C:\C\School\Polynomials\PolynomialsFrontend\Release\PolynomialsFrontend.vcxprojAssemblyReference.cache
