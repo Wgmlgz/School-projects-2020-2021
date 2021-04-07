@@ -216,7 +216,10 @@ ref class PolyUi : public System::Windows::Forms::Form {
   System::Windows::Forms::Label ^ label25;
 
  private:
-  System::Windows::Forms::TextBox ^ textBox15;
+  System::Windows::Forms::TextBox ^ ValVars;
+
+ private:
+
 
  private:
   System::Windows::Forms::Label ^ label26;
@@ -244,6 +247,15 @@ ref class PolyUi : public System::Windows::Forms::Form {
 
  private:
   System::Windows::Forms::Button ^ FromFile;
+
+ private:
+  System::Windows::Forms::Button ^ SumPush;
+
+ private:
+  System::Windows::Forms::Button ^ MultPush;
+
+ private:
+  System::Windows::Forms::Button ^ DerPush;
 
  private:
 
@@ -321,13 +333,16 @@ ref class PolyUi : public System::Windows::Forms::Form {
     this->textBox14 = (gcnew System::Windows::Forms::TextBox());
     this->label24 = (gcnew System::Windows::Forms::Label());
     this->label25 = (gcnew System::Windows::Forms::Label());
-    this->textBox15 = (gcnew System::Windows::Forms::TextBox());
+    this->ValVars = (gcnew System::Windows::Forms::TextBox());
     this->label26 = (gcnew System::Windows::Forms::Label());
     this->DerVar = (gcnew System::Windows::Forms::TextBox());
     this->label4 = (gcnew System::Windows::Forms::Label());
     this->label6 = (gcnew System::Windows::Forms::Label());
     this->DerTimes = (gcnew System::Windows::Forms::TextBox());
     this->FromFile = (gcnew System::Windows::Forms::Button());
+    this->SumPush = (gcnew System::Windows::Forms::Button());
+    this->MultPush = (gcnew System::Windows::Forms::Button());
+    this->DerPush = (gcnew System::Windows::Forms::Button());
     this->SuspendLayout();
     //
     // PushButton
@@ -336,9 +351,9 @@ ref class PolyUi : public System::Windows::Forms::Form {
     this->PushButton->Font = (gcnew System::Drawing::Font(
         L"Consolas", 10, System::Drawing::FontStyle::Regular,
         System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
-    this->PushButton->Location = System::Drawing::Point(243, 694);
+    this->PushButton->Location = System::Drawing::Point(300, 692);
     this->PushButton->Name = L"PushButton";
-    this->PushButton->Size = System::Drawing::Size(73, 23);
+    this->PushButton->Size = System::Drawing::Size(73, 25);
     this->PushButton->TabIndex = 1;
     this->PushButton->Text = L"push";
     this->PushButton->UseVisualStyleBackColor = false;
@@ -352,7 +367,7 @@ ref class PolyUi : public System::Windows::Forms::Form {
         System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
     this->NewStr->Location = System::Drawing::Point(13, 694);
     this->NewStr->Name = L"NewStr";
-    this->NewStr->Size = System::Drawing::Size(224, 23);
+    this->NewStr->Size = System::Drawing::Size(281, 23);
     this->NewStr->TabIndex = 2;
     //
     // Bank
@@ -364,7 +379,7 @@ ref class PolyUi : public System::Windows::Forms::Form {
     this->Bank->ItemHeight = 19;
     this->Bank->Location = System::Drawing::Point(13, 51);
     this->Bank->Name = L"Bank";
-    this->Bank->Size = System::Drawing::Size(461, 593);
+    this->Bank->Size = System::Drawing::Size(461, 612);
     this->Bank->TabIndex = 3;
     //
     // HintDoSum
@@ -896,15 +911,17 @@ ref class PolyUi : public System::Windows::Forms::Form {
     this->label25->TabIndex = 42;
     this->label25->Text = L"Val at point:";
     //
-    // textBox15
+    // ValVars
     //
-    this->textBox15->Font = (gcnew System::Drawing::Font(
+    this->ValVars->Font = (gcnew System::Drawing::Font(
         L"Consolas", 10, System::Drawing::FontStyle::Regular,
         System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
-    this->textBox15->Location = System::Drawing::Point(824, 516);
-    this->textBox15->Name = L"textBox15";
-    this->textBox15->Size = System::Drawing::Size(268, 23);
-    this->textBox15->TabIndex = 48;
+    this->ValVars->Location = System::Drawing::Point(824, 516);
+    this->ValVars->Name = L"ValVars";
+    this->ValVars->Size = System::Drawing::Size(268, 23);
+    this->ValVars->TabIndex = 48;
+    this->ValVars->TextChanged +=
+        gcnew System::EventHandler(this, &PolyUi::ValVars_TextChanged);
     //
     // label26
     //
@@ -977,14 +994,59 @@ ref class PolyUi : public System::Windows::Forms::Form {
     this->FromFile->Font = (gcnew System::Drawing::Font(
         L"Consolas", 10, System::Drawing::FontStyle::Regular,
         System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
-    this->FromFile->Location = System::Drawing::Point(221, 650);
+    this->FromFile->Location = System::Drawing::Point(379, 692);
     this->FromFile->Name = L"FromFile";
-    this->FromFile->Size = System::Drawing::Size(95, 23);
+    this->FromFile->Size = System::Drawing::Size(95, 25);
     this->FromFile->TabIndex = 55;
     this->FromFile->Text = L"from file";
     this->FromFile->UseVisualStyleBackColor = false;
     this->FromFile->Click +=
         gcnew System::EventHandler(this, &PolyUi::FromFile_Click);
+    //
+    // SumPush
+    //
+    this->SumPush->BackColor = System::Drawing::Color::GhostWhite;
+    this->SumPush->Font = (gcnew System::Drawing::Font(
+        L"Consolas", 10, System::Drawing::FontStyle::Regular,
+        System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+    this->SumPush->Location = System::Drawing::Point(1041, 119);
+    this->SumPush->Name = L"SumPush";
+    this->SumPush->Size = System::Drawing::Size(95, 25);
+    this->SumPush->TabIndex = 56;
+    this->SumPush->Text = L"push";
+    this->SumPush->UseVisualStyleBackColor = false;
+    this->SumPush->Click +=
+        gcnew System::EventHandler(this, &PolyUi::SumPush_Click);
+    //
+    // MultPush
+    //
+    this->MultPush->BackColor = System::Drawing::Color::GhostWhite;
+    this->MultPush->Font = (gcnew System::Drawing::Font(
+        L"Consolas", 10, System::Drawing::FontStyle::Regular,
+        System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+    this->MultPush->Location = System::Drawing::Point(1041, 261);
+    this->MultPush->Name = L"MultPush";
+    this->MultPush->Size = System::Drawing::Size(95, 25);
+    this->MultPush->TabIndex = 57;
+    this->MultPush->Text = L"push";
+    this->MultPush->UseVisualStyleBackColor = false;
+    this->MultPush->Click +=
+        gcnew System::EventHandler(this, &PolyUi::MultPush_Click);
+    //
+    // DerPush
+    //
+    this->DerPush->BackColor = System::Drawing::Color::GhostWhite;
+    this->DerPush->Font = (gcnew System::Drawing::Font(
+        L"Consolas", 10, System::Drawing::FontStyle::Regular,
+        System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+    this->DerPush->Location = System::Drawing::Point(1041, 408);
+    this->DerPush->Name = L"DerPush";
+    this->DerPush->Size = System::Drawing::Size(95, 25);
+    this->DerPush->TabIndex = 58;
+    this->DerPush->Text = L"push";
+    this->DerPush->UseVisualStyleBackColor = false;
+    this->DerPush->Click +=
+        gcnew System::EventHandler(this, &PolyUi::DerPush_Click);
     //
     // PolyUi
     //
@@ -992,12 +1054,15 @@ ref class PolyUi : public System::Windows::Forms::Form {
     this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
     this->BackColor = System::Drawing::Color::BlueViolet;
     this->ClientSize = System::Drawing::Size(1348, 727);
+    this->Controls->Add(this->DerPush);
+    this->Controls->Add(this->MultPush);
+    this->Controls->Add(this->SumPush);
     this->Controls->Add(this->FromFile);
     this->Controls->Add(this->label6);
     this->Controls->Add(this->label4);
     this->Controls->Add(this->DerVar);
     this->Controls->Add(this->label26);
-    this->Controls->Add(this->textBox15);
+    this->Controls->Add(this->ValVars);
     this->Controls->Add(this->ValRes);
     this->Controls->Add(this->label23);
     this->Controls->Add(this->textBox13);
@@ -1051,7 +1116,7 @@ ref class PolyUi : public System::Windows::Forms::Form {
   }
 #pragma endregion
  private:
-  void updateSum() {
+  string updateSum() {
     std::string stra = marshal_as<std::string>(SumStrA->Text->ToString());
     std::string strb = marshal_as<std::string>(SumStrB->Text->ToString());
     std::string strna = marshal_as<std::string>(SumNA->Text->ToString());
@@ -1065,10 +1130,11 @@ ref class PolyUi : public System::Windows::Forms::Form {
     } catch (...) {
     }
     Polinom a(stra), b(strb);
-
+    string st = (a + b).toStr();
     SumRes->Text = gcnew String(("Result: " + (a + b).toStr()).c_str());
+    return st;
   }
-  void updateDer() {
+  string updateDer() {
     std::string stra = marshal_as<std::string>(DerStr->Text->ToString());
     std::string strna = marshal_as<std::string>(DerN->Text->ToString());
     std::string strb = marshal_as<std::string>(DerVar->Text->ToString());
@@ -1078,16 +1144,20 @@ ref class PolyUi : public System::Windows::Forms::Form {
     }
     try {
     Polinom a(stra);
-
+      string st = (a.derivative(strb[0], stoi(marshal_as<std::string>(
+                                             DerTimes->Text->ToString()))))
+                      .toStr();
     DerRes->Text = gcnew String(
         ("Result: " + (a.derivative(strb[0], stoi(marshal_as<std::string>(
                                                  DerTimes->Text->ToString()))))
                           .toStr())
             .c_str());
+      return st;
     } catch (...) {
     }
+    
   }
-  void updateMult() {
+  string updateMult() {
     std::string stra = marshal_as<std::string>(MultStrA->Text->ToString());
     std::string strb = marshal_as<std::string>(MultStrB->Text->ToString());
     std::string strna = marshal_as<std::string>(MultNA->Text->ToString());
@@ -1101,8 +1171,9 @@ ref class PolyUi : public System::Windows::Forms::Form {
     } catch (...) {
     }
     Polinom a(stra), b(strb);
-
+    string st = (a * b).toStr();
     MultRes->Text = gcnew String(("Result: " + (a * b).toStr()).c_str());
+    return st;
   }
   void uptateRoots() {
     std::string stra = marshal_as<std::string>(RootStr->Text->ToString());
@@ -1118,6 +1189,9 @@ ref class PolyUi : public System::Windows::Forms::Form {
           ("Result: " + a.intRoots()).c_str());
     } catch (...) {
     }
+  }
+  void updateVal() {
+
   }
   void pushToBank(string str) {
     auto tmp_pol = Polinom(str);
@@ -1264,6 +1338,25 @@ ref class PolyUi : public System::Windows::Forms::Form {
       }
     } catch (...) {
     }
+  }
+
+ private:
+  System::Void ValVars_TextChanged(System::Object ^ sender,
+                                   System::EventArgs ^ e) {}
+
+ private:
+  System::Void SumPush_Click(System::Object ^ sender, System::EventArgs ^ e) {
+    pushToBank(updateSum());
+  }
+
+ private:
+  System::Void DerPush_Click(System::Object ^ sender, System::EventArgs ^ e) {
+    pushToBank(updateDer());
+  }
+
+ private:
+  System::Void MultPush_Click(System::Object ^ sender, System::EventArgs ^ e) {
+    pushToBank(updateMult());
   }
 };
 }  // namespace PolynomialsFrontend

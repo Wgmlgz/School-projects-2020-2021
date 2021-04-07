@@ -8,12 +8,15 @@ C:\C\School\Polynomials\PolynomialsFrontend\list.h(81): message : while compilin
           [
               T=Polinom
           ]
-C:\C\School\Polynomials\PolynomialsFrontend\PolyUi.h(1060): message : see reference to function template instantiation 'Node<T> *List<T>::at(size_t)' being compiled
+C:\C\School\Polynomials\PolynomialsFrontend\PolyUi.h(1125): message : see reference to function template instantiation 'Node<T> *List<T>::at(size_t)' being compiled
           with
           [
               T=Polinom
           ]
 C:\C\School\Polynomials\PolynomialsFrontend\PolyUi.h(20): message : see reference to class template instantiation 'List<Polinom>' being compiled
 C:\C\School\Polynomials\PolynomialsFrontend\list.h(84,23): warning C4018: '<': signed/unsigned mismatch
+C:\C\School\Polynomials\PolynomialsFrontend\PolyUi.h(1159): warning C4715: 'PolynomialsFrontend::PolyUi::updateDer': not all control paths return a value
   PolyUi.obj : MSIL module encountered; incremental linking is disabled for MSIL; performing full link
+.NETFramework,Version=v4.7.2.AssemblyAttributes.obj : warning LNK4204: 'C:\C\School\Polynomials\PolynomialsFrontend\Release\vc142.pdb' is missing debugging information for referencing module; linking object as if no debug info
+Source.obj : warning LNK4204: 'C:\C\School\Polynomials\PolynomialsFrontend\Release\vc142.pdb' is missing debugging information for referencing module; linking object as if no debug info
   PolynomialsFrontend.vcxproj -> C:\C\School\Polynomials\PolynomialsFrontend\Release\PolynomialsFrontend.exe

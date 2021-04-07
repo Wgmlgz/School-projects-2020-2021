@@ -1,19 +1,22 @@
 ﻿  PolyUi.cpp
-C:\C\School\Polynomials\PolynomialsFrontend\polinom.h(69,23): warning C4244: 'return': conversion from 'int64_t' to 'int', possible loss of data
-C:\C\School\Polynomials\PolynomialsFrontend\polinom.h(173,25): warning C4018: '<': signed/unsigned mismatch
-C:\C\School\Polynomials\PolynomialsFrontend\polinom.h(254,16): warning C4244: 'initializing': conversion from 'int64_t' to 'int', possible loss of data
+C:\C\School\Polynomials\PolynomialsFrontend\polinom.h(110,23): warning C4244: 'return': conversion from 'int64_t' to 'int', possible loss of data
+C:\C\School\Polynomials\PolynomialsFrontend\polinom.h(175,25): warning C4018: '<': signed/unsigned mismatch
+C:\C\School\Polynomials\PolynomialsFrontend\polinom.h(259,16): warning C4244: 'initializing': conversion from 'int64_t' to 'int', possible loss of data
 C:\C\School\Polynomials\PolynomialsFrontend\list.h(82,12): warning C4018: '>=': signed/unsigned mismatch
 C:\C\School\Polynomials\PolynomialsFrontend\list.h(81): message : while compiling class template member function 'Node<T> *List<T>::at(size_t)'
           with
           [
               T=Polinom
           ]
-C:\C\School\Polynomials\PolynomialsFrontend\PolyUi.h(1058): message : see reference to function template instantiation 'Node<T> *List<T>::at(size_t)' being compiled
+C:\C\School\Polynomials\PolynomialsFrontend\PolyUi.h(1125): message : see reference to function template instantiation 'Node<T> *List<T>::at(size_t)' being compiled
           with
           [
               T=Polinom
           ]
 C:\C\School\Polynomials\PolynomialsFrontend\PolyUi.h(20): message : see reference to class template instantiation 'List<Polinom>' being compiled
 C:\C\School\Polynomials\PolynomialsFrontend\list.h(84,23): warning C4018: '<': signed/unsigned mismatch
+C:\C\School\Polynomials\PolynomialsFrontend\PolyUi.h(1159): warning C4715: 'PolynomialsFrontend::PolyUi::updateDer': not all control paths return a value
   PolyUi.obj : MSIL module encountered; incremental linking is disabled for MSIL; performing full link
+.NETFramework,Version=v4.7.2.AssemblyAttributes.obj : warning LNK4204: '' is missing debugging information for referencing module; linking object as if no debug info
+Source.obj : warning LNK4204: 'C:\C\School\Polynomials\PolynomialsFrontend\Debug\vc142.pdb' is missing debugging information for referencing module; linking object as if no debug info
   PolynomialsFrontend.vcxproj -> C:\C\School\Polynomials\PolynomialsFrontend\Debug\PolynomialsFrontend.exe
