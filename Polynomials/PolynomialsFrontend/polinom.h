@@ -258,7 +258,7 @@ class Polinom {
     if (monoms.size != 0 && monoms.end->data.vars.size == 0) {
       int free = monoms.end->data.mult_val;
       if (free < 0) free = -free;
-      for (int i = -free; i <= free; ++i) {
+      for (int i = -666; i <= 666; ++i) {
         if (i == 0 || free % i == 0) {
           List<pair<char, int>> vals;
           for (char j = 'a'; j <= 'z'; ++j) vals.pushBack({j, i});
