@@ -1,20 +1,14 @@
-#include <iostream>
-//#include "RedBlack.h"
+#include "Wgmlgz.h"
+#include "BinSearchTree.h"
 #include <random>
-#include "Tree.h"
-void add(StrTreeNode* da, int depth = 0) {
-  if (depth > 8) return;
-  int aa = 3;
-  if (depth > 6) aa  = 1;
-  for (auto i : range(aa)) {
-    da->branches.push_back(new StrTreeNode(rand() % 2 ?"a" : "2"));
-  }
-  for (auto i : da->branches) {
-    add(i, depth + 1);
-  }
-}
 int main() {
-  auto tree = StrTreeNode("da");
-  add(&tree);
-  tree.print();
+  while (1) {
+    auto bt = BinSearchTree<int>();
+    for (int i = 0; i < 100; ++i) {
+      int t = rand()%100;
+      //range(h, 30000000);
+      bt.insert(t);
+    }
+    bt.root->print();
+  }
 }
