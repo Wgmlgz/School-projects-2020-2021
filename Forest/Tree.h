@@ -7,7 +7,7 @@ struct Rect { V2 pos, size; };
 
 Tclass TreeNode {
 public:
-  bool isEnd = true;
+  //bool isEnd = true;
   std::vector<TreeNode*> branches;
   T data;
   TreeNode(){};
@@ -19,14 +19,18 @@ public:
     branches[n] = new TreeNode(new_data);
     isEnd = false;
   }
+  bool isEnd() {
+    for (auto i : branches) if (i) return false;
+    return true;
+  }
   
 private:
   vector<string> str_data() { return { std::to_string(data) }; }
 public:
-  int spacing_x = 1;
+  int spacing_x = 0;
   int spacing_y = 0;
   int block_spacing = 1;
-  int vertical_spacing = 1;
+  int vertical_spacing = 0;
 
   string cor_top = ".";
   string cor_donw = "\'";
@@ -75,7 +79,7 @@ private:
     return ret;
   }
   vstr renderRec() {
-    if (isEnd) {
+    if (isEnd()) {
       return render();
     }
 

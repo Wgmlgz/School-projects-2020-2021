@@ -2,6 +2,7 @@
 #
 # Get latest from https://github.com/github/gitignore/blob/master/Unity.gitignore
 #
+Forest/.vsdode/*
 Turing/Turing emulator/[Ll]ibrary/
 Turing/Turing emulator/[Tt]emp/
 Turing/Turing emulator/[Oo]bj/
@@ -72,3 +73,4 @@ crashlytics-build.properties
 Turing/Turing emulator/Assembly-CSharp.csproj
 *.csproj
 *.csproj
+
