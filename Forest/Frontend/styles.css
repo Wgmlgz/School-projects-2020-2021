@@ -1,0 +1,13 @@
+em {
+  color: blueviolet;
+}
+.anime {
+  width: 200px;
+}
+.tree_block {
+  width: 200px;
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  line-height: 1px;
+}
