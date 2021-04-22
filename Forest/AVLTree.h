@@ -3,16 +3,16 @@
 #include "BinSearchTree.h"
 #include "BinTree.h"
 //#include "Tree.h"
-Tclass AVLTreeNode : public BinTreeNode<T> {
+Tclass AVLTreeNode : public BinTreeNode<T>{
 public:
   int height = 0;
-  AVLTreeNode<T>* get_lhs(){ return static_cast<AVLTreeNode<T>*>(BinTreeNode<T>::get_lhs()); }
-  AVLTreeNode<T>* get_rhs(){ return static_cast<AVLTreeNode<T>*>(BinTreeNode<T>::get_rhs()); }
-  void set_lhs(AVLTreeNode<T>* new_ptr){
+  AVLTreeNode<T>* get_lhs() { return static_cast<AVLTreeNode<T>*>(BinTreeNode<T>::get_lhs()); }
+  AVLTreeNode<T>* get_rhs() { return static_cast<AVLTreeNode<T>*>(BinTreeNode<T>::get_rhs()); }
+  void set_lhs(AVLTreeNode<T>* new_ptr) {
     BinTreeNode<T>::set_lhs(static_cast<BinTreeNode<T>*>(new_ptr));
     //this->isEnd = false;
   }
-  void set_rhs(AVLTreeNode<T>* new_ptr){
+  void set_rhs(AVLTreeNode<T>* new_ptr) {
     BinTreeNode<T>::set_rhs(static_cast<BinTreeNode<T>*>(new_ptr));
     //this->isEnd = false;
   }
@@ -21,9 +21,9 @@ public:
   }
 };
 
-Tclass AVLTree : public BinSearchTree<T> {
+Tclass AVLTree : public BinSearchTree<T>{
   using node_ptr = AVLTreeNode<T>*;
-  int height (node_ptr node) {
+  int height(node_ptr node) {
     return node ? node->height : 0;
   }
   int bf(node_ptr node) {
@@ -35,43 +35,40 @@ Tclass AVLTree : public BinSearchTree<T> {
   void fix_height(node_ptr a, node_ptr b) {
     fix_height(a); fix_height(b);
   }
-  node_ptr rrot(node_ptr node) {
-    node_ptr tmp = node->get_lhs();
-    node->set_lhs(tmp->get_rhs());
-    tmp->set_rhs(node);
+  node_ptr rrotAVL(node_ptr node) {
+    node_ptr tmp = static_cast<node_ptr>(BinSearchTree<T>::rrot(static_cast<BinTreeNode<T>*>(node)));
     fix_height(node, tmp);
     return tmp;
   }
-  node_ptr lrot(node_ptr node) {
-    node_ptr tmp = node->get_rhs();
-    node->set_rhs(tmp->get_lhs());
-    tmp->set_lhs(node);
-      fix_height(node, tmp);
+  node_ptr lrotAVL(node_ptr node) {
+    node_ptr tmp = static_cast<node_ptr>(BinSearchTree<T>::lrot(static_cast<BinTreeNode<T>*>(node)));
+    fix_height(node, tmp);
     return tmp;
   }
   node_ptr balance(node_ptr node) {
     fix_height(node);
     if (bf(node) == 2) {
-      if(bf(node->get_rhs()) < 0)
-        node->set_rhs(rrot(node->get_rhs()));
-      return lrot(node);
-    } else if (bf(node) == -2) {
-      if(bf(node->get_lhs()) > 0)
-        node->set_lhs(lrot(node->get_lhs()));
-      return rrot(node);
+      if (bf(node->get_rhs()) < 0)
+        node->set_rhs(rrotAVL(node->get_rhs()));
+      return lrotAVL(node);
+    }
+    else if (bf(node) == -2) {
+    if (bf(node->get_lhs()) > 0)
+      node->set_lhs(lrotAVL(node->get_lhs()));
+    return rrotAVL(node);
     }
     return node;
-  }
-  node_ptr insert(node_ptr node, T insert_data) {
-    if (!node) return new AVLTreeNode<T>(insert_data);
-    if (insert_data < node->data)
-      node->set_lhs(insert(node->get_lhs(), insert_data));
-    else
-      node->set_rhs(insert(node->get_rhs(), insert_data));
-    return balance(node);
-  }
+}
+node_ptr insert(node_ptr node, T insert_data) {
+  if (!node) return new AVLTreeNode<T>(insert_data);
+  if (insert_data < node->data)
+    node->set_lhs(insert(node->get_lhs(), insert_data));
+  else
+    node->set_rhs(insert(node->get_rhs(), insert_data));
+  return balance(node);
+}
 public:
   void insert(T insert_data) {
-    this->root = this->insert(static_cast<node_ptr>(this->root), insert_data);  
+    this->root = this->insert(static_cast<node_ptr>(this->root), insert_data);
   }
 };

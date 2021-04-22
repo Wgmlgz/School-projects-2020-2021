@@ -14,12 +14,19 @@ class BinSearchTree {
   }
 public:
   node_ptr root = nullptr;
- 
-  void insert(T insert_data) {
-    root = insert(root, insert_data);  
+  node_ptr rrot(node_ptr node) {
+    node_ptr tmp = node->get_lhs();
+    node->set_lhs(tmp->get_rhs());
+    tmp->set_rhs(node);
+    return tmp;
   }
-
-  void remove() {
-
+  node_ptr lrot(node_ptr node) {
+    node_ptr tmp = node->get_rhs();
+    node->set_rhs(tmp->get_lhs());
+    tmp->set_lhs(node);
+    return tmp;
+  }
+  void insert(T insert_data) {
+    root = insert(root, insert_data);
   }
 };

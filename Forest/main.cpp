@@ -1,18 +1,32 @@
-#include "Wgmlgz.h"
-#include "BinSearchTree.h"
-#include "AVLTree.h"
-#include <random>
+#include  "Treap.h"
+
+const bool DEBUG = false;
 
 int main() {
-    auto at = AVLTree<int>();
-    auto bt = BinSearchTree<int>();
-    for (int i = 0; i < 100; ++i) {
-      int t = rand()%10000;
-      cout << i << endl;
-      //range(h, 30000000);
-      bt.insert(i);
-      at.insert(i);
-    at.root->print(); 
-    bt.root->print(); 
+  auto tr = Treap<int>();
+  int input = 0, numbers = 10, last = -1;
+  char ch;
+
+  std::cin >> numbers;
+  for (int i = 0; i < numbers; ++i) {
+    std::cin >> ch >> input;
+    if (ch == '+') {
+      if (last != -1)
+        tr.insert(input + last);
+      else
+        tr.insert(input);
+      last = -1;
     }
+    else {
+      auto res = tr.next(input);
+      if (res) {
+        std::cout << res->data << std::endl;
+        last = res->data;
+      }
+      else {
+        std::cout << -1 << std::endl;
+      }
+    }
+    if (DEBUG) tr.root->print();
+  }
 }

@@ -2,30 +2,29 @@
 
 using vstr = vector<string>;
 
-struct V2 {int x = 0, y = 0; };
+struct V2 { int x = 0, y = 0; };
 struct Rect { V2 pos, size; };
 
-Tclass TreeNode {
+Tclass TreeNode{
 public:
-  //bool isEnd = true;
   std::vector<TreeNode*> branches;
   T data;
-  TreeNode(){};
+  TreeNode() {};
   TreeNode(T new_data) {
     data = new_data;
     branches.resize(5, nullptr);
   }
   void pushData(size_t n, T new_data) {
     branches[n] = new TreeNode(new_data);
-    isEnd = false;
   }
   bool isEnd() {
     for (auto i : branches) if (i) return false;
     return true;
   }
-  
+
 private:
   vector<string> str_data() { return { std::to_string(data) }; }
+  vstr null_render = { "null" };
 public:
   int spacing_x = 0;
   int spacing_y = 0;
@@ -39,8 +38,14 @@ public:
   char hor = '-';
   string ver = "|";
 
+
+  string cor_top_arr = " ";
+  char hor_arr = '_';
+  string ver_arr = "|";
+
+
 private:
-  V2 size(){
+  V2 size() {
     int max = 0;
     for (auto i : str_data())
       if (i.length() > max)
@@ -49,7 +54,7 @@ private:
     int y = 2 + str_data().size() + spacing_y * 2;
     return {x, y};
   }
-  void _print(vstr& v){
+  void _print(vstr& v) {
     for (auto& i : v) {
       cout << i << "#" << endl;
     }
@@ -79,14 +84,14 @@ private:
     return ret;
   }
   vstr renderRec() {
-    if (isEnd()) {
-      return render();
-    }
+    //if (isEnd()) {
+    //  return render();
+    //}
 
     vector<vstr> rendered_branches;
     for (auto i : this->branches) {
-      if (i == nullptr) continue;
-      rendered_branches.push_back(i->renderRec());
+      if (i == nullptr) rendered_branches.push_back(null_render);
+      else rendered_branches.push_back(i->renderRec());
     }
     int max = 0;
     for (auto& i : rendered_branches)
@@ -116,11 +121,11 @@ private:
       range(j, rendered_branches.size()) {
         int to_fill = rendered_branches[j][0].size();
         bool b = (i != (rendered_branches.size() - 2) / 2 + 1);
-        res[i] += string(to_fill - to_fill / 2 - 1, !b && j != 0 ?'-':' ');
-        res[i] += b ? ver : cor_top;
-        res[i] += string(to_fill / 2, !b && j != rendered_branches.size() - 1?'-':' ');
+        res[i] += string(to_fill - to_fill / 2 - 1, !b && j != 0 ? hor_arr : ' ');
+        res[i] += b ? ver_arr : cor_top_arr;
+        res[i] += string(to_fill / 2, !b && j != rendered_branches.size() - 1 ? hor_arr : ' ');
         if (j < rendered_branches.size() - 1)
-            res[i] += string(block_spacing, b?' ':'-');
+            res[i] += string(block_spacing, b ? ' ' : hor_arr);
       }
     }
     range(i, (rendered_this.size() - 2) / 2 + 1) {
@@ -137,7 +142,7 @@ private:
   }
 
 public:
-  void print(){
+  void print() {
     for (auto& i : renderRec())
       cout << i << endl;
   }
