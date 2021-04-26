@@ -3,6 +3,7 @@
 #include <string>
 #include <iostream>
 #include <algorithm>
+#include <utility>
 
 #define range3(name, start, stop, step) for (int name = start; name < stop; name += step)
 #define range2(name, start, stop) for (int name = start; name < stop; ++name)
@@ -18,3 +19,5 @@ using std::cin;
 using std::cout;
 using std::endl;
 using std::max;
+using std::pair;
+using std::to_string;

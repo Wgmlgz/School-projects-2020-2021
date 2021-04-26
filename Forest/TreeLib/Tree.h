@@ -1,13 +1,14 @@
+#pragma once
 #include "Wgmlgz.h"
 
 using vstr = vector<string>;
 
-struct V2 { int x = 0, y = 0; };
+struct V2 { int x = 0, y = 0; V2(int nx, int ny) { x = nx; y = ny; } };
 struct Rect { V2 pos, size; };
 
-Tclass TreeNode{
-public:
+Tclass TreeNode{ public:
   std::vector<TreeNode*> branches;
+  int id = rand();
   T data;
   TreeNode() {};
   TreeNode(T new_data) {
@@ -52,7 +53,7 @@ private:
         max = i.length();
     int x = max + spacing_x * 2 + 2;
     int y = 2 + str_data().size() + spacing_y * 2;
-    return {x, y};
+    return V2{ x, y };
   }
   void _print(vstr& v) {
     for (auto& i : v) {
@@ -147,10 +148,3 @@ public:
       cout << i << endl;
   }
 };
-
-template <typename T>
-class Tree {
-  virtual void insert(T insert_data) {
-
-  }
-}
