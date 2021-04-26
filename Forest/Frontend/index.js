@@ -107,3 +107,8 @@ function logKey(e) {
   d.style.left = x_pos+'px';
   d.style.top = y_pos+'px';
 }
+
+function test() {
+  _EXPORT_createTestTree(20)
+  _EXPORT_outputTestTree()
+}
