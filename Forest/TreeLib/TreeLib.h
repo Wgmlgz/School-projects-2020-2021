@@ -4,7 +4,8 @@
 #include <fstream>
 #include <stdio.h>
 #include "Tree.h"
-#include "TreePrinter.h"
+#include "TreePrinterJSON.h"
+#include "TreePrinterASCII.h"
 
 AVLTree<int> test_tree;
 vector<TreeNode<int>*> forest;
@@ -16,7 +17,7 @@ void createTestTree(int tree_size) {
 
 
 void outputTestTree() {
-    test_tree.root->print();
+    printASCII(test_tree.root);
     auto file = std::ofstream("file.txt");
     file << "test str";
     file.close();
@@ -32,6 +33,6 @@ int readChar() {
     return buff[buff_index++];
 }
 void testTreeToJson() {
-    buff = toJson<int>(test_tree.root).first;
+    buff = toJson<int>(test_tree.root, test_tree.root).first;
     buff_index = 0;
 }

@@ -26,4 +26,12 @@ public:
 
   void pushLhs(T new_data) { this->pushData(0, new_data); }
   void pushRhs(T new_data) { this->pushData(1, new_data); }
+
+
+  // stuff
+  void reverse() {
+    std::swap(this->branches[0], this->branches[1]);
+    if (get_lhs()) get_lhs()->reverse();
+    if (get_rhs()) get_rhs()->reverse();
+  }
 };

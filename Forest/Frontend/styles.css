@@ -1,5 +1,5 @@
 em {
-  color: blueviolet;
+  color: rgb(72, 77, 109);
 }
 .anime {
   width: 200px;
@@ -12,7 +12,24 @@ em {
   line-height: 1px;
 }
 
+.line {
+  background-color: rgb(255, 85, 85);
+  height: 4px;
+  position: absolute;
+  z-index: -10;
+}
+.tree_node {
+  border: 4px;
+  border-style: solid;
+  border-radius: 10px;
+  border-color: rgb(68, 71, 90);
+  padding: 0.2em;
+  font-family: consolas;
+  font-size: 1.4em;
+  color: rgb(248, 248, 242);
+  background-color: rgb(68, 71, 90);
+}
 /*other stuff*/
 body {
-  background-color: rgb(75, 54, 99);
+  background-color: rgb(40, 42, 54);
 }

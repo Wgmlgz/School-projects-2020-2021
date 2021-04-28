@@ -51,24 +51,30 @@ Tclass AVLTree : public BinSearchTree<T>{
       if (bf(node->get_rhs()) < 0)
         node->set_rhs(rrotAVL(node->get_rhs()));
       return lrotAVL(node);
-    }
-    else if (bf(node) == -2) {
+    } else if (bf(node) == -2) {
     if (bf(node->get_lhs()) > 0)
       node->set_lhs(lrotAVL(node->get_lhs()));
     return rrotAVL(node);
     }
     return node;
-}
-node_ptr insert(node_ptr node, T insert_data) {
-  if (!node) return new AVLTreeNode<T>(insert_data);
-  if (insert_data < node->data)
-    node->set_lhs(insert(node->get_lhs(), insert_data));
-  else
-    node->set_rhs(insert(node->get_rhs(), insert_data));
-  return balance(node);
-}
+  }
+
+  node_ptr last_inserted_node;
+
+  node_ptr insert(node_ptr node, T insert_data) {
+    if (!node) {
+      last_inserted_node = new AVLTreeNode<T>(insert_data);
+      return last_inserted_node;
+    }
+    if (insert_data < node->data)
+      node->set_lhs(insert(node->get_lhs(), insert_data));
+    else
+      node->set_rhs(insert(node->get_rhs(), insert_data));
+    return balance(node);
+  }
 public:
-  void insert(T insert_data) {
+  node_ptr insert(T insert_data) {
     this->root = this->insert(static_cast<node_ptr>(this->root), insert_data);
+    return last_inserted_node;
   }
 };
