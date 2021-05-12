@@ -36,19 +36,20 @@ function animate({duration, draw, timing}) {
   });
 }
 
-function addBlock(name, content, x, y) {
-    var newNode = document.createElement('div');
-    // newNode.className = 'tree_node';
-    newNode.setAttribute('id', name)
-    newNode.setAttribute('style', `position: absolute;  top: ${y}px; left: ${x}px;`)
+function addBlock(name, content, x, y, color) {
+  console.log(color);
+  var newNode = document.createElement('p');
+  newNode.className = 'tree_node';
+  newNode.setAttribute('id', name)
+  newNode.setAttribute('style', `position:absolute;top:${y}px;left:${x}px;border-color:${color};background-color:${color}`)
 
-    newNode.innerHTML = `<p class="tree_node"\>${content}</p>`
+  newNode.innerHTML = `${content}`
 
-    tree.appendChild(newNode);
+  tree.appendChild(newNode);
 }
 
-function addBlockAndAnim(name, content, x, y, x1, y1) {
-  addBlock(name,content,x,y)
+function addBlockAndAnim(name, content, x, y, x1, y1, color) {
+  addBlock(name,content,x,y, color)
   animate({
     duration: anim_time,
     timing: function (timeFraction) {
@@ -58,41 +59,46 @@ function addBlockAndAnim(name, content, x, y, x1, y1) {
       else return Math.pow(timeFraction * 2 - 2, c) / 2 + 1
       // else return 0
     },
-    draw: function(progress) {
-      document.getElementById(name).style.left = x + (x1 - x) * progress + 'px';
-      document.getElementById(name).style.top = y + (y1 - y) * progress + 'px';
+    draw: function (progress) {
+      try {
+        document.getElementById(name).style.left = x + (x1 - x) * progress + 'px';
+        document.getElementById(name).style.top = y + (y1 - y) * progress + 'px';
+      }catch {}
     }
   });  
 }
 
 function refreshLinePos(line, a, b) {
-  let as = document.getElementById(a).style
-  let bs = document.getElementById(b).style
+    console.log("rfr");
+    console.log(a);
+    console.log(b);
+    let as = document.getElementById(a).style
+    let bs = document.getElementById(b).style
 
-  var posax = Number.parseInt(as.left) - 35
-  var posay = Number.parseInt(as.top)- 5
+    var posax = Number.parseInt(as.left) - 35
+    var posay = Number.parseInt(as.top) - 5
   
-  //last dot
-  var posbx = Number.parseInt(bs.left)- 35
-  var posby = Number.parseInt(bs.top)- 5
+    //last dot
+    var posbx = Number.parseInt(bs.left) - 35
+    var posby = Number.parseInt(bs.top) - 5
 
-  //temp calculation variables
-  var centerx;
-  var centery;
-  var distance;
-  var angle;
+    //temp calculation variables
+    var centerx;
+    var centery;
+    var distance;
+    var angle;
   
-  //find center points;
-  centerx = (posax+posbx)/2;
-  centery = (posay+posby)/2;
+    //find center points;
+    centerx = (posax + posbx) / 2;
+    centery = (posay + posby) / 2;
   
-  var angle = Math.atan2(posay-posby,posax-posbx)* 180 / Math.PI;
-  distance = Math.sqrt(Math.pow((posbx - posax), 2) + Math.pow((posby - posay), 2));
+    var angle = Math.atan2(posay - posby, posax - posbx) * 180 / Math.PI;
+    distance = Math.sqrt(Math.pow((posbx - posax), 2) + Math.pow((posby - posay), 2));
   
-  $(line).css("width", distance +"px");
-  $(line).css("transform"," rotate("+angle+"deg)");
-  $(line).css("top",centery  - ($(line).height()/2)+(100/2));
-  $(line).css("left", centerx - ($(line).width() / 2) + (100 / 2));
+    $(line).css("width", distance + "px");
+    $(line).css("transform", " rotate(" + angle + "deg)");
+    $(line).css("top", centery - ($(line).height() / 2) + (100 / 2));
+    $(line).css("left", centerx - ($(line).width() / 2) + (100 / 2));
 }
 function addLine(a, b, property) {
   var line = document.createElement('div');
@@ -104,16 +110,17 @@ function addLine(a, b, property) {
   return line
 }
 function allLineAndAnim(a, b, property) {
+  console.log("dad");
   var line = addLine(a, b, property)
   animate({
     duration: anim_time,
-    timing: function(timeFraction) {
-        return timeFraction
+    timing: function (timeFraction) {
+      return timeFraction
     },
-    draw: function(progress) {
+    draw: function (progress) {
       refreshLinePos(line, a, b)
     }
-  });  
+  });
 }
 function clearTree() {
   tree.innerHTML = ''
@@ -135,7 +142,8 @@ function drawTree(num) {
         data[property].x,
         data[property].y,
         data[property].X,
-        data[property].Y
+        data[property].Y,
+        data[property].clr
       )
     }
   })
@@ -229,3 +237,4 @@ function readStr() {
   }
 }
 
+drawTree(5);

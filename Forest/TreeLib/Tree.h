@@ -4,7 +4,7 @@
 
 struct V2 { int x = 0, y = 0; V2(int nx, int ny) { x = nx; y = ny; } };
 struct Rect { V2 pos, size; };
-
+struct Line { V2 pos1, pos2; };
 // use ++id_counter
 int id_counter = 0;
 Tclass TreeNode{
@@ -13,6 +13,7 @@ public:
   int id = ++id_counter;
   T data;
   TreeNode() {};
+  virtual ~TreeNode() = default;
   TreeNode(T new_data) {
     data = new_data;
     branches.resize(5, nullptr);
@@ -28,7 +29,7 @@ public:
     for (auto i : branches) if (i) return false;
     return true;
   }
-  TreeNode<T>* clone() {
+  virtual TreeNode<T>* clone() {
     vector<TreeNode<T>*> cloned_branches;
     for (auto& i : branches) {
       if (i) cloned_branches.push_back(i->clone());

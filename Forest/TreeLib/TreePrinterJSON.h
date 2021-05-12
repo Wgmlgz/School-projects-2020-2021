@@ -4,14 +4,16 @@
 
 // settings
 int size_x = 75;
-int size_y = 75;
+int size_y = 100;
+const string DEFAULT_COLOR = "#44475a";
 
 template<typename T>
 struct nodeData {
     string content = "";
-    int id = 0;
+    double id = 0;
     Rect rect = { {0,0}, {0, 0} };
     TreeNode<T>* ptr = nullptr;
+    string color = DEFAULT_COLOR;
 };
 // vector<nodeData> nodes;
 
@@ -19,7 +21,7 @@ template<typename T>
 V2 calcNodeSz(
     TreeNode<T>* node, int parent_id,
     vector<nodeData<T>>& all_child_rects,
-    vector<pair<int, int>>& connections
+    vector<pair<double, double>>& connections
 ) {
     vector<V2> child_sizes;
 
@@ -27,15 +29,17 @@ V2 calcNodeSz(
     int this_id = node->id;
     if (parent_id != -1) connections.push_back({ parent_id, this_id });
 
+    int child_n = 0;
     for (auto i : node->branches) {
+        ++child_n;
         if (i == nullptr) {
-            continue;
-            // int tmp_id = rand();
-            // connections.push_back({ this_id, tmp_id });
-            // //all_child_rects.push_back({ "null", to_string(rand()), {{0, 0}, {size_x, size_y}} });
-            // all_child_rects.push_back({ "null", tmp_id, { {this_size.x, -size_y}, {size_x, size_y} } });
-            // child_sizes.push_back({ size_x, size_y });
-            // this_size.x += size_x;
+            //continue;
+            double tmp_id = node->id + (1.0 / node->branches.size()) * child_n;
+            connections.push_back({ this_id, tmp_id });
+            //all_child_rects.push_back({ "null", to_string(rand()), {{0, 0}, {size_x, size_y}} });
+            all_child_rects.push_back({ "null", tmp_id, { {this_size.x, -size_y}, {size_x, size_y} } });
+            child_sizes.push_back({ size_x, size_y });
+            this_size.x += size_x;
         } else {
             auto sz = all_child_rects.size();
 
@@ -54,15 +58,21 @@ V2 calcNodeSz(
     }
     if (this_size.x < size_x) this_size.x = size_x;
     this_size.y += size_y;
-    all_child_rects.push_back({ node->to_str(), this_id, {{this_size.x / 2 - size_x / 2, 0} , {size_x, size_y} }, node });
+    string color = DEFAULT_COLOR;
+    auto avl_node = dynamic_cast<AVLTreeNode<T>*>(node);
+    if (avl_node) {
+        color = "#ff5555";
+    }
+    all_child_rects.push_back({ node->to_str(), this_id, {{this_size.x / 2 - size_x / 2, 0} , {size_x, size_y}}, node, color });
     return this_size;
 }
 
-string createJSONNode(string id, string content, int x, int y, int x1, int y1) {
+string createJSONNode(string id, string content, int x, int y, int x1, int y1, string color = DEFAULT_COLOR) {
     string json;
 
     json += "\"" + id + "\"" + ":{";
     json += "\"c\":\"" + content + "\",";
+    json += "\"clr\":\"" + color + "\",";
     json += "\"x\":" + to_string(x) + ",";
     json += "\"y\":" + to_string(y) + ",";
     json += "\"X\":" + to_string(x1) + ",";
@@ -74,9 +84,9 @@ string createJSONNode(string id, string content, int x, int y, int x1, int y1) {
 template<typename T>
 pair<string, string> innerJson(
     vector<nodeData<T>>& calc_res_old,
-    vector<pair<int, int>>& connections_old,
+    vector<pair<double, double>>& connections_old,
     vector<nodeData<T>>& calc_res_new,
-    vector<pair<int, int>>& connections_new
+    vector<pair<double, double>>& connections_new
 ) {
     //vector<pair<int, int>> connections_old, connections_new;
     string json;
@@ -97,7 +107,8 @@ pair<string, string> innerJson(
             find_new.rect.pos.x,
             -find_new.rect.pos.y,
             curr_node.rect.pos.x,
-            -curr_node.rect.pos.y
+            -curr_node.rect.pos.y,
+            curr_node.color
         );
         json += (i == calc_res_new.size() - 1 ? "" : ",");
     }
@@ -117,7 +128,7 @@ pair<string, string> innerJson(
 template<typename T>
 pair<string, string> toJson(TreeNode<T>* node_old, TreeNode<T>* node_new) {
     vector<nodeData<T>> nodes_old, nodes_new;
-    vector<pair<int, int>> connections_old, connections_new;
+    vector<pair<double, double>> connections_old, connections_new;
 
     calcNodeSz(node_old, -1, nodes_old, connections_old);
     calcNodeSz(node_new, -1, nodes_new, connections_new);
@@ -138,7 +149,7 @@ pair<string, string> toJsonWithCaps(TreeNode<T>* node_old, TreeNode<T>* node_new
     vector<cupData<T>> old_caps,
     vector<cupData<T>> new_caps) {
     vector<nodeData<T>> nodes_old, nodes_new;
-    vector<pair<int, int>> connections_old, connections_new;
+    vector<pair<double, double>> connections_old, connections_new;
 
     calcNodeSz(node_old, -1, nodes_old, connections_old);
     calcNodeSz(node_new, -1, nodes_new, connections_new);
@@ -152,7 +163,7 @@ pair<string, string> toJsonWithCaps(TreeNode<T>* node_old, TreeNode<T>* node_new
             if (j.id == i.head_id) {
                 nodes_old.push_back({
                     i.content, i.id,
-                    {{j.rect.pos.x, j.rect.pos.y + 100} , {0, 0}}, nullptr
+                    {{j.rect.pos.x, j.rect.pos.y + 30} , {0, 0}}, nullptr
                     });
             }
         }
@@ -165,6 +176,26 @@ pair<string, string> toJsonWithCaps(TreeNode<T>* node_old, TreeNode<T>* node_new
         //     });
     }
 
+    for (auto& i : new_caps) {
+        nodeData<T> new_t;
+        bool find_old = false, find_new = false;
+
+        for (auto& j : nodes_new) {
+            if (j.id == i.head_id) {
+                nodes_new.push_back({
+                    i.content, i.id,
+                    {{j.rect.pos.x, j.rect.pos.y + 50} , {0, 0}}, nullptr
+                    });
+            }
+        }
+        int tmp_id = rand();
+        // nodes_old.push_back({ i.second, tmp_id,
+        //     {{old_t.rect.pos.x, old_t.rect.pos.y + 100} , {0, 0}}, old_t.ptr
+        //     });
+        // nodes_new.push_back({ i.second, tmp_id,
+        //     {{old_t.rect.pos.x, old_t.rect.pos.y + 100} , {0, 0}}, old_t.ptr
+        //     });
+    }
     auto inner_json = innerJson(nodes_old, connections_old, nodes_new, connections_new);
 
     return { "{" + inner_json.first + "}", "{" + inner_json.second + "}" };

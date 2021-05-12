@@ -3,6 +3,7 @@
 #include "BinSearchTree.h"
 #include "BinTree.h"
 //#include "Tree.h"
+#include <functional>
 Tclass AVLTreeNode : public BinTreeNode<T>{
 public:
   int height = 0;
@@ -19,10 +20,31 @@ public:
   AVLTreeNode(T new_data) {
     BinTreeNode<T>::TreeNode::data = new_data;
   }
+  AVLTreeNode<T>* clone() {
+    vector<TreeNode<T>*> cloned_branches;
+    for (auto& i : BinTreeNode<T>::TreeNode::branches) {
+      if (i) cloned_branches.push_back(static_cast<AVLTreeNode<T>*>(i)->clone());
+      else cloned_branches.push_back(nullptr);
+    }
+    //--id_counter;
+    AVLTreeNode<T>* cloned_node =
+      new AVLTreeNode<T>(this->data);
+    static_cast<TreeNode<T>*>(cloned_node)->branches = cloned_branches;
+    cloned_node->id = BinTreeNode<T>::TreeNode::id;
+    cloned_node->height = height;
+    return cloned_node;
+  }
+
 };
 
 Tclass AVLTree : public BinSearchTree<T>{
   using node_ptr = AVLTreeNode<T>*;
+public:
+  node_ptr root = nullptr;
+
+  std::function<void(node_ptr node)> on_insert;
+  std::function<void(node_ptr node)> on_balance;
+private:
   int height(node_ptr node) {
     return node ? node->height : 0;
   }
@@ -48,24 +70,26 @@ Tclass AVLTree : public BinSearchTree<T>{
   node_ptr balance(node_ptr node) {
     fix_height(node);
     if (bf(node) == 2) {
+      on_balance(node);
       if (bf(node->get_rhs()) < 0)
         node->set_rhs(rrotAVL(node->get_rhs()));
       return lrotAVL(node);
     } else if (bf(node) == -2) {
-    if (bf(node->get_lhs()) > 0)
-      node->set_lhs(lrotAVL(node->get_lhs()));
-    return rrotAVL(node);
+      on_balance(node);
+      if (bf(node->get_lhs()) > 0)
+        node->set_lhs(lrotAVL(node->get_lhs()));
+      return rrotAVL(node);
     }
     return node;
   }
 
   node_ptr last_inserted_node;
-
   node_ptr insert(node_ptr node, T insert_data) {
     if (!node) {
       last_inserted_node = new AVLTreeNode<T>(insert_data);
       return last_inserted_node;
     }
+    on_insert(node);
     if (insert_data < node->data)
       node->set_lhs(insert(node->get_lhs(), insert_data));
     else
@@ -74,7 +98,7 @@ Tclass AVLTree : public BinSearchTree<T>{
   }
 public:
   node_ptr insert(T insert_data) {
-    this->root = this->insert(static_cast<node_ptr>(this->root), insert_data);
+    root = insert(static_cast<node_ptr>(this->root), insert_data);
     return last_inserted_node;
   }
 };
