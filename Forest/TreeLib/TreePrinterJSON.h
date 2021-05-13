@@ -24,6 +24,7 @@ V2 calcNodeSz(
     vector<nodeData<T>>& all_child_rects,
     vector<pair<double, double>>& connections
 ) {
+    if (!node) return { 0, 0 };
     vector<V2> child_sizes;
 
     V2 this_size = { 0, size_y };
@@ -60,27 +61,27 @@ V2 calcNodeSz(
     if (this_size.x < size_x) this_size.x = size_x;
     this_size.y += size_y;
     string color = DEFAULT_COLOR;
-    
+
     auto avl_node = dynamic_cast<AVLTreeNode<T>*>(node);
     if (avl_node) {
         color = "#ff5555";
     } else {
         auto treap_node = dynamic_cast<TreapNode<T>*>(node);
         if (treap_node) {
-            auto hsv_color = hsv{treap_node->priority * 360, 1.0, 1.0};
+            auto hsv_color = hsv{ treap_node->priority * 360, 1.0, 1.0 };
             double t = treap_node->priority;
             t /= 2;
             t += 0.2;
-            auto rgb_color = rgb{t, t, t};
+            auto rgb_color = rgb{ t, t, t };
             cout << rgb_color.r << " " << rgb_color.g << " " << rgb_color.b << endl;
             color = rgb2hex(rgb_color, true);
         }
     }
     all_child_rects.push_back({ node->to_str(), this_id, {{this_size.x / 2 - size_x / 2, 0} , {size_x, size_y}}, node, color });
-    if (parent_id == -1){   
-        for (auto&i : all_child_rects) {
+    if (parent_id == -1) {
+        for (auto& i : all_child_rects) {
             i.rect.pos.x -= this_size.x / 2;
-            i.rect.pos.y += this_size.y / 2;        
+            i.rect.pos.y += this_size.y / 2;
         }
     }
     return this_size;
@@ -156,6 +157,18 @@ pair<string, string> toJson(TreeNode<T>* node_old, TreeNode<T>* node_new) {
 
     return { "{" + inner_json.first + "}", "{" + inner_json.second + "}" };
 }
+template<typename T>
+pair<string, string> toJson(TreeNode<T>* node) {
+    vector<nodeData<T>> nodes;
+    vector<pair<double, double>> connections;
+
+    calcNodeSz(node, -1, nodes, connections);
+
+    auto inner_json = innerJson(nodes, connections, nodes, connections);
+
+    return { "{" + inner_json.first + "}", "{" + inner_json.second + "}" };
+}
+
 template<typename T>
 struct cupData {
     string content;

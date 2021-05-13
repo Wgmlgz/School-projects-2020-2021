@@ -37,7 +37,7 @@ template<typename T>
 class Treap : public BinSearchTree<T> {
 public:
     using node_ptr = TreapNode<T>*;
-
+    node_ptr root = nullptr;
     void split(node_ptr node, T x, node_ptr& L, node_ptr& R) {
         node_ptr newTree = nullptr;
         if (node->data <= x) {
@@ -46,8 +46,7 @@ public:
             else
                 split(node->get_rhs(), x, newTree, R);
             L = new TreapNode<T>(node->data, node->priority, node->get_lhs(), newTree);
-        }
-        else {
+        } else {
             if (node->get_lhs() == nullptr)
                 L = nullptr;
             else
@@ -62,8 +61,7 @@ public:
         if (L->priority > R->priority) {
             auto newR = Merge(L->get_rhs(), R);
             return new TreapNode<T>(L->data, L->priority, L->get_lhs(), newR);
-        }
-        else {
+        } else {
             auto newL = Merge(L, R->get_lhs());
             return new TreapNode<T>(R->data, R->priority, newL, R->get_rhs());
         }
@@ -74,12 +72,16 @@ public:
         node_ptr m = new TreapNode<T>(insert_data);
         return Merge(Merge(l, m), r);
     }
-    void insert(T insert_data) {
+    virtual void insert(T insert_data) override {
+        cout << "treap insert" << endl;
         if (!this->root) {
             this->root = new TreapNode<T>(insert_data);
             return;
         }
-        this->root = insert(static_cast<node_ptr>(this->root), insert_data);
+        this->root = insert(root, insert_data);
+    }
+    virtual node_ptr getRoot() override {
+        return root;
     }
     node_ptr next(T input, node_ptr node) {
         if (!node)
@@ -90,6 +92,6 @@ public:
         return t ? t : node;
     }
     node_ptr next(T input) {
-        return next(input, static_cast<node_ptr>(this->root));
+        return next(input, root);
     }
 };

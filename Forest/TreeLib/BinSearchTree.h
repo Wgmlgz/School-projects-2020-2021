@@ -30,8 +30,12 @@ public:
     tmp->set_lhs(node);
     return tmp;
   }
-  node_ptr insert(T insert_data) {
+  virtual void insert(T insert_data) {
+    cout << "Bin insert" << endl;
     root = insert(root, insert_data);
-    return last_inserted_node;
+    //return last_inserted_node;
+  }
+  virtual node_ptr getRoot() {
+    return root;
   }
 };

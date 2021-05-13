@@ -8,25 +8,41 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <button onclick="clearTree()" id="bnt" class="btn">clear tree</button>
-    <button onclick="prevFrame()" id="bnt" class="btn">Prev frame</button>
-    <button onclick="nextFrame()" id="bnt" class="btn">Next frame</button>
-    <label class="pure-material-slider">
-      <input type="range" id="zoom_slider"min="0.1"max="5"value="1"step="any"/>
-      <span>Slider</span>
-    </label>
-    <p id="frame_counter">da</p>
-    <button onclick="cum()" id="bnt">da OF!!!</button>
-    <p>da <em>da</em> da</p>
-    <div id="tree_ded"style="position:absolute;top:50%;right:50%;">
-      <div id="tree" style="position: absolute; bottom: 0px; right: 0px;"></div>
+    <button id="bnt_clear" class="btn">clear tree</button>
+    <button id="bnt_prev" class="btn">Prev frame</button>
+    <button id="bnt_next" class="btn">Next frame</button>
+    <br />
+    <p id="frame_counter_title" class="title">Current frame:</p>
+    <p id="frame_counter" class="title">da</p>
+    <br />
+    <input type="number" id="input_insert" required />
+    <button id="btn_insert" class="btn">Insert element</button>
+    <div class="tree_type">
+      <label class="pure-material-slider">
+        <input
+          type="range"
+          id="zoom_slider"
+          min="0.1"
+          max="5"
+          value="1"
+          step="any"
+        />
+        <span>Zoom level</span>
+      </label>
+      <br />
+      <button id="btn_select_binTree" class="btn">Binary</button>
+      <button id="btn_select_AVLTree" class="btn">AVL</button>
+      <button id="btn_select_RBTree" class="btn">RB</button>
+      <button id="btn_select_Treap" class="btn">Treap</button>
+      <button id="btn_select_SplayTree" class="btn">Splay</button>
     </div>
-    <div class="tree_block" id="anime">
-    <p>da</p>
+    <div id="tree_ded" style="position: absolute; top: 50%; right: 50%">
+      <div id="tree" style="position: absolute; bottom: 0px; right: 0px"></div>
     </div>
     <script src="https://yastatic.net/jquery/3.3.1/jquery.min.js"></script>
-    <script src="index.js"></script>
     <script src="build.js"></script>
-    <script src="file.txt"></script>
+    <script type="module" src="TreeConstructor.js"></script>
+    <script type="module" src="InputHandler.js"></script>
+    <script type="module" src="index.js"></script>
   </body>
 </html>

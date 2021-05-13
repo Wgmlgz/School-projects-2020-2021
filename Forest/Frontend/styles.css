@@ -11,7 +11,25 @@ em {
   right: 0px;
   line-height: 1px;
 }
-
+.tree_type {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+.title {
+  text-align: center;
+  display: inline-block;
+  border: 4px;
+  border-style: solid;
+  border-radius: 10px;
+  border-color: rgb(68, 71, 90);
+  padding: 5px;
+  font-family: consolas;
+  font-weight: bold;
+  font-size: 20px;
+  color: rgb(248, 248, 242);
+  background-color: rgb(68, 71, 90);
+}
 .line {
   background-color: rgb(255, 85, 85);
   height: 4px;
@@ -25,6 +43,7 @@ em {
   border-color: rgb(68, 71, 90);
   padding: 5px;
   font-family: consolas;
+  font-weight: bold;
   font-size: 20px;
   color: rgb(248, 248, 242);
   background-color: rgb(68, 71, 90);
@@ -103,8 +122,8 @@ body {
     0.24
   );
   display: inline-block;
-  width: 200px;
-  color: rgba(var(--pure-material-onsurface-rgb, 0, 0, 0), 0.87);
+  width: 400px;
+  color: rgba(var(--pure-material-onsurface-rgb, 255, 255, 255), 0.87);
   font-family: consolas;
   font-size: 20px;
   line-height: 1.5;

@@ -4,8 +4,8 @@
 
 const bool DEBUG = false;
 
-// string path = "C:\\Code\\School\\Forest\\Frontend\\";
-string path = "/home/wgmlgz/code/School/Forest/Frontend/";
+string path = "C:\\Code\\School\\Forest\\Frontend\\";
+//string path = "/home/wgmlgz/code/School/Forest/Frontend/";
 
 using node_ptr = AVLTreeNode<int>*;
 
@@ -46,23 +46,24 @@ int main() {
   //std::function<void(node_ptr node)> on_insert = on_insertf;
   //test.on_insert = on_insert;
   //test.on_balance = on_balance;
-  test.insert(666);
-  //range(i, 1) test.insert(rand() % 1000);
-  printASCII(test.root);
-  range(i, 10) {
+  //test.insert(666);
+  //range(i, 100) test.insert(rand() % 1000);
+  //printASCII(test.root);
+  range(i, 50) {
     ins_stack.clear();
     //auto clone = test.root->clone();
     int t = rand() % 1000;
+    write(test.root, test.root, { {} }, {});
     //string insert_data = to_string(t);
     test.insert(t);
-    printASCII(test.root);
+    //printASCII(test.root);
     // for (int j = 0; j < ins_stack.size() - 1; ++j) {
     //   write(clone, clone, { { insert_data, ins_res->id, ins_stack[j] } },
     //     { { insert_data, ins_res->id, ins_stack[j + 1] } });
     // }
     // write(clone, test.root, { {insert_data, ins_res->id,
     // ins_stack[ins_stack.size() - 1]} }, {});
-    write(test.root, test.root, { {} }, {});
+
     //printASCII(test.root);
     // BinTreeNode<int>* ttt = test.root;
   // ttt->reverse();
