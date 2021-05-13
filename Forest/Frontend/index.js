@@ -1,10 +1,8 @@
 let offset_x = 0
 let offset_y = 0
 
-
 let is_down = false
 let anim_time = 500 
-
 
 let last_x = 0
 let last_y = 0
@@ -16,6 +14,7 @@ let start = true
 let current_frame = 0
 let anim_forward = true
 let screenLog = document.querySelector('#screen-log');
+
 document.addEventListener('mousemove', logKey);
 document.addEventListener('mousedown', btnDown);
 document.addEventListener('mouseup', btnUp);
@@ -31,7 +30,7 @@ function animate({duration, draw, timing}) {
 
     draw(timing(timeFraction));
   
-    if (timeFraction < 1) { requestAnimationFrame(animate); }
+    if (true) { requestAnimationFrame(animate); }
 
   });
 }
@@ -61,8 +60,12 @@ function addBlockAndAnim(name, content, x, y, x1, y1, color) {
     },
     draw: function (progress) {
       try {
-        document.getElementById(name).style.left = x + (x1 - x) * progress + 'px';
-        document.getElementById(name).style.top = y + (y1 - y) * progress + 'px';
+        var this_st = document.getElementById(name).style;
+        this_st.left = (x + (x1 - x) * progress) + 'px';
+        this_st.top = (y + (y1 - y) * progress) + 'px';
+        var sliderv = document.getElementById("zoom_slider").value;
+        var tree = document.getElementById('tree_ded').style;
+        tree.zoom = sliderv;
       }catch {}
     }
   });  
@@ -75,12 +78,12 @@ function refreshLinePos(line, a, b) {
     let as = document.getElementById(a).style
     let bs = document.getElementById(b).style
 
-    var posax = Number.parseInt(as.left) - 35
-    var posay = Number.parseInt(as.top) - 5
+    var posax = Number.parseInt(as.left) - 25
+    var posay = Number.parseInt(as.top)
   
     //last dot
-    var posbx = Number.parseInt(bs.left) - 35
-    var posby = Number.parseInt(bs.top) - 5
+    var posbx = Number.parseInt(bs.left) - 25
+    var posby = Number.parseInt(bs.top)
 
     //temp calculation variables
     var centerx;
@@ -94,7 +97,7 @@ function refreshLinePos(line, a, b) {
   
     var angle = Math.atan2(posay - posby, posax - posbx) * 180 / Math.PI;
     distance = Math.sqrt(Math.pow((posbx - posax), 2) + Math.pow((posby - posay), 2));
-  
+
     $(line).css("width", distance + "px");
     $(line).css("transform", " rotate(" + angle + "deg)");
     $(line).css("top", centery - ($(line).height() / 2) + (100 / 2));
@@ -162,9 +165,13 @@ function drawTree(num) {
   })
 }
 function btnDown(e) {
-  is_down = true;
+  console.log(e.screenY);
+  if (e.screenY > 200) {
+    is_down = true;
+  }
   down_x = e.screenX
   down_y = e.screenY
+  
 }
 function btnUp(e) {
   is_down = false;
@@ -237,4 +244,4 @@ function readStr() {
   }
 }
 
-drawTree(5);
+drawTree(2);

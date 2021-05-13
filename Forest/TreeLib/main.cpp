@@ -4,11 +4,12 @@
 
 const bool DEBUG = false;
 
-string path = "C:\\Code\\School\\Forest\\Frontend\\";
+// string path = "C:\\Code\\School\\Forest\\Frontend\\";
+string path = "/home/wgmlgz/code/School/Forest/Frontend/";
 
 using node_ptr = AVLTreeNode<int>*;
 
-AVLTree<int> test;
+Treap<int> test;
 // insert stuff 
 vector<int> ins_stack;
 
@@ -21,7 +22,6 @@ void on_insert(node_ptr node) {
 void on_balance(node_ptr node) {
   cout << "on_balance\n";
   //auto clone = test.root->clone();
-
 }
 
 void write(TreeNode<int>* a, TreeNode<int>* b, vector<cupData<int>> acap, vector<cupData<int>> bcap) {
@@ -35,7 +35,7 @@ void write(TreeNode<int>* a, TreeNode<int>* b, vector<cupData<int>> acap, vector
   tree_json << stringify_res.first << endl;
   lines_json << stringify_res.second << endl;
 
-  cout << stringify_res.first << endl;
+  //cout << stringify_res.first << endl;
 
   ++frame_n;
 }
@@ -44,23 +44,26 @@ int main() {
   // createTestTree(50);
   // optputTestTree();
   //std::function<void(node_ptr node)> on_insert = on_insertf;
-  test.on_insert = on_insert;
-  test.on_balance = on_balance;
+  //test.on_insert = on_insert;
+  //test.on_balance = on_balance;
   test.insert(666);
-  //range(i, 100) test.insert(rand() % 100);
+  //range(i, 1) test.insert(rand() % 1000);
+  printASCII(test.root);
   range(i, 10) {
     ins_stack.clear();
-    auto clone = test.root->clone();
-    int t = rand() % 100;
-    string insert_data = to_string(t);
-    auto ins_res = test.insert(t);
-
-    for (int j = 0; j < ins_stack.size() - 1; ++j) {
-      write(clone, clone, { { insert_data, ins_res->id, ins_stack[j] } },
-        { { insert_data, ins_res->id, ins_stack[j + 1] } });
-    }
-    write(clone, test.root, { {insert_data, ins_res->id,
-    ins_stack[ins_stack.size() - 1]} }, {});
+    //auto clone = test.root->clone();
+    int t = rand() % 1000;
+    //string insert_data = to_string(t);
+    test.insert(t);
+    printASCII(test.root);
+    // for (int j = 0; j < ins_stack.size() - 1; ++j) {
+    //   write(clone, clone, { { insert_data, ins_res->id, ins_stack[j] } },
+    //     { { insert_data, ins_res->id, ins_stack[j + 1] } });
+    // }
+    // write(clone, test.root, { {insert_data, ins_res->id,
+    // ins_stack[ins_stack.size() - 1]} }, {});
+    write(test.root, test.root, { {} }, {});
+    //printASCII(test.root);
     // BinTreeNode<int>* ttt = test.root;
   // ttt->reverse();
   //printASCII(test.root);

@@ -6,7 +6,7 @@
 #include <functional>
 Tclass AVLTreeNode : public BinTreeNode<T>{
 public:
-  int height = 0;
+  int height = 1;
   AVLTreeNode<T>* get_lhs() { return static_cast<AVLTreeNode<T>*>(BinTreeNode<T>::get_lhs()); }
   AVLTreeNode<T>* get_rhs() { return static_cast<AVLTreeNode<T>*>(BinTreeNode<T>::get_rhs()); }
   void set_lhs(AVLTreeNode<T>* new_ptr) {
@@ -42,13 +42,14 @@ Tclass AVLTree : public BinSearchTree<T>{
 public:
   node_ptr root = nullptr;
 
-  std::function<void(node_ptr node)> on_insert;
-  std::function<void(node_ptr node)> on_balance;
+  std::function<void(node_ptr node)> on_insert = [](node_ptr){};
+  std::function<void(node_ptr node)> on_balance = [](node_ptr){};
 private:
   int height(node_ptr node) {
     return node ? node->height : 0;
   }
   int bf(node_ptr node) {
+    cout << node->data << " " << height(node->get_rhs()) << " " << height(node->get_lhs()) << endl;
     return height(node->get_rhs()) - height(node->get_lhs());
   }
   void fix_height(node_ptr node) {
@@ -92,13 +93,84 @@ private:
     on_insert(node);
     if (insert_data < node->data)
       node->set_lhs(insert(node->get_lhs(), insert_data));
-    else
+    else if (insert_data > node->data)
       node->set_rhs(insert(node->get_rhs(), insert_data));
+    else
+      return node;
     return balance(node);
   }
+  node_ptr minValueNode(node_ptr node) { 
+      node_ptr current = node; 
+    
+      while (current->get_lhs() != NULL) 
+          current = current->get_lhs(); 
+    
+      return current; 
+  } 
+  
+  public: node_ptr deleteNode(node_ptr root, T new_data) { 
+      if (root == NULL) 
+          return root; 
+    
+      if ( new_data < root->data ) 
+          root->set_lhs(deleteNode(root->get_lhs(), new_data)); 
+      else if( new_data > root->data ) 
+          root->set_rhs(deleteNode(root->get_rhs(), new_data)); 
+      else { 
+          if( (root->get_lhs() == NULL) ||
+              (root->get_rhs() == NULL) ) { 
+              node_ptr temp = root->get_lhs() ? 
+                          root->get_lhs() : 
+                          root->get_rhs(); 
+              if (temp == NULL) { 
+                  temp = root; 
+                  root = NULL; 
+              } else {
+                *root = *temp; // Copy the contents of 
+                free(temp); 
+              }
+          } 
+          else { 
+              node_ptr temp = minValueNode(root->get_rhs()); 
+              root->data = temp->data; 
+    
+              root->set_rhs(deleteNode(root->get_rhs(), temp->data)); 
+          } 
+      } 
+    
+      if (root == NULL) 
+      return root; 
+    
+      root->height = 1 + max(height(root->get_lhs()), height(root->get_rhs())); 
+    
+      int balance = bf(root); 
+    
+      if (balance > 1 && bf(root->get_lhs()) >= 0) 
+          return rrotAVL(root); 
+    
+      if (balance > 1 && bf(root->get_lhs()) < 0) { 
+          root->set_lhs(lrotAVL(root->get_lhs())); 
+          return rrotAVL(root); 
+      } 
+    
+      if (balance < -1 && bf(root->get_rhs()) <= 0) 
+          return lrotAVL(root); 
+    
+      if (balance < -1 && 
+          bf(root->get_rhs()) > 0) { 
+          root->set_rhs(rrotAVL(root->get_rhs())); 
+          return lrotAVL(root); 
+      } 
+    
+      return root; 
+  } 
+
 public:
   node_ptr insert(T insert_data) {
     root = insert(static_cast<node_ptr>(this->root), insert_data);
     return last_inserted_node;
+  }
+  node_ptr remove(T remove_data) {
+    this->root = deleteNode(this->root, remove_data);
   }
 };

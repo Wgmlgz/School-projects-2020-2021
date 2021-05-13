@@ -1,5 +1,6 @@
 #pragma once
 #include "AVLTree.h"
+#include "Treap.h"
 #include "Wgmlgz.h"
 #include <fstream>
 #include <stdio.h>
