@@ -7,19 +7,19 @@ const bool DEBUG = false;
 string path = "C:\\Code\\School\\Forest\\Frontend\\";
 //string path = "/home/wgmlgz/code/School/Forest/Frontend/";
 
-using node_ptr = AVLTreeNode<int>*;
+using nodeptr = AVLTreeNode<int>*;
 
 Treap<int> test;
 // insert stuff 
 vector<int> ins_stack;
 
-void on_insert(node_ptr node) {
+void on_insert(nodeptr node) {
   ins_stack.push_back(node->id);
 
   cout << "on_insert\n";
 }
 
-void on_balance(node_ptr node) {
+void on_balance(nodeptr node) {
   cout << "on_balance\n";
   //auto clone = test.root->clone();
 }
@@ -43,7 +43,7 @@ int main() {
   srand(23442);
   // createTestTree(50);
   // optputTestTree();
-  //std::function<void(node_ptr node)> on_insert = on_insertf;
+  //std::function<void(nodeptr node)> on_insert = on_insertf;
   //test.on_insert = on_insert;
   //test.on_balance = on_balance;
   //test.insert(666);

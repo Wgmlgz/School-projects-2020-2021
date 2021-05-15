@@ -5,12 +5,12 @@ let down_x = 0
 let down_y = 0
 
 let is_down = false
-
-
+let can = false
 let start = true
 
 export function btnDown(e) {
-  if (e.screenY > 200) {
+  console.log(can);
+  if (can) {
     is_down = true;
   }
   down_x = e.screenX
@@ -40,4 +40,12 @@ export function dragTree(e) {
 
     start = false
   }
+}
+export function mouseEnter() {
+  console.log('enter');
+  can = true
+}
+export function mouseLeft() {
+  can = false
+  console.log('over');
 }

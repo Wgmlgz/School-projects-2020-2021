@@ -13,14 +13,23 @@ typedef struct {
 
 static hsv   rgb2hsv(rgb in);
 static rgb   hsv2rgb(hsv in);
-
+void clampRgb(rgb& RGB) {
+    if (RGB.r > 1) RGB.r = 1;
+    if (RGB.g > 1) RGB.g = 1;
+    if (RGB.b > 1) RGB.b = 1;
+}
 std::string rgb2hex(rgb RGB, bool with_head)
 {
-  std::stringstream ss;
-  if (with_head)
-    ss << "#";
-  ss << std::hex << (((int)(RGB.r * 255)) << 16 | (int)(RGB.g * 255) << 8 | (int)(RGB.b * 255) );
-  return ss.str();
+    clampRgb(RGB);
+    std::stringstream ss;
+    if (with_head)
+        ss << "#";
+    int r, g, b;
+    r = (int)(RGB.r * 255) << 16;
+    r = (int)(RGB.g * 255) << 8;
+    r = (int)(RGB.b * 255);
+    ss << std::hex << (((int)(RGB.r * 255)) << 16 | (int)(RGB.g * 255) << 8 | (int)(RGB.b * 255));
+    return ss.str();
 }
 
 hsv rgb2hsv(rgb in)
@@ -29,10 +38,10 @@ hsv rgb2hsv(rgb in)
     double      min, max, delta;
 
     min = in.r < in.g ? in.r : in.g;
-    min = min  < in.b ? min  : in.b;
+    min = min < in.b ? min : in.b;
 
     max = in.r > in.g ? in.r : in.g;
-    max = max  > in.b ? max  : in.b;
+    max = max > in.b ? max : in.b;
 
     out.v = max;                                // v
     delta = max - min;
@@ -42,7 +51,7 @@ hsv rgb2hsv(rgb in)
         out.h = 0; // undefined, maybe nan?
         return out;
     }
-    if( max > 0.0 ) { // NOTE: if Max is == 0, this divide would cause a crash
+    if (max > 0.0) { // NOTE: if Max is == 0, this divide would cause a crash
         out.s = (delta / max);                  // s
     } else {
         // if max is 0, then r = g = b = 0              
@@ -51,17 +60,17 @@ hsv rgb2hsv(rgb in)
         out.h = 0.0;                            // its now undefined
         return out;
     }
-    if( in.r >= max )                           // > is bogus, just keeps compilor happy
-        out.h = ( in.g - in.b ) / delta;        // between yellow & magenta
+    if (in.r >= max)                           // > is bogus, just keeps compilor happy
+        out.h = (in.g - in.b) / delta;        // between yellow & magenta
     else
-    if( in.g >= max )
-        out.h = 2.0 + ( in.b - in.r ) / delta;  // between cyan & yellow
-    else
-        out.h = 4.0 + ( in.r - in.g ) / delta;  // between magenta & cyan
+        if (in.g >= max)
+            out.h = 2.0 + (in.b - in.r) / delta;  // between cyan & yellow
+        else
+            out.h = 4.0 + (in.r - in.g) / delta;  // between magenta & cyan
 
     out.h *= 60.0;                              // degrees
 
-    if( out.h < 0.0 )
+    if (out.h < 0.0)
         out.h += 360.0;
 
     return out;
@@ -74,14 +83,14 @@ rgb hsv2rgb(hsv in)
     long        i;
     rgb         out;
 
-    if(in.s <= 0.0) {       // < is bogus, just shuts up warnings
+    if (in.s <= 0.0) {       // < is bogus, just shuts up warnings
         out.r = in.v;
         out.g = in.v;
         out.b = in.v;
         return out;
     }
     hh = in.h;
-    if(hh >= 360.0) hh = 0.0;
+    if (hh >= 360.0) hh = 0.0;
     hh /= 60.0;
     i = (long)hh;
     ff = hh - i;
@@ -89,7 +98,7 @@ rgb hsv2rgb(hsv in)
     q = in.v * (1.0 - (in.s * ff));
     t = in.v * (1.0 - (in.s * (1.0 - ff)));
 
-    switch(i) {
+    switch (i) {
     case 0:
         out.r = in.v;
         out.g = t;
@@ -123,5 +132,5 @@ rgb hsv2rgb(hsv in)
         out.b = q;
         break;
     }
-    return out;     
+    return out;
 }

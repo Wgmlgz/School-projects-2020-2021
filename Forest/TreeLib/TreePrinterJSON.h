@@ -38,7 +38,6 @@ V2 calcNodeSz(
             //continue;
             double tmp_id = node->id + 0.001 * child_n;
             connections.push_back({ this_id, tmp_id });
-            //all_child_rects.push_back({ "null", to_string(rand()), {{0, 0}, {size_x, size_y}} });
             all_child_rects.push_back({ "null", tmp_id, { {this_size.x, -size_y}, {size_x, size_y} } });
             child_sizes.push_back({ size_x, size_y });
             this_size.x += size_x;
@@ -64,19 +63,34 @@ V2 calcNodeSz(
 
     auto avl_node = dynamic_cast<AVLTreeNode<T>*>(node);
     if (avl_node) {
-        color = "#ff5555";
-    } else {
-        auto treap_node = dynamic_cast<TreapNode<T>*>(node);
-        if (treap_node) {
-            auto hsv_color = hsv{ treap_node->priority * 360, 1.0, 1.0 };
-            double t = treap_node->priority;
-            t /= 2;
-            t += 0.2;
-            auto rgb_color = rgb{ t, t, t };
-            cout << rgb_color.r << " " << rgb_color.g << " " << rgb_color.b << endl;
-            color = rgb2hex(rgb_color, true);
+        if (abs(AVLTree<T>::bf(avl_node)) == 2) {
+            color = "#ff5555";
+        } else if (abs(AVLTree<T>::bf(avl_node)) == 1) {
+            color = "#ffb86c";
+        } else {
+            color = "#5cbd75";
+        }
+
+    }
+    auto treap_node = dynamic_cast<TreapNode<T>*>(node);
+    if (treap_node) {
+        //auto hsv_color = hsv{ treap_node->priority * 180, 1.0, 1.0 };
+        double t = treap_node->priority;
+        t /= 2;
+        t += 0.2;
+        auto rgb_color = rgb{ t, t, t };
+        //auto rgb_color = hsv2rgb(hsv_color);
+        cout << rgb_color.r << " " << rgb_color.g << " " << rgb_color.b << endl;
+        color = rgb2hex(rgb_color, true);
+    }
+    auto rb_node = dynamic_cast<RBNode<T>*>(node);
+    if (rb_node) {
+        if (rb_node->color) {
+            color = "#ff5555";
         }
     }
+
+
     all_child_rects.push_back({ node->to_str(), this_id, {{this_size.x / 2 - size_x / 2, 0} , {size_x, size_y}}, node, color });
     if (parent_id == -1) {
         for (auto& i : all_child_rects) {

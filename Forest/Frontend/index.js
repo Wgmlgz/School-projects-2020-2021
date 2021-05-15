@@ -1,28 +1,38 @@
 let frame_counter = 1
 
-let current_frame = 0
 let screenLog = document.querySelector('#screen-log');
 
 let zoom = 1
 
-import { btnDown, btnUp, dragTree } from './InputHandler.js'
-import { addBlockAndAnim, allLineAndAnim, clearTree, setAnimForward } from './TreeConstructor.js'
+import { btnDown, btnUp, dragTree, mouseEnter, mouseLeft  } from './InputHandler.js'
+import { addBlockAndAnim, allLineAndAnim, clearTree} from './TreeConstructor.js'
 
-
+var last_frame = 0
 setInterval(function(){ 
   zoom = document.getElementById("zoom_slider").value;
   var tree = document.getElementById('tree_ded').style;
   tree.zoom = zoom;
+
+  // timeline
+  var timeline_progress = document.getElementById('timeline_slider').value;
+  var current_frame = Math.round(timeline_progress * (_EXPORT_getStackSize() - 1));
+  if (current_frame != last_frame) {
+    if (_EXPORT_getStackSize() > 0) {
+      drawTreeFrame(current_frame);
+    }
+    last_frame = current_frame;
+  }
 }, 10);
 
 document.addEventListener('mousemove', dragTree);
 document.addEventListener('mousedown', btnDown);
 document.addEventListener('mouseup', btnUp);
 
-
+document.getElementById("tree_fill").addEventListener("mouseenter", mouseEnter)
+document.getElementById("tree_fill").addEventListener("mouseleave", mouseLeft)
 document.querySelector('#bnt_clear').addEventListener('click', clearTree)
-document.querySelector('#bnt_prev').addEventListener('click', prevFrame)
-document.querySelector('#bnt_next').addEventListener('click', nextFrame)
+// document.querySelector('#bnt_prev').addEventListener('click', prevFrame)
+// document.querySelector('#bnt_next').addEventListener('click', nextFrame)
 
 document.querySelector('#btn_insert').addEventListener('click', insertElement)
 
@@ -77,16 +87,19 @@ function insertElement() {
   _EXPORT_insert(input)
   drawLastTree()
 }
-
-function drawLastTree() {
-  clearTree()
-  _EXPORT_getState(-1)
+function drawTreeFrame(n) {
+    clearTree()
+  _EXPORT_getState(n)
   var str = readStr()
   drawJsonTreeStr(str)
-  _EXPORT_getLines(-1)
+  _EXPORT_getLines(n)
   str = readStr()
   drawJsonLinesStr(str)
 }
+function drawLastTree() {
+  drawTreeFrame(-1)
+}
+
 function drawJsonTreeStr(json_string) {
   if (json_string == "") return 
   var data = JSON.parse(json_string);
@@ -135,35 +148,35 @@ function drawJsonLines(json_string) {
     }
   })
 }
-function drawTree(num) {
-  frame_counter = document.getElementById('frame_counter')
+// function drawTree(num) {
+//   frame_counter = document.getElementById('frame_counter')
 
-  frame_counter.innerHTML = current_frame
-  clearTree()
-  fetch('tree_frame_' + num + '.json').then(response => drawJsonTree(response))
+//   frame_counter.innerHTML = current_frame
+//   clearTree()
+//   fetch('tree_frame_' + num + '.json').then(response => drawJsonTree(response))
 
-  fetch('lines_frame_' + num + '.json').then(response => drawJsonLines(response))
-}
+//   fetch('lines_frame_' + num + '.json').then(response => drawJsonLines(response))
+// }
 
-function test() {
-  _EXPORT_createTestTree(20)
-  _EXPORT_outputTestTree()
-}
+// function test() {
+//   _EXPORT_createTestTree(20)
+//   _EXPORT_outputTestTree()
+// }
 
-function prevFrame() {
-  setAnimForward(false)
-  if (current_frame < 0) current_frame = 0
-  drawTree(current_frame)
-  current_frame -= 1
-}
+// function prevFrame() {
+//   setAnimForward(false)
+//   if (current_frame < 0) current_frame = 0
+//   drawTree(current_frame)
+//   current_frame -= 1
+// }
 
-function nextFrame() {
-  current_frame += 1
-  setAnimForward(true)
-  drawTree(current_frame)
-}
+// function nextFrame() {
+//   current_frame += 1
+//   setAnimForward(true)
+//   drawTree(current_frame)
+// }
 
 
 
-drawJsonTreeStr('{"1.000000":{"c":"FUCK FUCK","clr":"#000000","x":0,"y":0,"X":0,"Y":0}}')
+drawJsonTreeStr('{"1.000000":{"c":"FUCK","clr":"#000000","x":0,"y":0,"X":0,"Y":0}}')
 //drawTree(2);

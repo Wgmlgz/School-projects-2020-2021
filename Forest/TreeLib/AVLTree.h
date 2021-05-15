@@ -31,40 +31,40 @@ public:
 };
 
 Tclass AVLTree : public BinSearchTree<T>{
-  using node_ptr = AVLTreeNode<T>*;
+  using nodeptr = AVLTreeNode<T>*;
 public:
-  node_ptr& getRoot() {
-    return (node_ptr&)this->root;
+  nodeptr& getRoot() {
+    return (nodeptr&)this->root;
   }
 
-  std::function<void(node_ptr node)> on_insert = [](node_ptr) {};
-  std::function<void(node_ptr node)> on_balance = [](node_ptr) {};
-private:
-  int height(node_ptr node) {
-    return node ? node->height : 0;
-  }
-  int bf(node_ptr node) {
-    cout << node->data << " " << height(node->rhs()) << " " << height(node->lhs()) << endl;
+  std::function<void(nodeptr node)> on_insert = [](nodeptr) {};
+  std::function<void(nodeptr node)> on_balance = [](nodeptr) {};
+  static int bf(nodeptr node) {
     return height(node->rhs()) - height(node->lhs());
   }
-  void fix_height(node_ptr node) {
+private:
+  static int height(nodeptr node) {
+    return node ? node->height : 0;
+  }
+
+  void fixHeight(nodeptr node) {
     node->height = 1 + max(height(node->rhs()), height(node->lhs()));
   }
-  void fix_height(node_ptr a, node_ptr b) {
-    fix_height(a); fix_height(b);
+  void fixHeight(nodeptr a, nodeptr b) {
+    fixHeight(a); fixHeight(b);
   }
-  node_ptr rrotAVL(node_ptr node) {
-    node_ptr tmp = static_cast<node_ptr>(BinSearchTree<T>::rrot(static_cast<BinTreeNode<T>*>(node)));
-    fix_height(node, tmp);
+  nodeptr rrotAVL(nodeptr node) {
+    nodeptr tmp = static_cast<nodeptr>(BinSearchTree<T>::rrot(static_cast<BinTreeNode<T>*>(node)));
+    fixHeight(node, tmp);
     return tmp;
   }
-  node_ptr lrotAVL(node_ptr node) {
-    node_ptr tmp = static_cast<node_ptr>(BinSearchTree<T>::lrot(static_cast<BinTreeNode<T>*>(node)));
-    fix_height(node, tmp);
+  nodeptr lrotAVL(nodeptr node) {
+    nodeptr tmp = static_cast<nodeptr>(BinSearchTree<T>::lrot(static_cast<BinTreeNode<T>*>(node)));
+    fixHeight(node, tmp);
     return tmp;
   }
-  node_ptr balance(node_ptr node) {
-    fix_height(node);
+  nodeptr balance(nodeptr node) {
+    fixHeight(node);
     if (bf(node) == 2) {
       on_balance(node);
       if (bf(node->rhs()) < 0)
@@ -79,8 +79,8 @@ private:
     return node;
   }
 
-  node_ptr last_inserted_node;
-  node_ptr insert(node_ptr node, T insert_data) {
+  nodeptr last_inserted_node;
+  nodeptr insert(nodeptr node, T insert_data) {
     if (!node) {
       last_inserted_node = new AVLTreeNode<T>(insert_data);
       return last_inserted_node;
@@ -94,41 +94,41 @@ private:
       return node;
     return balance(node);
   }
-  node_ptr minValueNode(node_ptr node) {
-    node_ptr current = node;
-    while (current->lhs() != NULL)
+  nodeptr minValueNode(nodeptr node) {
+    nodeptr current = node;
+    while (current->lhs() != nullptr)
         current = current->lhs();
     return current;
   }
 
-  public: node_ptr deleteNode(node_ptr node, T new_data) {
-    if (node == NULL) return node;
+  public: nodeptr deleteNode(nodeptr node, T new_data) {
+    if (node == nullptr) return node;
 
     if (new_data < node->data)
       node->lhs() = deleteNode(node->lhs(), new_data);
     else if (new_data > node->data)
       node->rhs() = deleteNode(node->rhs(), new_data);
     else {
-      if ((node->lhs() == NULL) ||
-        (node->rhs() == NULL)) {
-        node_ptr temp = node->lhs() ?
+      if ((node->lhs() == nullptr) ||
+        (node->rhs() == nullptr)) {
+        nodeptr temp = node->lhs() ?
           node->lhs() :
           node->rhs();
-        if (temp == NULL) {
+        if (temp == nullptr) {
           temp = node;
-          node = NULL;
+          node = nullptr;
         } else {
           *node = *temp;
           free(temp);
         }
       } else {
-        node_ptr temp = minValueNode(node->rhs());
+        nodeptr temp = minValueNode(node->rhs());
         node->data = temp->data;
         node->rhs() = (deleteNode(node->rhs(), temp->data));
       }
     }
 
-    if (node == NULL)
+    if (node == nullptr)
     return node;
 
     node->height = 1 + max(height(node->lhs()), height(node->rhs()));
@@ -139,7 +139,7 @@ private:
       return rrotAVL(node);
 
     if (balance > 1 && bf(node->lhs()) < 0) {
-      node->lhs() = (lrotAVL(node->lhs()));
+      node->lhs() = lrotAVL(node->lhs());
       return rrotAVL(node);
     }
 
@@ -148,7 +148,7 @@ private:
 
     if (balance < -1 &&
       bf(node->rhs()) > 0) {
-      node->rhs() = (rrotAVL(node->rhs()));
+      node->rhs() = rrotAVL(node->rhs());
       return lrotAVL(node);
     }
 
@@ -160,7 +160,7 @@ public:
     cout << "avl insert" << endl;
     getRoot() = insert(getRoot(), insert_data);
   }
-  node_ptr remove(T remove_data) {
+  nodeptr remove(T remove_data) {
     getRoot() = deleteNode(getRoot(), remove_data);
   }
 };

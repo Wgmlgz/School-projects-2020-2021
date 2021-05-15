@@ -1,6 +1,8 @@
 #pragma once
 #include "AVLTree.h"
+#include "RBTree.h"
 #include "Treap.h"
+#include "SplayTree.h"
 #include "Wgmlgz.h"
 #include <fstream>
 #include <stdio.h>
@@ -23,20 +25,19 @@ int readChar() {
     return buff[buff_index++];
 }
 
-
 struct TreeData {
     string display_name = "I'm a defaut tree(";
     BinSearchTree<int>* tree_ptr = nullptr;
-    vector<string> json_states_stack;
-    vector<string> json_lines_stack;
+    vector<string> json_states_stack = { "{\"666\":{\"c\":\"null\",\"clr\":\"#44475a\",\"x\":0,\"y\":0,\"X\":0,\"Y\":0}}" };
+    vector<string> json_lines_stack = { "" };
 };
 
 vector<TreeData> trees = {
     {"Binary search tree", new BinSearchTree<int>()},
     {"AVL tree", new AVLTree<int>() },
-    {"AVL tree", new AVLTree<int>() },
+    {"Red-black tree", new RBTree<int>() },
     {"Treap", new Treap<int>() },
-    {"Treap", new Treap<int>()}
+    {"Splay tree", new SplayTree<int>()}
 };
 
 int current_tree = 0;
@@ -46,11 +47,15 @@ void selectTree(int n) {
 void insert(int insert_data) {
     trees[current_tree].tree_ptr->insert(insert_data);
     auto json = toJson<int>(trees[current_tree].tree_ptr->getRoot());
+    cout << json.first << endl;
     trees[current_tree].json_states_stack.push_back(json.first);
     trees[current_tree].json_lines_stack.push_back(json.second);
 }
 void getName() {
     put2Buff(trees[current_tree].display_name);
+}
+int getStackSize() {
+    return trees[current_tree].json_states_stack.size();
 }
 void getState(int state = -1) {
     if (trees[current_tree].json_states_stack.size()) {
