@@ -7,14 +7,9 @@
 Tclass AVLTreeNode : public BinTreeNode<T>{
 public:
   int height = 1;
-  AVLTreeNode<T>* get_lhs() { return static_cast<AVLTreeNode<T>*>(BinTreeNode<T>::get_lhs()); }
-  AVLTreeNode<T>* get_rhs() { return static_cast<AVLTreeNode<T>*>(BinTreeNode<T>::get_rhs()); }
-  void set_lhs(AVLTreeNode<T>* new_ptr) {
-    BinTreeNode<T>::set_lhs(static_cast<BinTreeNode<T>*>(new_ptr));
-  }
-  void set_rhs(AVLTreeNode<T>* new_ptr) {
-    BinTreeNode<T>::set_rhs(static_cast<BinTreeNode<T>*>(new_ptr));
-  }
+  AVLTreeNode<T>*& lhs() { return (AVLTreeNode<T>*&)(this->branches[0]); }
+  AVLTreeNode<T>*& rhs() { return (AVLTreeNode<T>*&)(this->branches[1]); }
+
   AVLTreeNode(T new_data) {
     BinTreeNode<T>::TreeNode::data = new_data;
   }
@@ -38,7 +33,9 @@ public:
 Tclass AVLTree : public BinSearchTree<T>{
   using node_ptr = AVLTreeNode<T>*;
 public:
-  node_ptr root = nullptr;
+  node_ptr& getRoot() {
+    return (node_ptr&)this->root;
+  }
 
   std::function<void(node_ptr node)> on_insert = [](node_ptr) {};
   std::function<void(node_ptr node)> on_balance = [](node_ptr) {};
@@ -47,11 +44,11 @@ private:
     return node ? node->height : 0;
   }
   int bf(node_ptr node) {
-    cout << node->data << " " << height(node->get_rhs()) << " " << height(node->get_lhs()) << endl;
-    return height(node->get_rhs()) - height(node->get_lhs());
+    cout << node->data << " " << height(node->rhs()) << " " << height(node->lhs()) << endl;
+    return height(node->rhs()) - height(node->lhs());
   }
   void fix_height(node_ptr node) {
-    node->height = 1 + max(height(node->get_rhs()), height(node->get_lhs()));
+    node->height = 1 + max(height(node->rhs()), height(node->lhs()));
   }
   void fix_height(node_ptr a, node_ptr b) {
     fix_height(a); fix_height(b);
@@ -70,13 +67,13 @@ private:
     fix_height(node);
     if (bf(node) == 2) {
       on_balance(node);
-      if (bf(node->get_rhs()) < 0)
-        node->set_rhs(rrotAVL(node->get_rhs()));
+      if (bf(node->rhs()) < 0)
+        node->rhs() = (rrotAVL(node->rhs()));
       return lrotAVL(node);
     } else if (bf(node) == -2) {
       on_balance(node);
-      if (bf(node->get_lhs()) > 0)
-        node->set_lhs(lrotAVL(node->get_lhs()));
+      if (bf(node->lhs()) > 0)
+        node->lhs() = (lrotAVL(node->lhs()));
       return rrotAVL(node);
     }
     return node;
@@ -90,87 +87,80 @@ private:
     }
     on_insert(node);
     if (insert_data < node->data)
-      node->set_lhs(insert(node->get_lhs(), insert_data));
+      node->lhs() = (insert(node->lhs(), insert_data));
     else if (insert_data > node->data)
-      node->set_rhs(insert(node->get_rhs(), insert_data));
+      node->rhs() = (insert(node->rhs(), insert_data));
     else
       return node;
     return balance(node);
   }
   node_ptr minValueNode(node_ptr node) {
-      node_ptr current = node;
-
-      while (current->get_lhs() != NULL)
-          current = current->get_lhs();
-
-      return current;
+    node_ptr current = node;
+    while (current->lhs() != NULL)
+        current = current->lhs();
+    return current;
   }
 
-  public: node_ptr deleteNode(node_ptr root, T new_data) {
-      if (root == NULL)
-          return root;
+  public: node_ptr deleteNode(node_ptr node, T new_data) {
+    if (node == NULL) return node;
 
-      if (new_data < root->data)
-          root->set_lhs(deleteNode(root->get_lhs(), new_data));
-      else if (new_data > root->data)
-          root->set_rhs(deleteNode(root->get_rhs(), new_data));
-      else {
-          if ((root->get_lhs() == NULL) ||
-              (root->get_rhs() == NULL)) {
-              node_ptr temp = root->get_lhs() ?
-                          root->get_lhs() :
-                          root->get_rhs();
-              if (temp == NULL) {
-                  temp = root;
-                  root = NULL;
-              } else {
-                *root = *temp; // Copy the contents of 
-                free(temp);
-              }
-          } else {
-              node_ptr temp = minValueNode(root->get_rhs());
-              root->data = temp->data;
-
-              root->set_rhs(deleteNode(root->get_rhs(), temp->data));
-          }
+    if (new_data < node->data)
+      node->lhs() = deleteNode(node->lhs(), new_data);
+    else if (new_data > node->data)
+      node->rhs() = deleteNode(node->rhs(), new_data);
+    else {
+      if ((node->lhs() == NULL) ||
+        (node->rhs() == NULL)) {
+        node_ptr temp = node->lhs() ?
+          node->lhs() :
+          node->rhs();
+        if (temp == NULL) {
+          temp = node;
+          node = NULL;
+        } else {
+          *node = *temp;
+          free(temp);
+        }
+      } else {
+        node_ptr temp = minValueNode(node->rhs());
+        node->data = temp->data;
+        node->rhs() = (deleteNode(node->rhs(), temp->data));
       }
+    }
 
-      if (root == NULL)
-      return root;
+    if (node == NULL)
+    return node;
 
-      root->height = 1 + max(height(root->get_lhs()), height(root->get_rhs()));
+    node->height = 1 + max(height(node->lhs()), height(node->rhs()));
 
-      int balance = bf(root);
+    int balance = bf(node);
 
-      if (balance > 1 && bf(root->get_lhs()) >= 0)
-          return rrotAVL(root);
+    if (balance > 1 && bf(node->lhs()) >= 0)
+      return rrotAVL(node);
 
-      if (balance > 1 && bf(root->get_lhs()) < 0) {
-          root->set_lhs(lrotAVL(root->get_lhs()));
-          return rrotAVL(root);
-      }
+    if (balance > 1 && bf(node->lhs()) < 0) {
+      node->lhs() = (lrotAVL(node->lhs()));
+      return rrotAVL(node);
+    }
 
-      if (balance < -1 && bf(root->get_rhs()) <= 0)
-          return lrotAVL(root);
+    if (balance < -1 && bf(node->rhs()) <= 0)
+      return lrotAVL(node);
 
-      if (balance < -1 &&
-          bf(root->get_rhs()) > 0) {
-          root->set_rhs(rrotAVL(root->get_rhs()));
-          return lrotAVL(root);
-      }
+    if (balance < -1 &&
+      bf(node->rhs()) > 0) {
+      node->rhs() = (rrotAVL(node->rhs()));
+      return lrotAVL(node);
+    }
 
-      return root;
+    return node;
   }
 
 public:
   virtual void insert(T insert_data) override {
     cout << "avl insert" << endl;
-    root = insert(static_cast<node_ptr>(this->root), insert_data);
-  }
-  virtual node_ptr getRoot() override {
-    return root;
+    getRoot() = insert(getRoot(), insert_data);
   }
   node_ptr remove(T remove_data) {
-    this->root = deleteNode(this->root, remove_data);
+    getRoot() = deleteNode(getRoot(), remove_data);
   }
 };

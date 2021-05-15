@@ -41,6 +41,3 @@ export function dragTree(e) {
     start = false
   }
 }
-   
-// module.exports = { btnDown, btnUp, dragTree }
-// export { btnDown, btnUp, dragTree };

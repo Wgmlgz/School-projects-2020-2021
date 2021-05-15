@@ -13,29 +13,34 @@ public:
   int id = ++id_counter;
   T data;
   TreeNode() {};
+
   virtual ~TreeNode() = default;
+
   TreeNode(T new_data) {
     data = new_data;
     branches.resize(5, nullptr);
   }
+
   TreeNode(T new_data, vector<TreeNode*> new_branches) {
     data = new_data;
     branches = new_branches;
   }
+
   void pushData(size_t n, T new_data) {
     branches[n] = new TreeNode(new_data);
   }
+
   bool isEnd() {
     for (auto i : branches) if (i) return false;
     return true;
   }
+
   virtual TreeNode<T>* clone() {
     vector<TreeNode<T>*> cloned_branches;
     for (auto& i : branches) {
       if (i) cloned_branches.push_back(i->clone());
       else cloned_branches.push_back(nullptr);
     }
-    //--id_counter;
     TreeNode<T>* cloned_node =
       new TreeNode<T>(this->data, cloned_branches);
     cloned_node->id = id;
