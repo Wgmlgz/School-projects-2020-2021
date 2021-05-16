@@ -1,5 +1,9 @@
 #pragma once
 #include "Tree.h"
+#include "Treap.h"
+#include "AVLTree.h"
+#include "RBTree.h"
+//#include "TreeLib.h"
 #include "Wgmlgz.h"
 #include "Colors.h"
 
@@ -127,14 +131,20 @@ pair<string, string> innerJson(
 
     for (int i = 0; i < calc_res_new.size(); ++i) {
         auto curr_node = calc_res_new[i];
-        auto find_new = nodeData<T>{ "test", curr_node.id, {{500, -1000}, {0, 0}}, nullptr };
+        nodeData<T> find_new = nodeData<T>{ "", curr_node.id, {{curr_node.rect.pos.x, curr_node.rect.pos.y}, {0, 0}}, nullptr };
 
         for (auto i : calc_res_old) {
             if (i.id == curr_node.id) {
                 find_new = i;
             }
         }
-
+        if (find_new.content == "") {
+            for (auto i : calc_res_old) {
+                if (i.id == round(curr_node.id)) {
+                    find_new = i;
+                }
+            }
+        }
         json += createJSONNode(
             to_string(curr_node.id),
             curr_node.content,
@@ -208,18 +218,11 @@ pair<string, string> toJsonWithCaps(TreeNode<T>* node_old, TreeNode<T>* node_new
         for (auto& j : nodes_old) {
             if (j.id == i.head_id) {
                 nodes_old.push_back({
-                    i.content, i.id,
-                    {{j.rect.pos.x, j.rect.pos.y + 30} , {0, 0}}, nullptr
+                    i.content, static_cast<double>(i.id),
+                    {{j.rect.pos.x, j.rect.pos.y + 50} , {0, 0}}, nullptr
                     });
             }
         }
-        int tmp_id = rand();
-        // nodes_old.push_back({ i.second, tmp_id,
-        //     {{old_t.rect.pos.x, old_t.rect.pos.y + 100} , {0, 0}}, old_t.ptr
-        //     });
-        // nodes_new.push_back({ i.second, tmp_id,
-        //     {{old_t.rect.pos.x, old_t.rect.pos.y + 100} , {0, 0}}, old_t.ptr
-        //     });
     }
 
     for (auto& i : new_caps) {
@@ -229,18 +232,11 @@ pair<string, string> toJsonWithCaps(TreeNode<T>* node_old, TreeNode<T>* node_new
         for (auto& j : nodes_new) {
             if (j.id == i.head_id) {
                 nodes_new.push_back({
-                    i.content, i.id,
+                    i.content, static_cast<double>(i.id),
                     {{j.rect.pos.x, j.rect.pos.y + 50} , {0, 0}}, nullptr
                     });
             }
         }
-        int tmp_id = rand();
-        // nodes_old.push_back({ i.second, tmp_id,
-        //     {{old_t.rect.pos.x, old_t.rect.pos.y + 100} , {0, 0}}, old_t.ptr
-        //     });
-        // nodes_new.push_back({ i.second, tmp_id,
-        //     {{old_t.rect.pos.x, old_t.rect.pos.y + 100} , {0, 0}}, old_t.ptr
-        //     });
     }
     auto inner_json = innerJson(nodes_old, connections_old, nodes_new, connections_new);
 

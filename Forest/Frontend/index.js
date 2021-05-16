@@ -5,9 +5,10 @@ let screenLog = document.querySelector('#screen-log');
 let zoom = 1
 
 import { btnDown, btnUp, dragTree, mouseEnter, mouseLeft  } from './InputHandler.js'
-import { addBlockAndAnim, allLineAndAnim, clearTree} from './TreeConstructor.js'
+import { addBlockAndAnim, allLineAndAnim, clearTree, setAnimProgress} from './TreeConstructor.js'
 
 var last_frame = 0
+// var anim_progress = 1
 setInterval(function(){ 
   zoom = document.getElementById("zoom_slider").value;
   var tree = document.getElementById('tree_ded').style;
@@ -15,13 +16,15 @@ setInterval(function(){
 
   // timeline
   var timeline_progress = document.getElementById('timeline_slider').value;
-  var current_frame = Math.round(timeline_progress * (_EXPORT_getStackSize() - 1));
+  var tmp = timeline_progress * (_EXPORT_getStackSize())
+  var current_frame = Math.floor(tmp);
   if (current_frame != last_frame) {
     if (_EXPORT_getStackSize() > 0) {
       drawTreeFrame(current_frame);
     }
     last_frame = current_frame;
   }
+  setAnimProgress(tmp - current_frame);
 }, 10);
 
 document.addEventListener('mousemove', dragTree);
@@ -178,5 +181,5 @@ function drawJsonLines(json_string) {
 
 
 
-drawJsonTreeStr('{"1.000000":{"c":"FUCK","clr":"#000000","x":0,"y":0,"X":0,"Y":0}}')
+drawJsonTreeStr('{"1.000000":{"c":"DA","clr":"#000000","x":0,"y":0,"X":0,"Y":0}}')
 //drawTree(2);

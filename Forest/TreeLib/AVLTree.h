@@ -33,12 +33,14 @@ public:
 Tclass AVLTree : public BinSearchTree<T>{
   using nodeptr = AVLTreeNode<T>*;
 public:
+  nodeptr last_inserted_node;
   nodeptr& getRoot() {
     return (nodeptr&)this->root;
   }
 
   std::function<void(nodeptr node)> on_insert = [](nodeptr) {};
   std::function<void(nodeptr node)> on_balance = [](nodeptr) {};
+  std::function<void()> on_insert_place_found = []() {};
   static int bf(nodeptr node) {
     return height(node->rhs()) - height(node->lhs());
   }
@@ -65,13 +67,12 @@ private:
   }
   nodeptr balance(nodeptr node) {
     fixHeight(node);
+    on_balance(node);
     if (bf(node) == 2) {
-      on_balance(node);
       if (bf(node->rhs()) < 0)
         node->rhs() = (rrotAVL(node->rhs()));
       return lrotAVL(node);
     } else if (bf(node) == -2) {
-      on_balance(node);
       if (bf(node->lhs()) > 0)
         node->lhs() = (lrotAVL(node->lhs()));
       return rrotAVL(node);
@@ -79,7 +80,7 @@ private:
     return node;
   }
 
-  nodeptr last_inserted_node;
+
   nodeptr insert(nodeptr node, T insert_data) {
     if (!node) {
       last_inserted_node = new AVLTreeNode<T>(insert_data);
@@ -92,6 +93,9 @@ private:
       node->rhs() = (insert(node->rhs(), insert_data));
     else
       return node;
+    if (node == getRoot()) {
+      on_insert_place_found();
+    }
     return balance(node);
   }
   nodeptr minValueNode(nodeptr node) {

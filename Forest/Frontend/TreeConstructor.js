@@ -1,13 +1,13 @@
 let anim_time = 500 
 export var anim_forward = true
-
+var anim_progress = 1
 function animate({ duration, draw, timing }) {
   let start = performance.now();
   
   requestAnimationFrame(function animate(time) {
     let timeFraction = (time - start) / duration;
     if (timeFraction > 1) timeFraction = 1;
-  
+    timeFraction = anim_progress
     if (anim_forward == false) timeFraction = 1 - timeFraction
 
     draw(timing(timeFraction));
@@ -106,4 +106,7 @@ export function setAnimForward(new_val) {
 }
 export function clearTree() {
   tree.innerHTML = ''
+}
+export function setAnimProgress(val) {
+  anim_progress = val
 }
