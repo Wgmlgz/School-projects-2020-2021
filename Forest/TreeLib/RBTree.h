@@ -8,9 +8,7 @@ public:
   RBNode*& lhs() { return (RBNode<T>*&)(this->branches[0]); }
   RBNode*& rhs() { return (RBNode<T>*&)(this->branches[1]); }
 
-  RBNode() {
-
-  }
+  RBNode() {}
   RBNode* parent;
   int color; // 1 -> Red, 0 -> Black
 };
@@ -22,23 +20,11 @@ public:
   using nodeptr = RBNode<T>*;
   using BinSearchTree<T>::rrot;
   using BinSearchTree<T>::lrot;
-  // nodeptr nullptr;
 
   nodeptr& getRoot() {
     return (nodeptr&)this->root;
   }
 private:
-  nodeptr searchTreeHelper(nodeptr node, T key) {
-    if (node == nullptr || key == node->data) {
-      return node;
-    }
-
-    if (key < node->data) {
-      return searchTreeHelper(node->lhs(), key);
-    }
-    return searchTreeHelper(node->rhs(), key);
-  }
-
   void fixDelete(nodeptr x) {
     nodeptr s;
     while (x != getRoot() && x->color == 0) {
@@ -223,10 +209,6 @@ public:
     // nullptr->data = -666;
     // nullptr->rhs() = nullptr;
     getRoot() = nullptr;
-  }
-
-  nodeptr searchTree(T k) {
-    return searchTreeHelper(this->getRoot(), k);
   }
 
   nodeptr minimum(nodeptr node) {

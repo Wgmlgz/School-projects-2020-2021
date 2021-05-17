@@ -42,8 +42,12 @@ public:
     cout << "on_insert\n";
   }
   void on_insert_place_found() {
-    if (this->tree_ptr->getRoot())
+    if (this->tree_ptr->getRoot() and !insert_place_found_clone) {
       insert_place_found_clone = this->tree_ptr->getRoot()->clone();
+      insert_place_found_clone->inorderVisit([=](TreeNode<T>* node) {
+        static_cast<AVLTree<T>*>(this->tree_ptr)->fixHeight(static_cast<AVLTreeNode<T>*>(node));
+        });
+    }
   }
   void on_balance(nodeptr node) {
     fix_stack.push_back({ this->tree_ptr->getRoot()->clone(), node->id });
@@ -59,6 +63,7 @@ public:
     }
     ins_stack.clear();
     fix_stack.clear();
+    insert_place_found_clone = nullptr;
     auto clone = this->tree_ptr->getRoot()->clone();
     this->write(this->tree_ptr->getRoot(), this->tree_ptr->getRoot(), { {} }, {});
     std::string insert_data = to_string(val);
@@ -67,12 +72,14 @@ public:
 
     auto ins_res = static_cast<AVLTree<T>*>(this->tree_ptr)->last_inserted_node;
 
+    this->write(clone, clone, { },
+      { { insert_data, ins_res->id, ins_stack[0] } });
     for (int j = 0; j < ins_stack.size() - 1; ++j) {
       this->write(clone, clone, { { insert_data, ins_res->id, ins_stack[j] } },
         { { insert_data, ins_res->id, ins_stack[j + 1] } });
     }
     this->write(clone, insert_place_found_clone, { {insert_data, ins_res->id,ins_stack[ins_stack.size() - 1]} }, {});
-    this->write(insert_place_found_clone, this->tree_ptr->getRoot(), { {insert_data, ins_res->id,ins_stack[ins_stack.size() - 1]} }, {});
+    this->write(insert_place_found_clone, this->tree_ptr->getRoot(), { {} }, {});
   }
   AVLTreeHandler() {
     this->tree_ptr = new AVLTree<T>();
@@ -87,6 +94,9 @@ public:
     };
     insert(1);
     insert(2);
-    insert(4);
+    insert(5);
+    insert(6);
+    insert(7);
+
   }
 };

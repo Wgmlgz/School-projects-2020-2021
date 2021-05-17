@@ -7,7 +7,7 @@
 }
 .tree_type {
   position: absolute;
-  bottom: 0;
+  bottom: 20px;
   width: 100%;
 }
 .title {
@@ -46,12 +46,14 @@
 #tree_fill {
   position: absolute;
   top: 200px;
-  bottom: 200px;
+  bottom: 300px;
   width: 100%;
   z-index: 666;
 }
 body {
   background-color: #282a36;
+  overflow: hidden;
+  margin: 20px;
 }
 
 .btn {
@@ -88,7 +90,7 @@ body {
 
 .pure-material-slider {
   display: inline-block;
-  width: 600px;
+  width: calc(100vw - 40px);
   color: rgba(var(--pure-material-onsurface-rgb, 255, 255, 255), 0.87);
   font-family: consolas;
   font-size: 20px;
@@ -130,9 +132,35 @@ body {
   -webkit-appearance: none;
   border: none;
   border-radius: 50%;
-  height: 2px;
-  width: 2px;
+  height: 3px;
+  width: 3px;
   background-color: #ff5555;
   transform: scale(6, 6);
   transition: box-shadow 0.2s;
+}
+
+.material-input {
+  padding: 5px;
+  font-size: 25px;
+  overflow: hidden;
+  font-family: consolas;
+  font-weight: bold;
+  border-width: 0;
+  outline: none;
+  border-radius: 5px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+  width: 100px;
+  background-color: rgb(68, 71, 90);
+  color: #ecf0f1;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
 }

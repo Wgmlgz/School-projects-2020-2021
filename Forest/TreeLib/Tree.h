@@ -1,6 +1,6 @@
 #pragma once
 #include "Wgmlgz.h"
-
+#include <functional>
 
 struct V2 { int x = 0, y = 0; V2(int nx, int ny) { x = nx; y = ny; } };
 struct Rect { V2 pos, size; };
@@ -45,6 +45,12 @@ public:
       new TreeNode<T>(this->data, cloned_branches);
     cloned_node->id = id;
     return cloned_node;
+  }
+  virtual void inorderVisit(std::function<void(TreeNode<T>*)> func) {
+    for (auto& i : branches) {
+      if (i) i->inorderVisit(func);
+    }
+    func(this);
   }
 
   vector<string> to_vstr() { return { std::to_string(data) }; }

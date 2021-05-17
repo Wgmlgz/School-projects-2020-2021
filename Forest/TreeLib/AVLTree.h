@@ -2,9 +2,10 @@
 #include "Wgmlgz.h"
 #include "BinSearchTree.h"
 #include "BinTree.h"
-//#include "Tree.h"
 #include <functional>
-Tclass AVLTreeNode : public BinTreeNode<T>{
+
+template<typename T>
+class AVLTreeNode : public BinTreeNode<T> {
 public:
   int height = 1;
   AVLTreeNode<T>*& lhs() { return (AVLTreeNode<T>*&)(this->branches[0]); }
@@ -27,7 +28,6 @@ public:
     cloned_node->height = height;
     return cloned_node;
   }
-
 };
 
 Tclass AVLTree : public BinSearchTree<T>{
@@ -44,13 +44,12 @@ public:
   static int bf(nodeptr node) {
     return height(node->rhs()) - height(node->lhs());
   }
+  void fixHeight(nodeptr node) {
+    node->height = 1 + max(height(node->rhs()), height(node->lhs()));
+  }
 private:
   static int height(nodeptr node) {
     return node ? node->height : 0;
-  }
-
-  void fixHeight(nodeptr node) {
-    node->height = 1 + max(height(node->rhs()), height(node->lhs()));
   }
   void fixHeight(nodeptr a, nodeptr b) {
     fixHeight(a); fixHeight(b);
@@ -88,14 +87,12 @@ private:
     }
     on_insert(node);
     if (insert_data < node->data)
-      node->lhs() = (insert(node->lhs(), insert_data));
+      node->lhs() = insert(node->lhs(), insert_data);
     else if (insert_data > node->data)
-      node->rhs() = (insert(node->rhs(), insert_data));
+      node->rhs() = insert(node->rhs(), insert_data);
     else
       return node;
-    if (node == getRoot()) {
-      on_insert_place_found();
-    }
+    on_insert_place_found();
     return balance(node);
   }
   nodeptr minValueNode(nodeptr node) {
@@ -162,6 +159,7 @@ private:
 public:
   virtual void insert(T insert_data) override {
     cout << "avl insert" << endl;
+    last_inserted_node = nullptr;
     getRoot() = insert(getRoot(), insert_data);
   }
   nodeptr remove(T remove_data) {

@@ -14,16 +14,37 @@
     <br />
     <p id="frame_counter_title" class="title">Current frame:</p>
     <p id="frame_counter" class="title">da</p>
+    <p id="frame_progress_title" class="title">Frame progress:</p>
+    <p id="frame_progress" class="title">da</p>
     <br />
-    <input type="number" id="input_insert" required />
+    <input
+      type="number"
+      value="666"
+      id="input_insert"
+      class="material-input"
+      required
+    />
     <button id="btn_insert" class="btn">Insert element</button>
+    <button id="btn_insert_random" class="btn">Insert random element</button>
     <div class="tree_type">
+      <label class="pure-material-slider">
+        <input
+          type="range"
+          id="timeline_latest_slider"
+          min="0.0"
+          max="0.9999"
+          value="0"
+          step="any"
+        />
+        <span>History cover (all history - last frame)</span>
+      </label>
+      <br />
       <label class="pure-material-slider">
         <input
           type="range"
           id="timeline_slider"
           min="0"
-          max="0.999"
+          max="0.9999"
           value="1"
           step="any"
         />
@@ -50,7 +71,7 @@
     </div>
     <div id="tree_fill"></div>
     <div id="tree_ded" style="position: absolute; top: 50%; right: 50%">
-      <div id="tree" style="position: absolute; bottom: 0px; right: 0px"></div>
+      <div id="tree" style="position: absolute; bottom: px; right: 0px"></div>
     </div>
     <script src="https://yastatic.net/jquery/3.3.1/jquery.min.js"></script>
     <script src="build.js"></script>

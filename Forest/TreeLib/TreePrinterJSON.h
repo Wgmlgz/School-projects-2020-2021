@@ -8,8 +8,8 @@
 #include "Colors.h"
 
 // settings
-int size_x = 75;
-int size_y = 100;
+int size_x = 50;
+int size_y = 75;
 const string DEFAULT_COLOR = "#44475a";
 
 template<typename T>
@@ -40,9 +40,10 @@ V2 calcNodeSz(
         ++child_n;
         if (i == nullptr) {
             //continue;
+            // null nodes
             double tmp_id = node->id + 0.001 * child_n;
             connections.push_back({ this_id, tmp_id });
-            all_child_rects.push_back({ "null", tmp_id, { {this_size.x, -size_y}, {size_x, size_y} } });
+            all_child_rects.push_back({ "#", tmp_id, { {this_size.x, -size_y}, {size_x / 8, size_y / 8} } });
             child_sizes.push_back({ size_x, size_y });
             this_size.x += size_x;
         } else {
@@ -131,25 +132,25 @@ pair<string, string> innerJson(
 
     for (int i = 0; i < calc_res_new.size(); ++i) {
         auto curr_node = calc_res_new[i];
-        nodeData<T> find_new = nodeData<T>{ "", curr_node.id, {{curr_node.rect.pos.x, curr_node.rect.pos.y}, {0, 0}}, nullptr };
+        nodeData<T> old_node = nodeData<T>{ "", curr_node.id, {{curr_node.rect.pos.x, 2000}, {0, 0}}, nullptr };
 
         for (auto i : calc_res_old) {
             if (i.id == curr_node.id) {
-                find_new = i;
+                old_node = i;
             }
         }
-        if (find_new.content == "") {
+        if (old_node.content == "") {
             for (auto i : calc_res_old) {
                 if (i.id == round(curr_node.id)) {
-                    find_new = i;
+                    old_node = i;
                 }
             }
         }
         json += createJSONNode(
             to_string(curr_node.id),
             curr_node.content,
-            find_new.rect.pos.x,
-            -find_new.rect.pos.y,
+            old_node.rect.pos.x,
+            -old_node.rect.pos.y,
             curr_node.rect.pos.x,
             -curr_node.rect.pos.y,
             curr_node.color

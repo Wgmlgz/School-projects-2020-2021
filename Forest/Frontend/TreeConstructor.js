@@ -1,17 +1,20 @@
 let anim_time = 500 
 export var anim_forward = true
 var anim_progress = 1
+var current_frame = 0
+
 function animate({ duration, draw, timing }) {
   let start = performance.now();
-  
+  let anim_frame = current_frame
+
   requestAnimationFrame(function animate(time) {
     let timeFraction = (time - start) / duration;
     if (timeFraction > 1) timeFraction = 1;
-    timeFraction = anim_progress
-    if (anim_forward == false) timeFraction = 1 - timeFraction
+    timeFraction = anim_progress - anim_frame
+    console.log(timeFraction);
+    if (timeFraction > 1 || timeFraction < 0) return
 
     draw(timing(timeFraction));
-  
     if (timeFraction != 1) { requestAnimationFrame(animate); }
 
   });
@@ -107,6 +110,7 @@ export function setAnimForward(new_val) {
 export function clearTree() {
   tree.innerHTML = ''
 }
-export function setAnimProgress(val) {
-  anim_progress = val
+export function setAnimProgress(tmp, frame) {
+  current_frame = frame
+  anim_progress = tmp
 }
