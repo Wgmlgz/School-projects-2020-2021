@@ -10,16 +10,22 @@ class BinSearchTree {
       last_inserted_node = new BinTreeNode<T>(insert_data);
       return last_inserted_node;
     }
+    on_insert(node);
     if (insert_data < node->data)
       node->lhs() = insert(node->lhs(), insert_data);
     else if (insert_data > node->data)
       node->rhs() = insert(node->rhs(), insert_data);
     return node;
+    on_insert_place_found();
   }
 
 public:
   nodeptr root = nullptr;
   nodeptr last_inserted_node = nullptr;
+
+
+  std::function<void(nodeptr node)> on_insert = [](nodeptr) {};
+  std::function<void()> on_insert_place_found = []() {};
 
   nodeptr& getRoot() {
     return root;
@@ -38,7 +44,7 @@ public:
     return tmp;
   }
   virtual void insert(T insert_data) {
-    cout << "Bin insert" << endl;
+    last_inserted_node = nullptr;
     root = insert(root, insert_data);
   }
 };

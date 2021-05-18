@@ -27,6 +27,19 @@ public:
         lhs() = new_left;
         rhs() = new_right;
     }
+
+    TreapNode<T>* clone() {
+        std::vector<TreeNode<T>*> cloned_branches;
+        for (auto& i : BinTreeNode<T>::TreeNode::branches) {
+            if (i) cloned_branches.push_back(static_cast<TreapNode<T>*>(i)->clone());
+            else cloned_branches.push_back(nullptr);
+        }
+        TreapNode<T>* cloned_node =
+            new TreapNode<T>(this->data, priority);
+        static_cast<TreeNode<T>*>(cloned_node)->branches = cloned_branches;
+        cloned_node->id = BinTreeNode<T>::TreeNode::id;
+        return cloned_node;
+    }
 };
 
 template<typename T>

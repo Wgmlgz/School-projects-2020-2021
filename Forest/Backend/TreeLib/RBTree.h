@@ -1,6 +1,6 @@
 #pragma once
 #include "BinSearchTree.h"
-#include "Wgmlgz.h"
+#include <iostream>
 
 template<typename T>
 class RBNode :public BinTreeNode<T> {
@@ -116,7 +116,7 @@ private:
     }
 
     if (z == nullptr) {
-      cout << "Couldn't find key in the tree" << endl;
+      std::cout << "Couldn't find key in the tree" << std::endl;
       return;
     }
 
@@ -260,7 +260,6 @@ public:
   }
 
   virtual void insert(T key) override {
-    cout << "RB insert" << endl;
     nodeptr node = new RBNode<T>();
     node->parent = nullptr;
     node->data = key;
@@ -295,7 +294,6 @@ public:
 
     if (node->parent->parent == nullptr)
       return;
-
 
     fixInsert(node);
   }

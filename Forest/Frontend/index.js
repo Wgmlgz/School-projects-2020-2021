@@ -29,7 +29,7 @@ setInterval(function () {
     tmp = timeline_progress * latest_frames + _EXPORT_getStackSize() - latest_frames
   }
   if (anim) {
-    tmp += 0.01
+    tmp += 0.03
     var new_timeline_progress = tmp / _EXPORT_getStackSize();
     if (_EXPORT_getStackSize() > latest_frames) { 
       var new_timeline_progress = timeline_progress * latest_frames + _EXPORT_getStackSize() - latest_frames

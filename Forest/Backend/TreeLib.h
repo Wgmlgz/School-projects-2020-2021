@@ -1,21 +1,13 @@
 #pragma once
-// #include "AVLTree.h"
-// #include "RBTree.h"
-// #include "Treap.h"
-// #include "SplayTree.h"
-// #include "Wgmlgz.h"
 #include <fstream>
 #include <stdio.h>
-//#include "Tree.h"
-//#include "TreePrinterJSON.h"
-//#include "TreePrinterASCII.h"
 #include "TreesChangesHandler.h"
 
 // buff
 int buff_index = 0;
-string buff = "test str\n   CUM!!!!!";
+std::string buff = "test str\n   CUM!!!!!";
 
-void put2Buff(string str) {
+void put2Buff(std::string str) {
     buff = str;
     buff_index = 0;
 }
@@ -25,20 +17,10 @@ int readChar() {
     return buff[buff_index++];
 }
 
-// struct TreeData {
-//     string display_name = "I'm a defaut tree(";
-//     BinSearchTree<int>* tree_ptr = nullptr;
-//     vector<string> json_states_stack = { "{\"666\":{\"c\":\"null\",\"clr\":\"#44475a\",\"x\":0,\"y\":0,\"X\":0,\"Y\":0}}" };
-//     vector<string> json_lines_stack = { "" };
-// };
-
-vector<AVLTreeHandler<int>*> trees = {
-    new AVLTreeHandler<int>()
-    // {"Binary search tree", new BinSearchTree<int>()},
-    // {"AVL tree", new AVLTree<int>() },
-    // {"Red-black tree", new RBTree<int>() },
-    // {"Treap", new Treap<int>() },
-    // {"Splay tree", new SplayTree<int>()}
+std::vector<TreeHandler<int>*> trees = {
+    new TreeHandler<int>(),
+    new AVLTreeHandler<int>(),
+    new TreapHandler<int>()
 };
 
 int current_tree = 0;
@@ -47,10 +29,6 @@ void selectTree(int n) {
 }
 void insert(int insert_data) {
     trees[current_tree]->insert(insert_data);
-    // auto json = toJson<int>(trees[current_tree]->tree_ptr->getRoot());
-    // cout << json.first << endl;
-    // trees[current_tree]->json_states_stack.push_back(json.first);
-    // trees[current_tree]->json_lines_stack.push_back(json.second);
 }
 void getName() {
     put2Buff(trees[current_tree]->display_name);
