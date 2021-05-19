@@ -20,7 +20,10 @@ int readChar() {
 std::vector<TreeHandler<int>*> trees = {
     new TreeHandler<int>(),
     new AVLTreeHandler<int>(),
-    new TreapHandler<int>()
+    new RBTreeHandler<int>(),
+    new TreapHandler<int>(),
+    new SplayTreeHandler<int>()
+
 };
 
 int current_tree = 0;

@@ -7,6 +7,7 @@ let down_y = 0
 let is_down = false
 let can = false
 let start = true
+var zoom = 1
 
 export function btnDown(e) {
   console.log(can);
@@ -33,7 +34,6 @@ export function dragTree(e) {
       st.left = 0 + 'px'
       st.top = 0 + 'px'
     } else {
-      let zoom = document.getElementById("zoom_slider").value;
       st.left = (x - down_x) * (1 / zoom) + offset_x + 'px'
       st.top = (y - down_y) * (1 / zoom)+ offset_y + 'px'
     }
@@ -48,4 +48,7 @@ export function mouseEnter() {
 export function mouseLeft() {
   can = false
   console.log('over');
+}
+export function setZoom(val) {
+  zoom = val
 }

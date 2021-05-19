@@ -15,8 +15,8 @@ class BinSearchTree {
       node->lhs() = insert(node->lhs(), insert_data);
     else if (insert_data > node->data)
       node->rhs() = insert(node->rhs(), insert_data);
-    return node;
     on_insert_place_found();
+    return node;
   }
 
 public:

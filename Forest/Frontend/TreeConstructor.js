@@ -11,7 +11,6 @@ function animate({ duration, draw, timing }) {
     let timeFraction = (time - start) / duration;
     if (timeFraction > 1) timeFraction = 1;
     timeFraction = anim_progress - anim_frame
-    console.log(timeFraction);
     if (timeFraction > 1 || timeFraction < 0) return
 
     draw(timing(timeFraction));

@@ -38,14 +38,15 @@ public:
     return true;
   }
 
-  TreeNode<T>* clone() {
+  virtual TreeNode<T>* clone() {
     std::vector<TreeNode<T>*> cloned_branches;
     for (auto& i : branches) {
       if (i) cloned_branches.push_back(i->clone());
       else cloned_branches.push_back(nullptr);
     }
     TreeNode<T>* cloned_node =
-      new TreeNode<T>(this->data, cloned_branches);
+      new TreeNode<T>(this->data);
+    cloned_node->branches = cloned_branches;
     cloned_node->id = id;
     return cloned_node;
   }

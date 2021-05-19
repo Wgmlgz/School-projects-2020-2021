@@ -4,7 +4,7 @@ let screenLog = document.querySelector('#screen-log');
 
 let zoom = 1
 
-import { btnDown, btnUp, dragTree, mouseEnter, mouseLeft  } from './InputHandler.js'
+import { btnDown, btnUp, dragTree, mouseEnter, mouseLeft , setZoom } from './InputHandler.js'
 import { addBlockAndAnim, allLineAndAnim, clearTree, setAnimProgress} from './TreeConstructor.js'
 
 var last_frame = 0
@@ -14,10 +14,6 @@ var anim = true
 var anim_forward = true
 
 setInterval(function () {
-  zoom = document.getElementById("zoom_slider").value;
-  var tree = document.getElementById('tree_ded').style;
-  tree.zoom = zoom;
-
   // timeline
   var timeline_progress = document.getElementById('timeline_slider').value;
   var lateset_size = document.getElementById('timeline_latest_slider').value;
@@ -29,7 +25,7 @@ setInterval(function () {
     tmp = timeline_progress * latest_frames + _EXPORT_getStackSize() - latest_frames
   }
   if (anim) {
-    tmp += 0.03
+    tmp += 0.015
     var new_timeline_progress = tmp / _EXPORT_getStackSize();
     if (_EXPORT_getStackSize() > latest_frames) { 
       var new_timeline_progress = timeline_progress * latest_frames + _EXPORT_getStackSize() - latest_frames
@@ -76,7 +72,7 @@ document.querySelector('#btn_select_AVLTree').addEventListener('click', selectAV
 document.querySelector('#btn_select_RBTree').addEventListener('click', selectRB)
 document.querySelector('#btn_select_Treap').addEventListener('click', selectTreap)
 document.querySelector('#btn_select_SplayTree').addEventListener('click', selectSplay)
-$(window).off('scroll');
+//$(window).off('scroll');
 var input = document.getElementById("input_insert");
 
 input.addEventListener("keyup", function(event) {
@@ -84,6 +80,21 @@ input.addEventListener("keyup", function(event) {
     document.getElementById("btn_insert").click();
   }
 });
+
+
+let scale = 1;
+
+function wheel(event) {
+  event.preventDefault();
+  scale += event.deltaY * -0.0015;
+  scale = Math.min(Math.max(.1, scale), 5)
+  document.getElementById('tree_ded').style.zoom = scale
+  setZoom(scale)
+}
+
+const el = document.querySelector('#tree_fill');
+el.onwheel = wheel;
+
 // $(document).ready(function(){
 //   $('#playlist').on('scroll',function(){
 //     console.log('Scrolling...');

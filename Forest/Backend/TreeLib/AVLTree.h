@@ -13,7 +13,7 @@ public:
   AVLTreeNode(T new_data) {
     BinTreeNode<T>::TreeNode::data = new_data;
   }
-  AVLTreeNode<T>* clone() {
+  virtual AVLTreeNode<T>* clone() override {
     std::vector<TreeNode<T>*> cloned_branches;
     for (auto& i : BinTreeNode<T>::TreeNode::branches) {
       if (i) cloned_branches.push_back(static_cast<AVLTreeNode<T>*>(i)->clone());
@@ -32,7 +32,6 @@ template<typename T>
 class AVLTree : public BinSearchTree<T> {
   using nodeptr = AVLTreeNode<T>*;
 public:
-  nodeptr last_inserted_node;
   nodeptr& getRoot() {
     return (nodeptr&)this->root;
   }
@@ -80,8 +79,8 @@ private:
 
   nodeptr insert(nodeptr node, T insert_data) {
     if (!node) {
-      last_inserted_node = new AVLTreeNode<T>(insert_data);
-      return last_inserted_node;
+      this->last_inserted_node = new AVLTreeNode<T>(insert_data);
+      return static_cast<nodeptr>(this->last_inserted_node);
     }
     this->on_insert(node);
     if (insert_data < node->data)
@@ -156,7 +155,7 @@ public: nodeptr deleteNode(nodeptr node, T new_data) {
 
 public:
   virtual void insert(T insert_data) override {
-    last_inserted_node = nullptr;
+    this->last_inserted_node = nullptr;
     getRoot() = insert(getRoot(), insert_data);
   }
   nodeptr remove(T remove_data) {

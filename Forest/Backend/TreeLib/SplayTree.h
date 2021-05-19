@@ -3,6 +3,7 @@
 template<typename T>
 class SplayTree : public BinSearchTree<T> {
 public:
+  std::function<void()> on_clone = []() {};
   using nodeptr = BinTreeNode<T>*;
   nodeptr& getRoot() {
     return (nodeptr&)this->root;
@@ -10,14 +11,17 @@ public:
   nodeptr splay(nodeptr node, T data) {
     if (node == nullptr || node->data == data)
       return node;
-
     if (node->data > data) {
       if (!node->lhs()) return node;
       if (node->lhs()->data > data) {
         node->lhs()->lhs() = splay(node->lhs()->lhs(), data);
+        on_clone();
+
         node = this->rrot(node);
       } else if (node->lhs()->data < data) {
         node->lhs()->rhs() = splay(node->lhs()->rhs(), data);
+        on_clone();
+
         if (node->lhs()->rhs())
           node->lhs() = this->lrot(node->lhs());
       }
@@ -28,10 +32,14 @@ public:
 
       if (node->rhs()->data > data) {
         node->rhs()->lhs() = splay(node->rhs()->lhs(), data);
+        on_clone();
+
         if (node->rhs()->lhs())
           node->rhs() = this->rrot(node->rhs());
       } else if (node->rhs()->data < data) {
         node->rhs()->rhs() = splay(node->rhs()->rhs(), data);
+        on_clone();
+
         node = this->lrot(node);
       }
 
@@ -41,5 +49,6 @@ public:
   virtual void insert(T insert_data) override {
     BinSearchTree<T>::insert(insert_data);
     getRoot() = splay(getRoot(), insert_data);
+
   }
 };

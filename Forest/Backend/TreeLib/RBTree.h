@@ -11,6 +11,23 @@ public:
   RBNode() {}
   RBNode* parent;
   int color; // 1 -> Red, 0 -> Black
+
+  virtual RBNode<T>* clone() override {
+    std::vector<TreeNode<T>*> cloned_branches;
+    for (auto& i : BinTreeNode<T>::TreeNode::branches) {
+      if (i) cloned_branches.push_back(static_cast<RBNode<T>*>(i)->clone());
+      else cloned_branches.push_back(nullptr);
+    }
+    RBNode<T>* cloned_node =
+      new RBNode<T>();
+    static_cast<TreeNode<T>*>(cloned_node)->branches = cloned_branches;
+    cloned_node->data = this->data;
+    cloned_node->id = this->id;
+    cloned_node->parent = parent;
+    cloned_node->color = color;
+    return cloned_node;
+  }
+
 };
 
 
@@ -261,6 +278,7 @@ public:
 
   virtual void insert(T key) override {
     nodeptr node = new RBNode<T>();
+    this->last_inserted_node = node;
     node->parent = nullptr;
     node->data = key;
     node->lhs() = nullptr;
@@ -272,6 +290,7 @@ public:
 
     while (x != nullptr) {
       y = x;
+      this->on_insert(y);
       if (node->data < x->data)
         x = x->lhs();
       else
@@ -286,7 +305,7 @@ public:
     } else {
       y->rhs() = node;
     }
-
+    this->on_insert_place_found();
     if (node->parent == nullptr) {
       node->color = 0;
       return;

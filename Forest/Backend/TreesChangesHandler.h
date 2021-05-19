@@ -18,13 +18,16 @@ public:
   TreeNode<T>* insert_place_found_clone = nullptr;
 
   void on_insert(bstnodeptr node) {
+    if (!node) return;
     ins_stack.push_back(node->id);
   }
 
 
   void on_insert_place_found() {
     if (tree_ptr->getRoot() and !insert_place_found_clone) {
-      insert_place_found_clone = tree_ptr->getRoot()->clone();
+      insert_place_found_clone = static_cast<bstnodeptr>(tree_ptr->getRoot())->clone();
+      std::cout << "6666";
+      printASCII(insert_place_found_clone);
     }
   }
 
@@ -52,23 +55,22 @@ public:
     ins_stack.clear();
     this->insert_place_found_clone = nullptr;
     auto clone = this->tree_ptr->getRoot()->clone();
-    this->write(this->tree_ptr->getRoot(), this->tree_ptr->getRoot(), { {} }, {});
+    //this->write(this->tree_ptr->getRoot(), this->tree_ptr->getRoot(), { {} }, {});
     std::string insert_data = std::to_string(val);
     this->tree_ptr->insert(val);
     printASCII(this->tree_ptr->getRoot());
 
-    auto ins_res = static_cast<BinSearchTree<T>*>(this->tree_ptr)->last_inserted_node;
-
+    auto ins_res = this->tree_ptr->last_inserted_node;
+    if (!ins_res) return;
     this->write(clone, clone, { },
-      { { insert_data, ins_res->id, this->ins_stack[0] } });
+      { { insert_data, ins_res->id, this->ins_stack[0], ins_res } });
     for (int j = 0; j < this->ins_stack.size() - 1; ++j) {
-      this->write(clone, clone, { { insert_data, ins_res->id, this->ins_stack[j] } },
-        { { insert_data, ins_res->id, this->ins_stack[j + 1] } });
+      this->write(clone, clone, { { insert_data, ins_res->id, this->ins_stack[j], ins_res } },
+        { { insert_data, ins_res->id, this->ins_stack[j + 1], ins_res } });
     }
-    this->write(clone, this->tree_ptr->getRoot(), {
-      {insert_data, ins_res->id,this->ins_stack[this->ins_stack.size() - 1]}
+    this->write(clone, insert_place_found_clone, {
+      {insert_data, ins_res->id,this->ins_stack[this->ins_stack.size() - 1], ins_res}
       }, {});
-
   }
 
   virtual void insert(T val) {
@@ -76,13 +78,14 @@ public:
     this->writeBstInsert(val);
   }
 
-  explicit TreeHandler() {
+  TreeHandler(int) { };
+  TreeHandler() {
     this->tree_ptr = new BinSearchTree<T>();
     this->tree_ptr->on_insert = [=](bstnodeptr node) {
       this->on_insert(node);
     };
     this->tree_ptr->on_insert_place_found = [=]() {
-      this->on_insert_place_found();
+      on_insert_place_found();
     };
     insert(1);
     insert(2);
@@ -103,14 +106,14 @@ public:
 
   void on_insert_place_found() {
     if (this->tree_ptr->getRoot() and !this->insert_place_found_clone) {
-      this->insert_place_found_clone = this->tree_ptr->getRoot()->clone();
+      this->insert_place_found_clone = static_cast<AVLTreeNode<T>*>(this->tree_ptr->getRoot())->clone();
       this->insert_place_found_clone->inorderVisit([=](TreeNode<T>* node) {
         static_cast<AVLTree<T>*>(this->tree_ptr)->fixHeight(static_cast<AVLTreeNode<T>*>(node));
         });
     }
   }
   void on_balance(nodeptr node) {
-    fix_stack.push_back({ this->tree_ptr->getRoot()->clone(), node->id });
+    //fix_stack.push_back({ this->tree_ptr->getRoot()->clone(), node->id });
     std::cout << "on_balance\n";
   }
 
@@ -119,7 +122,8 @@ public:
     this->writeBstInsert(val);
     this->write(this->insert_place_found_clone, this->tree_ptr->getRoot(), { {} }, {});
   }
-  AVLTreeHandler() {
+
+  AVLTreeHandler() : TreeHandler<T>(0) {
     this->tree_ptr = new AVLTree<T>();
     this->tree_ptr->on_insert = [=](bstnodeptr node) {
       this->on_insert(node);
@@ -140,6 +144,51 @@ public:
 };
 
 template<typename T>
+class RBTreeHandler : public TreeHandler<T> {
+public:
+  std::vector<std::pair<TreeNode<T>*, int>> fix_stack;
+  using nodeptr = RBNode<T>*;
+  using bstnodeptr = BinTreeNode<T>*;
+
+
+  void on_insert_place_found() {
+    if (this->tree_ptr->getRoot() and !this->insert_place_found_clone) {
+      this->insert_place_found_clone = static_cast<RBNode<T>*>(this->tree_ptr->getRoot())->clone();
+      // this->insert_place_found_clone->inorderVisit([=](TreeNode<T>* node) {
+      //   static_cast<AVLTree<T>*>(this->tree_ptr)->fixHeight(static_cast<AVLTreeNode<T>*>(node));
+      //   });
+    }
+  }
+  void on_balance(nodeptr node) {
+    //fix_stack.push_back({ this->tree_ptr->getRoot()->clone(), node->id });
+    std::cout << "on_balance\n";
+  }
+
+  virtual void insert(T val) override {
+    if (this->tryRootInsert(val)) return;
+    this->writeBstInsert(val);
+    this->write(this->insert_place_found_clone, this->tree_ptr->getRoot(), { {} }, {});
+  }
+
+  RBTreeHandler() : TreeHandler<T>(0) {
+    this->tree_ptr = new RBTree<T>();
+    this->tree_ptr->on_insert = [=](bstnodeptr node) {
+      this->on_insert(node);
+    };
+    this->tree_ptr->on_insert_place_found = [=]() {
+      on_insert_place_found();
+    };
+    insert(1);
+    insert(2);
+    insert(5);
+    insert(6);
+    insert(7);
+
+  }
+};
+
+
+template<typename T>
 class TreapHandler : public TreeHandler<T> {
 public:
   using nodeptr = TreapNode<T>*;
@@ -151,15 +200,21 @@ public:
   //  std::cout << "on_balance\n";
   //}
 
+  void on_clone() {
+    if (!this->tree_ptr->getRoot()) return;
+    auto clone = this->tree_ptr->getRoot()->clone();
+    this->write(clone, clone, {}, {});
+  }
   virtual void insert(T val) override {
     if (this->tryRootInsert(val)) return;
-    //this->writeBstInsert(val);
-    auto clone = this->tree_ptr->getRoot()->clone();
-    this->tree_ptr->insert(val);
+    this->writeBstInsert(val);
+    //auto clone = this->tree_ptr->getRoot()->clone();
+    //this->tree_ptr->insert(val);
 
-    this->write(clone, this->tree_ptr->getRoot(), { {} }, {});
+    //this->write(clone, this->tree_ptr->getRoot(), { {} }, {});
   }
-  TreapHandler() {
+  TreapHandler() : TreeHandler<T>(0) {
+    std::cout << "Treap!" << std::endl;
     this->tree_ptr = new Treap<T>();
     this->tree_ptr->on_insert = [=](bstnodeptr node) {
       this->on_insert(node);
@@ -167,9 +222,15 @@ public:
     this->tree_ptr->on_insert_place_found = [=]() {
       this->on_insert_place_found();
     };
-    this->tree_ptr->insert(1);
-    this->tree_ptr->insert(2);
-    this->tree_ptr->insert(3);
+    static_cast<Treap<T>*>(this->tree_ptr)->on_clone = [=]() {
+      this->on_clone();
+    };
+
+    insert(1);
+    insert(2);
+    insert(5);
+    insert(6);
+    insert(7);
 
     // static_cast<AVLTree<T>*>(this->tree_ptr)->on_balance = [=](nodeptr node) {
       // this->on_balance(node);
@@ -182,3 +243,63 @@ public:
 
   }
 };
+
+
+
+template<typename T>
+class SplayTreeHandler : public TreeHandler<T> {
+public:
+  std::vector<std::pair<TreeNode<T>*, TreeNode<T>*>> fix_stack;
+  using nodeptr = BinTreeNode<T>*;
+  using bstnodeptr = BinTreeNode<T>*;
+
+  void on_insert_place_found() {
+    if (this->tree_ptr->getRoot() and !this->insert_place_found_clone) {
+      this->insert_place_found_clone = this->tree_ptr->getRoot()->clone();
+      // this->insert_place_found_clone->inorderVisit([=](TreeNode<T>* node) {
+      //   static_cast<AVLTree<T>*>(this->tree_ptr)->fixHeight(static_cast<AVLTreeNode<T>*>(node));
+      //   });
+    }
+  }
+  void on_clone() {
+    auto clone = this->tree_ptr->getRoot()->clone();
+
+    fix_stack.push_back({ this->insert_place_found_clone, this->tree_ptr->getRoot() });
+    //this->write(this->insert_place_found_clone, clone, {}, {});
+    //this->insert_place_found_clone = clone;
+  }
+  void on_balance(nodeptr node) {
+    //fix_stack.push_back({ this->tree_ptr->getRoot()->clone(), node->id });
+    std::cout << "on_balance\n";
+  }
+
+  virtual void insert(T val) override {
+    fix_stack.clear();
+    if (this->tryRootInsert(val)) return;
+    this->writeBstInsert(val);
+    for (auto i : fix_stack) {
+      //this->write(i.first, i.second, {}, {});
+    }
+    this->write(this->insert_place_found_clone, this->tree_ptr->getRoot(), { {} }, {});
+  }
+
+  SplayTreeHandler() : TreeHandler<T>(0) {
+    this->tree_ptr = new SplayTree<T>();
+    this->tree_ptr->on_insert = [=](bstnodeptr node) {
+      this->on_insert(node);
+    };
+    this->tree_ptr->on_insert_place_found = [=]() {
+      on_insert_place_found();
+    };
+    static_cast<SplayTree<T>*>(this->tree_ptr)->on_clone = [=]() {
+      this->on_clone();
+    };
+    insert(1);
+    insert(2);
+    insert(5);
+    insert(6);
+    insert(7);
+
+  }
+};
+
