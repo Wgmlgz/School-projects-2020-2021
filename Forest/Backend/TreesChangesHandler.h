@@ -77,6 +77,11 @@ public:
     if (this->tryRootInsert(val)) return;
     this->writeBstInsert(val);
   }
+  virtual void remove(T val) {
+    auto clone = this->tree_ptr->getRoot()->clone();
+    this->tree_ptr->remove(val);
+    this->write(clone, this->tree_ptr->getRoot(), {}, {});
+  }
 
   TreeHandler(int) { };
   TreeHandler() {
@@ -87,12 +92,6 @@ public:
     this->tree_ptr->on_insert_place_found = [=]() {
       on_insert_place_found();
     };
-    insert(1);
-    insert(2);
-    insert(5);
-    insert(6);
-    insert(7);
-
   }
 };
 
@@ -134,12 +133,6 @@ public:
     static_cast<AVLTree<T>*>(this->tree_ptr)->on_balance = [=](nodeptr node) {
       this->on_balance(node);
     };
-    insert(1);
-    insert(2);
-    insert(5);
-    insert(6);
-    insert(7);
-
   }
 };
 
@@ -178,12 +171,6 @@ public:
     this->tree_ptr->on_insert_place_found = [=]() {
       on_insert_place_found();
     };
-    insert(1);
-    insert(2);
-    insert(5);
-    insert(6);
-    insert(7);
-
   }
 };
 
@@ -225,22 +212,6 @@ public:
     static_cast<Treap<T>*>(this->tree_ptr)->on_clone = [=]() {
       this->on_clone();
     };
-
-    insert(1);
-    insert(2);
-    insert(5);
-    insert(6);
-    insert(7);
-
-    // static_cast<AVLTree<T>*>(this->tree_ptr)->on_balance = [=](nodeptr node) {
-      // this->on_balance(node);
-    // };
-    // insert(1);
-    // insert(2);
-    // insert(5);
-    // insert(6);
-    // insert(7);
-
   }
 };
 
@@ -294,12 +265,6 @@ public:
     static_cast<SplayTree<T>*>(this->tree_ptr)->on_clone = [=]() {
       this->on_clone();
     };
-    insert(1);
-    insert(2);
-    insert(5);
-    insert(6);
-    insert(7);
-
   }
 };
 

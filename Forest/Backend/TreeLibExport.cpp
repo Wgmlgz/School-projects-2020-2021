@@ -27,6 +27,9 @@ extern "C" {
     PREFIX(void) EXPORT_insert(int insert_data) {
         insert(insert_data);
     }
+    PREFIX(void) EXPORT_remove(int insert_data) {
+        remove(insert_data);
+    }
     PREFIX(void) EXPORT_getName() {
         getName();
     }

@@ -33,6 +33,9 @@ void selectTree(int n) {
 void insert(int insert_data) {
     trees[current_tree]->insert(insert_data);
 }
+void remove(int val) {
+    trees[current_tree]->remove(val);
+}
 void getName() {
     put2Buff(trees[current_tree]->display_name);
 }

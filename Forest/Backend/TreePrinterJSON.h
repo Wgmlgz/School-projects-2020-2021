@@ -64,6 +64,8 @@ V2 calcNodeSz(
     if (parent_id != -1) connections.push_back({ parent_id, this_id });
 
     int child_n = 0;
+
+    int first_x = -1, last_x = -1;
     for (auto i : node->branches) {
         ++child_n;
         if (i == nullptr) {

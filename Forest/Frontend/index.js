@@ -13,11 +13,20 @@ var anim_progress = 1
 var anim = true
 var anim_forward = true
 
+var last_slider = 1;
 setInterval(function () {
+
+  if (anim) {
+    document.querySelector('#btn_play').innerHTML = 'Stop';
+  } else {
+    document.querySelector('#btn_play').innerHTML = 'Play';
+  }
   // timeline
   var timeline_progress = document.getElementById('timeline_slider').value;
   var lateset_size = document.getElementById('timeline_latest_slider').value;
   
+  if (last_slider != timeline_progress) anim = false
+
   var tmp = timeline_progress * (_EXPORT_getStackSize())
   
   var latest_frames = Math.ceil(_EXPORT_getStackSize() * (1 - lateset_size))
@@ -51,6 +60,10 @@ setInterval(function () {
 
   document.getElementById('frame_counter').innerHTML = current_frame
   document.getElementById('frame_progress').innerHTML = Math.round((tmp - current_frame) * 100) / 100
+
+  last_slider = document.getElementById('timeline_slider').value
+
+
 }, 8);
 
 document.addEventListener('mousemove', dragTree);
@@ -59,12 +72,13 @@ document.addEventListener('mouseup', btnUp);
 
 document.getElementById("tree_fill").addEventListener("mouseenter", mouseEnter)
 document.getElementById("tree_fill").addEventListener("mouseleave", mouseLeft)
-document.querySelector('#bnt_clear').addEventListener('click', clearTree)
 // document.querySelector('#bnt_prev').addEventListener('click', prevFrame)
 // document.querySelector('#bnt_next').addEventListener('click', nextFrame)
 
 document.querySelector('#btn_insert').addEventListener('click', insertElement)
 document.querySelector('#btn_insert_random').addEventListener('click', insertRandomElement)
+document.querySelector('#btn_remove').addEventListener('click', removeElement)
+
 
 
 document.querySelector('#btn_select_binTree').addEventListener('click', selectBin)
@@ -72,6 +86,15 @@ document.querySelector('#btn_select_AVLTree').addEventListener('click', selectAV
 document.querySelector('#btn_select_RBTree').addEventListener('click', selectRB)
 document.querySelector('#btn_select_Treap').addEventListener('click', selectTreap)
 document.querySelector('#btn_select_SplayTree').addEventListener('click', selectSplay)
+
+document.querySelector('#btn_play').addEventListener('click', onPlay)
+
+
+function onPlay() {
+  anim = !anim
+  var btn = document.getElementById("btn_play").style;
+  
+}
 //$(window).off('scroll');
 var input = document.getElementById("input_insert");
 
@@ -95,29 +118,29 @@ function wheel(event) {
 const el = document.querySelector('#tree_fill');
 el.onwheel = wheel;
 
-// $(document).ready(function(){
-//   $('#playlist').on('scroll',function(){
-//     console.log('Scrolling...');
-//   });
-// });
-
+var selected_tree = 0
 function selectBin() {
+  selected_tree = 0
   _EXPORT_selectTree(0);
   drawLastTree();
 }
 function selectAVL() {
+  selected_tree = 1
   _EXPORT_selectTree(1);
   drawLastTree();
 }
 function selectRB() {
+  selected_tree = 2
   _EXPORT_selectTree(2);
   drawLastTree();
 }
 function selectTreap() {
+  selected_tree = 3
   _EXPORT_selectTree(3);
   drawLastTree();
 }
 function selectSplay() {
+  selected_tree = 4
   _EXPORT_selectTree(4);
   drawLastTree();
 }
@@ -141,6 +164,10 @@ function insert(val) {
   _EXPORT_insert(val)
   drawLastTree()
 }
+
+function removeElement() {
+  _EXPORT_remove(document.getElementById('input_insert').value)
+}
 function insertElement() {
   insert(document.getElementById('input_insert').value)
 }
@@ -154,6 +181,16 @@ function getRandomInt(min, max) {
 function insertRandomElement() {
   insert(getRandomInt(1, 100))
 }
+
+function insertElementAll() {
+  for (var i = 0; i < 5; i += 1) {
+    _EXPORT_selectTree(i);
+    insert(document.getElementById('input_insert').value)
+  }
+  _EXPORT_selectTree(selected_tree);
+}
+
+
 function drawTreeFrame(progress, n) {
   setAnimProgress(progress, n)
   clearTree()
@@ -193,7 +230,6 @@ function drawJsonLinesStr(json_string) {
 }
 // main
 function drawJsonTree(json_string) {
-  console.log(json_string);
   json_string.json().then(data => {
     for (const property in data) {
       addBlockAndAnim(

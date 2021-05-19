@@ -317,7 +317,7 @@ public:
     fixInsert(node);
   }
 
-  void deleteNode(T data) {
+  virtual void remove(T data) override {
     deleteNodeHelper(this->getRoot(), data);
   }
 };

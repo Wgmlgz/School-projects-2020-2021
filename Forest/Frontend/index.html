@@ -5,13 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>da</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <button id="bnt_clear" class="btn">clear tree</button>
-    <button id="bnt_prev" class="btn">Prev frame</button>
-    <button id="bnt_next" class="btn">Next frame</button>
-    <br />
     <p id="frame_counter_title" class="title">Current frame:</p>
     <p id="frame_counter" class="title">da</p>
     <p id="frame_progress_title" class="title">Frame progress:</p>
@@ -25,7 +23,10 @@
       required
     />
     <button id="btn_insert" class="btn">Insert element</button>
+    <button id="btn_remove" class="btn">Remove element</button>
     <button id="btn_insert_random" class="btn">Insert random element</button>
+    
+    
     <div class="tree_type">
       <label class="pure-material-slider">
         <input
@@ -56,6 +57,7 @@
       <button id="btn_select_RBTree" class="btn">RB</button>
       <button id="btn_select_Treap" class="btn">Treap</button>
       <button id="btn_select_SplayTree" class="btn">Splay</button>
+      <button id="btn_play" class="btn" style="margin-left: 50px;">Play</button>
     </div>
     <div id="tree_fill"></div>
     <div id="tree_ded" style="position: absolute; top: 50%; right: 50%">
