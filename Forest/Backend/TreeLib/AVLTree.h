@@ -1,6 +1,7 @@
 #pragma once
 #include <functional>
 #include <iostream>
+
 #include "BinSearchTree.h"
 #include "BinTree.h"
 
@@ -96,58 +97,38 @@ class AVLTree : public BinSearchTree<T> {
     return current;
   }
 
- public:
-  nodeptr deleteNodeHelper(nodeptr node, T val) {
-    std::cout << "avl remove\n";
-    if (node == nullptr) return node;
+  nodeptr findmin(nodeptr p) { return p->lhs() ? findmin(p->lhs()) : p; }
 
-    if (val < node->data)
-      node->lhs() = deleteNodeHelper(node->lhs(), val);
-    else if (val > node->data)
-      node->rhs() = deleteNodeHelper(node->rhs(), val);
+  nodeptr removeMin(nodeptr p) {
+    if (!p->lhs()) return p->rhs();
+    p->lhs() = removeMin(p->lhs());
+    return balance(p);
+  }
+  nodeptr remove(nodeptr p, int k) {
+    if (!p) return nullptr;
+    if (k < p->data)
+      p->lhs() = remove(p->lhs(), k);
+    else if (k > p->data)
+      p->rhs() = remove(p->rhs(), k);
     else {
-      if ((node->lhs() == nullptr) || (node->rhs() == nullptr)) {
-        nodeptr tmp = node->lhs() ? node->lhs() : node->rhs();
-        if (tmp == nullptr) {
-          tmp = node;
-          node = nullptr;
-        } else {
-          *node = *tmp;
-          free(tmp);
-        }
-      } else {
-        nodeptr tmp = minValueNode(node->rhs());
-        node->data = tmp->data;
-        node->rhs() = deleteNodeHelper(node->rhs(), tmp->data);
-      }
+      nodeptr l = p->lhs();
+      nodeptr r = p->rhs();
+      delete p;
+      if (!r) return l;
+      nodeptr m = findmin(r);
+      m->rhs() = removeMin(r);
+      m->lhs() = l;
+      return balance(m);
     }
-
-    if (node == nullptr) return node;
-
-    node->height = 1 + std::max(height(node->lhs()), height(node->rhs()));
-
-    int balance = bf(node);
-    if (balance > 1 && bf(node->lhs()) >= 0) return rrotAVL(node);
-    if (balance > 1 && bf(node->lhs()) < 0) {
-      node->lhs() = lrotAVL(node->lhs());
-      return rrotAVL(node);
-    }
-
-    if (balance < -1 && bf(node->rhs()) <= 0) return lrotAVL(node);
-    if (balance < -1 && bf(node->rhs()) > 0) {
-      node->rhs() = rrotAVL(node->rhs());
-      return lrotAVL(node);
-    }
-
-    return node;
+    return balance(p);
   }
 
-public :
+ public:
   virtual void insert(T insert_data) override {
     this->last_inserted_node = nullptr;
     getRoot() = insert(getRoot(), insert_data);
   }
   virtual void remove(T remove_data) override {
-    getRoot() = deleteNodeHelper(getRoot(), remove_data);
+    getRoot() = remove(getRoot(), remove_data);
   }
 };
