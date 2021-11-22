@@ -1,2 +1,0 @@
-C:\C\School\Turing\Debug\Turing.exe
-C:\C\School\Turing\Debug\Turing.pdb
